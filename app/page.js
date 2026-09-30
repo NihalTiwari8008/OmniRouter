@@ -9,8 +9,8 @@ import CountUp from "react-countup";
 // ──────────────────────────────────────────────
 const TABS = [
   { id: "command-center", label: "Command Center", title: "Executive Dashboard", subtitle: "Real-time carbon, water, and thermal routing efficiency" },
-  { id: "router-studio", label: "Router Studio", title: "Router Studio", subtitle: "Multi-objective Pareto optimization for carbon-aware workload scheduling" },
-  { id: "audit-ledger", label: "Audit Ledger", title: "Compliance Audit Trail", subtitle: "Tamper-evident log of distributed compute routing decisions" },
+  { id: "router-studio", label: "Router Studio", title: "Router Studio", subtitle: "Find the most eco-friendly location and time for your AI tasks." },
+  { id: "audit-ledger", label: "Audit Ledger", title: "Compliance Audit Trail", subtitle: "Official audit trail for sustainability and compliance reporting." },
 ];
 
 const NAV_ICONS = {
@@ -38,9 +38,9 @@ const STREAM_ROWS = [
 ];
 
 const LEDGER_ROWS = [
-  { id: "#JOB-8841", time: "Just now", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-74.1%", carbonSaved: "38.2 kg saved", water: "-120 L", rationale: "Minimal carbon intensity (14g) + active district heating export heat sink." },
-  { id: "#JOB-8840", time: "12m ago", dest: "US-West-2 (Oregon)", destColor: "blue", carbon: "-58.4%", carbonSaved: "21.5 kg saved", water: "-85 L", rationale: "Hydro curtailment window utilized; data residency EU-geo-fence waived." },
-  { id: "#JOB-8839", time: "45m ago", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-72.8%", carbonSaved: "44.0 kg saved", water: "-110 L", rationale: "Strict GDPR constraint applied; selected zero-carbon nuclear/hydro grid." },
+  { id: "#JOB-8841", time: "Just now", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-74.1%", carbonSaved: "38.2 kg saved", water: "-120 L", rationale: "Low carbon intensity; exports waste heat to city grid." },
+  { id: "#JOB-8840", time: "12m ago", dest: "US-West-2 (Oregon)", destColor: "blue", carbon: "-58.4%", carbonSaved: "21.5 kg saved", water: "-85 L", rationale: "Utilized hydro power during peak green energy hours." },
+  { id: "#JOB-8839", time: "45m ago", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-72.8%", carbonSaved: "44.0 kg saved", water: "-110 L", rationale: "Strict GDPR rule applied; selected zero-carbon hydro grid." },
 ];
 
 // ──────────────────────────────────────────────
@@ -73,7 +73,7 @@ function DestBadge({ dest, color }) {
   };
   const c = colorMap[color] || colorMap.emerald;
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md ${c.bg} ${c.text} font-medium border ${c.border}`}>
+    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-sm ${c.bg} ${c.text} font-medium border ${c.border}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${c.dot}`} />
       {dest}
     </span>
@@ -86,7 +86,7 @@ function StatusBadge({ status, color }) {
     slate: "bg-slate-100 text-slate-600",
   };
   return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold ${colorMap[color] || colorMap.slate}`}>
+    <span className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-semibold ${colorMap[color] || colorMap.slate}`}>
       {status}
     </span>
   );
@@ -201,7 +201,7 @@ export default function HomePage() {
         <header className="flex flex-wrap items-center justify-between pb-4 border-b border-slate-200/80 gap-4">
           <div>
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{currentTab.title}</h1>
-            <p className="text-sm text-slate-500 mt-0.5">{currentTab.subtitle}</p>
+            <p className="text-sm text-slate-600 mt-1">{currentTab.subtitle}</p>
           </div>
           <div className="flex items-center gap-3">
             {/* Telemetry Status Pill */}
@@ -237,7 +237,7 @@ export default function HomePage() {
               {/* Water Conserved */}
               <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Water Conserved</span>
+                  <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Water Conserved</span>
                   <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -252,7 +252,7 @@ export default function HomePage() {
                       "0 L"
                     )}
                   </div>
-                  <div className={`mt-2 text-xs font-medium ${hasData ? "text-emerald-600" : "text-slate-400"}`}>
+                  <div className={`mt-2 text-sm font-medium ${hasData ? "text-emerald-600" : "text-slate-600"}`}>
                     {hasData ? "+18.4% vs baseline" : "Awaiting placement run"}
                   </div>
                 </div>
@@ -261,7 +261,7 @@ export default function HomePage() {
               {/* Carbon Diverted */}
               <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Carbon Diverted</span>
+                  <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Carbon Diverted</span>
                   <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -276,8 +276,8 @@ export default function HomePage() {
                       "0 kg"
                     )}
                   </div>
-                  <div className={`mt-2 text-xs font-medium ${hasData ? "text-emerald-600" : "text-slate-400"}`}>
-                    {hasData ? "-68.2% marginal" : "Awaiting placement run"}
+                  <div className={`mt-2 text-sm font-medium ${hasData ? "text-emerald-600" : "text-slate-600"}`}>
+                    {hasData ? "-68.2% vs default routing" : "Awaiting placement run"}
                   </div>
                 </div>
               </motion.div>
@@ -285,7 +285,7 @@ export default function HomePage() {
               {/* Heat Energy Reused */}
               <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Heat Energy Reused</span>
+                  <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Heat Energy Reused</span>
                   <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -300,7 +300,7 @@ export default function HomePage() {
                       "0 MWh"
                     )}
                   </div>
-                  <div className={`mt-2 text-xs font-medium ${hasData ? "text-amber-600" : "text-slate-400"}`}>
+                  <div className={`mt-2 text-sm font-medium ${hasData ? "text-amber-600" : "text-slate-600"}`}>
                     {hasData ? "Stockholm District Loop" : "Loop idle"}
                   </div>
                 </div>
@@ -309,7 +309,7 @@ export default function HomePage() {
               {/* Compliance Status */}
               <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs flex flex-col justify-between">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Compliance Status</span>
+                  <span className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Compliance Status</span>
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${hasData ? "bg-emerald-50 text-emerald-600" : "bg-slate-100 text-slate-600"}`}>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -324,7 +324,7 @@ export default function HomePage() {
                       "Standby"
                     )}
                   </div>
-                  <div className={`mt-2 text-xs font-medium ${hasData ? "text-slate-600" : "text-slate-400"}`}>
+                  <div className={`mt-2 text-sm font-medium ${hasData ? "text-slate-600" : "text-slate-600"}`}>
                     CSRD Scope 2/3 verified
                   </div>
                 </div>
@@ -332,10 +332,9 @@ export default function HomePage() {
             </motion.div>
 
             {/* Regional Fabric Topology */}
-            <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-5">
+            <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-6">
               <div>
-                <h2 className="text-base font-bold text-slate-900">Global Compute Fabric Topology</h2>
-                <p className="text-xs text-slate-500 mt-0.5">Autonomous multi-region dispatch paths based on marginal emissions and water stress.</p>
+                <h2 className="text-lg font-bold text-slate-900">Global Data Center Network</h2>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Node 1: US-West (Oregon) */}
@@ -388,10 +387,10 @@ export default function HomePage() {
             </motion.div>
 
             {/* Live Activity Stream */}
-            <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
+            <motion.div variants={fadeInUp} className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-6">
               <div>
-                <h2 className="text-base font-bold text-slate-900">Live Activity Stream</h2>
-                <p className="text-xs text-slate-500 mt-0.5">Deterministic dispatch decisions committed to verifiable logs.</p>
+                <h2 className="text-lg font-bold text-slate-900">Live Activity Stream</h2>
+                <p className="text-sm text-slate-600 mt-1">Real-time log of workloads optimized and routed.</p>
               </div>
               <AnimatePresence mode="wait">
                 {!hasData ? (
@@ -402,19 +401,19 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <span className="text-sm font-semibold text-slate-800">No live routing events</span>
-                    <p className="text-xs text-slate-400 max-w-sm mt-1">Submit a placement run in Router Studio to activate stream.</p>
+                    <p className="text-sm text-slate-500 max-w-sm mt-1">Submit a placement run in Router Studio to activate stream.</p>
                   </motion.div>
                 ) : (
                   <motion.div key="stream-table" {...fadeIn} className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
+                    <table className="w-full text-left text-sm">
                       <thead>
-                        <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase tracking-wider">
-                          <th className="py-3 px-3">DISPATCH ID</th>
-                          <th className="py-3 px-3">WORKLOAD DESCRIPTOR</th>
-                          <th className="py-3 px-3">DESTINATION</th>
-                          <th className="py-3 px-3 text-right">CARBON DELTA</th>
-                          <th className="py-3 px-3 text-right">WATER SAVINGS</th>
-                          <th className="py-3 px-3 text-right">STATUS</th>
+                        <tr className="border-b border-slate-100 text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                          <th className="py-3.5 px-4">DISPATCH ID</th>
+                          <th className="py-3.5 px-4">WORKLOAD</th>
+                          <th className="py-3.5 px-4">DESTINATION</th>
+                          <th className="py-3.5 px-4 text-right">CARBON DELTA</th>
+                          <th className="py-3.5 px-4 text-right">WATER SAVINGS</th>
+                          <th className="py-3.5 px-4 text-right">STATUS</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium">
@@ -426,15 +425,15 @@ export default function HomePage() {
                             transition={{ delay: i * 0.12, duration: 0.4 }}
                             className="hover:bg-slate-50/80 transition-colors"
                           >
-                            <td className="py-3.5 px-3 font-mono font-semibold text-slate-900">{row.id}</td>
-                            <td className="py-3.5 px-3">
+                            <td className="py-4 px-4 font-semibold text-slate-900">{row.id}</td>
+                            <td className="py-4 px-4">
                               <div className="text-slate-900 font-semibold">{row.name}</div>
-                              <div className="text-[11px] text-slate-400 font-normal">{row.desc}</div>
+                              <div className="text-xs text-slate-500 font-normal mt-0.5">{row.desc}</div>
                             </td>
-                            <td className="py-3.5 px-3"><DestBadge dest={row.dest} color={row.destColor} /></td>
-                            <td className="py-3.5 px-3 text-right font-mono font-semibold text-emerald-600">{row.carbon}</td>
-                            <td className="py-3.5 px-3 text-right font-mono text-blue-600 font-semibold">{row.water}</td>
-                            <td className="py-3.5 px-3 text-right"><StatusBadge status={row.status} color={row.statusColor} /></td>
+                            <td className="py-4 px-4"><DestBadge dest={row.dest} color={row.destColor} /></td>
+                            <td className="py-4 px-4 text-right font-semibold text-emerald-600">{row.carbon}</td>
+                            <td className="py-4 px-4 text-right text-blue-600 font-semibold">{row.water}</td>
+                            <td className="py-4 px-4 text-right"><StatusBadge status={row.status} color={row.statusColor} /></td>
                           </motion.tr>
                         ))}
                       </tbody>
@@ -453,22 +452,22 @@ export default function HomePage() {
               {/* Left Column (5 Cols) */}
               <motion.div variants={fadeInUp} className="lg:col-span-5 bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-6">
                 <div className="border-b border-slate-100 pb-4">
-                  <h2 className="text-base font-bold text-slate-900">Workload Placement Constraints</h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Configure model profile, temporal elasticity, and sovereignty parameters.</p>
+                  <h2 className="text-lg font-bold text-slate-900">Workload Placement Constraints</h2>
+                  <p className="text-sm text-slate-600 mt-1">Set your job constraints and deadline flexibility.</p>
                 </div>
                 {/* Workload Name */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700">Workload Name / Job Identifier</label>
+                  <label className="text-sm font-semibold text-slate-700">Workload Name / Job Identifier</label>
                   <input
-                    className="w-full text-xs font-medium rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 px-3 py-2 text-slate-800 border"
+                    className="w-full text-sm font-medium rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 px-3 py-2.5 text-slate-800 border"
                     type="text"
                     defaultValue="Llama-3 Fine-Tuning (70B-Instruct)"
                   />
                 </div>
                 {/* Workload Category */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-700">Workload Category</label>
-                  <select className="w-full text-xs font-medium rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 px-3 py-2 text-slate-800 border">
+                  <label className="text-sm font-semibold text-slate-700">Workload Category</label>
+                  <select className="w-full text-sm font-medium rounded-lg border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 px-3 py-2.5 text-slate-800 border">
                     <option>LLM Batch Inference (High Throughput)</option>
                     <option>Fine-Tuning / Checkpointing</option>
                     <option>Vector DB Embeddings Generation</option>
@@ -477,9 +476,9 @@ export default function HomePage() {
                 </div>
                 {/* Deadline Slider */}
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs">
+                  <div className="flex items-center justify-between text-sm">
                     <label className="font-semibold text-slate-700">Execution SLA Window</label>
-                    <span className="font-mono font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                    <span className="font-semibold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded">
                       {deadlineVal} Hours (Flexible window)
                     </span>
                   </div>
@@ -491,7 +490,7 @@ export default function HomePage() {
                     value={deadlineVal}
                     onChange={(e) => setDeadlineVal(Number(e.target.value))}
                   />
-                  <div className="flex justify-between text-[11px] text-slate-400">
+                  <div className="flex justify-between text-xs text-slate-500">
                     <span>0h (Instant)</span>
                     <span>24h (Standard)</span>
                     <span>48h (Max Shift)</span>
@@ -500,8 +499,8 @@ export default function HomePage() {
                 {/* Geo-Fence Toggle */}
                 <div className="p-3.5 bg-slate-50 border border-slate-200/80 rounded-lg flex items-center justify-between gap-4">
                   <div className="space-y-0.5">
-                    <span className="text-xs font-semibold text-slate-800 block">Strict Data Residency (Geo-Fence)</span>
-                    <span className="text-[11px] text-slate-500 block leading-tight">Restrict compute execution strictly to EU-GDPR compliant sovereign zones.</span>
+                    <span className="text-sm font-semibold text-slate-800 block">Strict Data Residency (Geo-Fence)</span>
+                    <span className="text-xs text-slate-600 block leading-tight">Restrict compute to EU-GDPR compliant zones only.</span>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer shrink-0">
                     <input
@@ -545,19 +544,19 @@ export default function HomePage() {
                           <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
                         </svg>
                       </div>
-                      <h3 className="text-sm font-bold text-slate-800">Pareto Visualizer in Standby</h3>
-                      <p className="text-xs text-slate-500 max-w-xs mt-1">Enter workload parameters to compute Pareto frontier trade-offs between water and marginal carbon.</p>
+                      <h3 className="text-sm font-bold text-slate-800">Impact Visualizer in Standby</h3>
+                      <p className="text-sm text-slate-500 max-w-xs mt-1">Configure your workload to see carbon vs. water trade-offs across regions.</p>
                     </motion.div>
                   ) : (
                     <motion.div key="pareto-populated" {...fadeIn} className="flex flex-col justify-between flex-1 space-y-6">
                       <div>
                         <div className="flex items-center justify-between mb-4">
                           <div>
-                            <h3 className="text-sm font-bold text-slate-900">Multi-Objective Pareto Frontier</h3>
-                            <span className="text-xs text-slate-500">Optimizing trade-off: Carbon Intensity vs. Water Footprint</span>
+                            <h3 className="text-base font-bold text-slate-900">Environmental Impact Analysis</h3>
+                            <span className="text-sm text-slate-600">Environmental Impact: Carbon vs. Water Trade-off</span>
                           </div>
-                          <span className="text-xs font-mono font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
-                            Converged in 12ms
+                          <span className="text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">
+                            Analyzed in 12ms
                           </span>
                         </div>
                         {/* Chart */}
@@ -570,8 +569,8 @@ export default function HomePage() {
                             <div className="border-b border-slate-200 w-full h-0" />
                           </div>
                           {/* Labels */}
-                          <div className="absolute left-3 top-2 text-[10px] font-mono text-slate-400 uppercase tracking-wider">▲ Carbon Intensity (kg CO2e)</div>
-                          <div className="absolute right-3 bottom-2 text-[10px] font-mono text-slate-400 uppercase tracking-wider">Water Usage (Liters) ►</div>
+                          <div className="absolute left-3 top-2 text-[10px] font-sans text-slate-400 uppercase tracking-wider">▲ Carbon Intensity (kg CO2e)</div>
+                          <div className="absolute right-3 bottom-2 text-[10px] font-sans text-slate-400 uppercase tracking-wider">Water Usage (Liters) ►</div>
                           {/* Pareto Curve */}
                           <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 400 220">
                             <motion.path
@@ -593,9 +592,9 @@ export default function HomePage() {
                             transition={{ delay: 0.6, duration: 0.4 }}
                           >
                             <div className="w-3.5 h-3.5 rounded-full bg-slate-500 border-2 border-white shadow-xs" />
-                            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded shadow-xs border border-slate-200 whitespace-nowrap text-[11px] font-medium text-slate-700">
-                              Point A: US-West-2
-                              <span className="block text-[10px] font-mono text-slate-400">Moderate Carbon • High Water</span>
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-white px-2.5 py-1.5 rounded-lg shadow-xs border border-slate-200 whitespace-nowrap text-xs font-medium text-slate-700">
+                              Oregon
+                              <span className="block text-[11px] text-slate-500">High Water Usage</span>
                             </div>
                           </motion.div>
                           {/* Point B: AP-South-1 */}
@@ -606,9 +605,9 @@ export default function HomePage() {
                             transition={{ delay: 0.8, duration: 0.4 }}
                           >
                             <div className="w-3.5 h-3.5 rounded-full bg-slate-500 border-2 border-white shadow-xs" />
-                            <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-white px-2 py-1 rounded shadow-xs border border-slate-200 whitespace-nowrap text-[11px] font-medium text-slate-700">
-                              Point B: AP-South-1
-                              <span className="block text-[10px] font-mono text-slate-400">High Carbon • Moderate Water</span>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-white px-2.5 py-1.5 rounded-lg shadow-xs border border-slate-200 whitespace-nowrap text-xs font-medium text-slate-700">
+                              Mumbai
+                              <span className="block text-[11px] text-slate-500">High Carbon</span>
                             </div>
                           </motion.div>
                           {/* Point C: EU-North-1 (Optimal) */}
@@ -622,9 +621,9 @@ export default function HomePage() {
                               <span className="animate-ping absolute inline-flex h-6 w-6 rounded-full bg-emerald-400 opacity-75" />
                               <span className="w-4 h-4 rounded-full bg-emerald-600 border-2 border-white shadow-md" />
                             </div>
-                            <div className="absolute left-5 top-1/2 -translate-y-1/2 bg-white px-2.5 py-1.5 rounded-lg shadow-md border border-emerald-300 whitespace-nowrap text-[11px] font-semibold text-emerald-800">
-                              Point C: EU-North-1 (Stockholm)
-                              <span className="block text-[10px] font-mono text-emerald-600 font-normal">Lowest Carbon • Lowest Water (Optimal)</span>
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 bg-white px-3 py-2 rounded-lg shadow-md border border-emerald-300 whitespace-nowrap text-xs font-semibold text-emerald-800">
+                              Stockholm (Best Choice)
+                              <span className="block text-[11px] text-emerald-600 font-normal">Lowest Carbon • Lowest Water</span>
                             </div>
                           </motion.div>
                         </div>
@@ -637,16 +636,16 @@ export default function HomePage() {
                         transition={{ delay: 1.2, duration: 0.4 }}
                       >
                         <div>
-                          <div className="text-xs font-bold text-emerald-900">Selected Target: EU-North (Stockholm)</div>
-                          <div className="text-xs text-emerald-700 mt-0.5">
-                            Pareto rank 1.0 • 74.1% Carbon Reduction • 120 L/hr Water Savings • District Heating Export Enabled
+                          <div className="text-sm font-bold text-emerald-900">Selected Target: EU-North (Stockholm)</div>
+                          <div className="text-sm text-emerald-700 mt-0.5">
+                            74.1% Lower Carbon Emissions • 120 L/hr Water Saved • District Heat Active
                           </div>
                         </div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white border border-emerald-300 text-xs font-semibold text-emerald-800 shadow-xs">
-                          <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-emerald-300 text-sm font-semibold text-emerald-800 shadow-xs">
+                          <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />
                           </svg>
-                          Optimal Dispatch Confirmed
+                          Best Route Confirmed
                         </div>
                       </motion.div>
                     </motion.div>
@@ -664,7 +663,7 @@ export default function HomePage() {
             <motion.div variants={fadeInUp} className="flex items-center justify-end">
               <button
                 onClick={() => alert("Exporting CSRD Scope 2/3 Compliance Report (PDF)...")}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-semibold shadow-xs transition-colors"
               >
                 <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
@@ -684,19 +683,19 @@ export default function HomePage() {
                       </svg>
                     </div>
                     <h3 className="text-sm font-bold text-slate-800">No routing decisions logged</h3>
-                    <p className="text-xs text-slate-400 max-w-sm mt-1">Run placement jobs in Router Studio to generate audited records.</p>
+                    <p className="text-sm text-slate-500 max-w-sm mt-1">Run placement jobs in Router Studio to generate audited records.</p>
                   </motion.div>
                 ) : (
                   <motion.div key="ledger-populated" {...fadeIn} className="overflow-x-auto">
-                    <table className="w-full text-left text-xs">
+                    <table className="w-full text-left text-sm">
                       <thead>
-                        <tr className="border-b border-slate-100 text-slate-400 font-semibold uppercase tracking-wider bg-slate-50/50">
+                        <tr className="border-b border-slate-100 text-xs text-slate-400 font-semibold uppercase tracking-wider bg-slate-50/50">
                           <th className="py-3.5 px-4">JOB ID</th>
                           <th className="py-3.5 px-4">TIMESTAMP</th>
                           <th className="py-3.5 px-4">TARGET REGION</th>
                           <th className="py-3.5 px-4 text-right">CARBON DELTA</th>
                           <th className="py-3.5 px-4 text-right">WATER DELTA</th>
-                          <th className="py-3.5 px-4">DECISION RATIONALE</th>
+                          <th className="py-3.5 px-4">RATIONALE</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium">
@@ -708,14 +707,14 @@ export default function HomePage() {
                             transition={{ delay: i * 0.12, duration: 0.4 }}
                             className="hover:bg-slate-50/80 transition-colors"
                           >
-                            <td className="py-3.5 px-4 font-mono font-semibold text-slate-900">{row.id}</td>
-                            <td className="py-3.5 px-4 text-slate-500 whitespace-nowrap">{row.time}</td>
-                            <td className="py-3.5 px-4"><DestBadge dest={row.dest} color={row.destColor} /></td>
-                            <td className="py-3.5 px-4 text-right font-mono font-semibold text-emerald-600">
-                              {row.carbon} <span className="text-[11px] text-slate-400 font-normal">({row.carbonSaved})</span>
+                            <td className="py-4 px-4 font-semibold text-slate-900">{row.id}</td>
+                            <td className="py-4 px-4 text-slate-600 whitespace-nowrap">{row.time}</td>
+                            <td className="py-4 px-4"><DestBadge dest={row.dest} color={row.destColor} /></td>
+                            <td className="py-4 px-4 text-right font-semibold text-emerald-600">
+                              {row.carbon} <span className="text-xs text-slate-500 font-normal">({row.carbonSaved})</span>
                             </td>
-                            <td className="py-3.5 px-4 text-right font-mono text-blue-600 font-semibold">{row.water}</td>
-                            <td className="py-3.5 px-4 text-slate-600">{row.rationale}</td>
+                            <td className="py-4 px-4 text-right text-blue-600 font-semibold">{row.water}</td>
+                            <td className="py-4 px-4 text-slate-600">{row.rationale}</td>
                           </motion.tr>
                         ))}
                       </tbody>
@@ -746,36 +745,36 @@ function RegionNode({ name, subtitle, hasData, populated }) {
         <div>
           <div className="flex items-center gap-2">
             <span className={`w-2.5 h-2.5 rounded-full ${hasData ? populated.dotColor : "bg-slate-400"} ${hasData && populated.dotPulse ? "animate-pulse" : ""}`} />
-            <h3 className="text-sm font-bold text-slate-900">{name}</h3>
+            <h3 className="text-lg font-bold text-slate-900">{name}</h3>
           </div>
-          <span className="text-xs text-slate-500">{subtitle}</span>
+          <span className="text-sm text-slate-600">{subtitle}</span>
         </div>
         {hasData ? (
-          <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-md border ${populated.badgeBg}`}>
+          <span className={`text-xs font-semibold px-3 py-1 rounded-md border ${populated.badgeBg}`}>
             {populated.badgeText}
           </span>
         ) : (
-          <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
+          <span className="text-xs font-medium px-3 py-1 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
             Standby
           </span>
         )}
       </div>
-      <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-200/60 text-xs">
+      <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200/60 text-sm">
         <div>
-          <span className="text-slate-400 block">Carbon Intensity</span>
-          <span className="font-mono font-medium text-slate-700">{hasData ? populated.carbon : "-- gCO2e/kWh"}</span>
+          <span className="text-slate-500 block text-xs">Carbon Intensity</span>
+          <span className="font-semibold text-slate-700">{hasData ? populated.carbon : "-- gCO2e/kWh"}</span>
         </div>
         <div>
-          <span className="text-slate-400 block">Water Stress (WSI)</span>
-          <span className="font-mono font-medium text-slate-700">{hasData ? populated.wsi : "--"}</span>
+          <span className="text-slate-500 block text-xs">Water Stress (WSI)</span>
+          <span className="font-semibold text-slate-700">{hasData ? populated.wsi : "--"}</span>
         </div>
         <div>
-          <span className="text-slate-400 block">Thermal Loop</span>
-          <span className="font-mono font-medium text-slate-700">{hasData ? populated.thermal : "--"}</span>
+          <span className="text-slate-500 block text-xs">Thermal Loop</span>
+          <span className="font-semibold text-slate-700">{hasData ? populated.thermal : "--"}</span>
         </div>
         <div>
-          <span className="text-slate-400 block">Latency SLA</span>
-          <span className="font-mono font-medium text-slate-700">{hasData ? populated.latency : "-- ms"}</span>
+          <span className="text-slate-500 block text-xs">Latency SLA</span>
+          <span className="font-semibold text-slate-700">{hasData ? populated.latency : "-- ms"}</span>
         </div>
       </div>
     </motion.div>
