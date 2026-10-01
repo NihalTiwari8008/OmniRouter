@@ -508,8 +508,8 @@ export default function HomePage() {
 }
 
 function GlobeMark({ size = "md" }) {
-  const sizes = size === "sm" ? "h-7 w-7" : "h-9 w-9";
-  const icon = size === "sm" ? "h-5 w-5" : "h-5 w-5";
+  const sizes = size === "sm" ? "h-8 w-8" : "h-11 w-11";
+  const icon = size === "sm" ? "h-6 w-6" : "h-6 w-6";
 
   return (
     <span className={`relative flex shrink-0 items-center justify-center ${sizes} text-blue-600`}>
@@ -528,7 +528,7 @@ function Brand({ compact = false }) {
     <div className={`flex items-center gap-2.5 ${compact ? "" : "border-b border-slate-100 px-6 py-4"}`}>
       <GlobeMark />
       <div className="min-w-0">
-        <div className="text-lg font-bold tracking-tight text-slate-950">
+        <div className="text-[22px] font-bold tracking-tight text-slate-950">
           Omni<span className="text-blue-600">Router</span>
         </div>
         {!compact && <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">Compute sustainability</div>}
