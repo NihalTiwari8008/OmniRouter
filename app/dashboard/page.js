@@ -966,10 +966,6 @@ export default function HomePage() {
           {activeTab === "audit-ledger" && (
             <motion.div key="audit" className="space-y-5 pt-6" initial="initial" animate="animate" variants={stagger}>
               <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-end gap-3">
-                <span className={isDispatched ? "inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700" : "inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500"}>
-                  <span className={isDispatched ? "h-1.5 w-1.5 rounded-full bg-emerald-500" : "h-1.5 w-1.5 rounded-full bg-slate-400"} />
-                  {isDispatched ? "Ledger synced · 1 new decision" : "Ledger ready for new decisions"}
-                </span>
                 {reportStatus === "ready" && <span className="text-xs font-medium text-emerald-700">CSRD report generated · PDF ready</span>}
                 <button onClick={generateReport} disabled={!isDispatched || reportStatus === "generating"} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60">
                   <svg className={`h-4 w-4 text-slate-500 ${reportStatus === "generating" ? "animate-spin" : ""}`} fill="none" viewBox="0 0 24 24">
