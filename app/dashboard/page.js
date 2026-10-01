@@ -583,6 +583,62 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
   );
 }
 
+function TelemetrySignalBar({ dispatched }) {
+  const signals = [
+    { label: "Grid carbon", value: "Active", tone: "emerald" },
+    { label: "Water stress", value: "Active", tone: "blue" },
+    { label: "Thermal reuse", value: "Tracking", tone: "amber" },
+    { label: "Policy engine", value: dispatched ? "Applied" : "Ready", tone: "slate" },
+  ];
+
+  return (
+    <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Decision inputs</div>
+          <div className="mt-1 text-xs text-slate-500">Telemetry signals available to the routing layer.</div>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          {signals.map((signal) => {
+            const dot = signal.tone === "emerald" ? "bg-emerald-500" : signal.tone === "blue" ? "bg-blue-500" : signal.tone === "amber" ? "bg-amber-500" : "bg-slate-400";
+            return (
+              <span key={signal.label} className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[10px] font-semibold text-slate-600">
+                <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+                {signal.label}
+                <span className="font-medium text-slate-400">{signal.value}</span>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AuditOverview({ dispatched, reportStatus }) {
+  const items = [
+    { label: "Logged decisions", value: dispatched ? "4" : "3", detail: dispatched ? "+1 this session" : "Awaiting new dispatch", tone: dispatched ? "emerald" : "slate" },
+    { label: "Policy checks", value: dispatched ? "4 / 4" : "Ready", detail: "Residency · SLA · capacity", tone: "blue" },
+    { label: "Impact fields", value: "Carbon + water", detail: "Heat reuse tracked", tone: "amber" },
+    { label: "Report status", value: reportStatus === "ready" ? "PDF ready" : "Available", detail: "CSRD export workflow", tone: reportStatus === "ready" ? "emerald" : "slate" },
+  ];
+
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {items.map((item) => {
+        const valueTone = item.tone === "emerald" ? "text-emerald-700" : item.tone === "blue" ? "text-blue-700" : item.tone === "amber" ? "text-amber-700" : "text-slate-800";
+        return (
+          <div key={item.label} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">{item.label}</div>
+            <div className={`mt-2 text-sm font-bold ${valueTone}`}>{item.value}</div>
+            <div className="mt-1 text-[10px] leading-4 text-slate-500">{item.detail}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function EmptyState({ title, description, compact = false }) {
   return (
     <div className={`flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/60 text-center ${compact ? "min-h-52 p-8" : "min-h-64 p-10"}`}>
@@ -763,10 +819,14 @@ export default function HomePage() {
                 <MetricCard label="Heat energy reused" tone="amber" detail={isDispatched ? "Stockholm district loop" : "Loop idle"} icon={metricIcons.heat}>
                   {isDispatched ? <span key={countKey}><CountUp end={8.4} decimals={1} duration={1.5} /> MWh</span> : "0 MWh"}
                 </MetricCard>
-                <MetricCard label="Compliance status" tone={hasData ? "green" : "slate"} detail="CSRD Scope 2/3" icon={metricIcons.compliance}>
+                <MetricCard label="Compliance status" tone={isDispatched ? "green" : "slate"} detail="CSRD Scope 2/3" icon={metricIcons.compliance}>
                   {isDispatched ? <span key={countKey}><CountUp end={99.4} decimals={1} duration={1.5} />%</span> : "Standby"}
                 </MetricCard>
               </div>
+
+              <motion.div variants={fadeInUp}>
+                <TelemetrySignalBar dispatched={isDispatched} />
+              </motion.div>
 
               <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-5 flex items-end justify-between gap-4">
@@ -977,6 +1037,8 @@ export default function HomePage() {
                   {reportStatus === "generating" ? "Generating report…" : reportStatus === "ready" ? "Regenerate CSRD report" : "Generate CSRD report"}
                 </button>
               </motion.div>
+
+              <AuditOverview dispatched={isDispatched} reportStatus={reportStatus} />
 
               <motion.section variants={fadeInUp} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                 {!isDispatched ? (
