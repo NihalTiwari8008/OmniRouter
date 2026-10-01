@@ -194,7 +194,6 @@ function AnalysisTimeline({ stage, complete }) {
 }
 
 function FeasibilityPanel({ complete = false, running = false }) {
-  const ready = complete || running;
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex items-start justify-between gap-4">
@@ -267,8 +266,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
             </g>
           ))}
 
-          <line x1={x(0)} y1={y(0)} x2={x(34)} y2={y(0.16)} stroke="#10b981" strokeWidth="2" strokeDasharray="6 6" opacity="0.45" />
-
+          <line x1={x(0)} y1={y(0)} x2={x(46)} y2={y(0.18)} stroke="#10b981" strokeWidth="2" strokeDasharray="6 6" opacity="0.35" />
           {ROUTER_REGIONS.map((region) => {
             const cx = x(region.carbon);
             const cy = y(region.waterStress);
@@ -299,7 +297,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
   );
 }
 
-function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, workloadCategory, deadlineHours, geoFence, selectedRegionId }) {
+function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, workloadCategory, deadlineHours, geoFence }) {
   return (
     <section className={dispatched ? "rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 sm:p-6" : "rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -844,12 +842,11 @@ export default function HomePage() {
                           workloadCategory={workloadCategory}
                           deadlineHours={deadlineVal}
                           geoFence={geoFence}
-                          selectedRegionId={selectedRegionId}
                         />
                       </div>
                     )}
                   </div>
-                </motion.section>                </motion.section>
+                </motion.section>
               </div>
             </motion.div>
           )}
