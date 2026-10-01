@@ -366,19 +366,9 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
           <button
             onClick={onDispatch}
             disabled={isDispatching}
-            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-blue-200 bg-white px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isDispatching ? (
-              <>
-                <svg className="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-20" cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2.2" /><path d="M20 12a8 8 0 0 0-8-8" stroke="currentColor" strokeLinecap="round" strokeWidth="2.2" /></svg>
-                Dispatching
-              </>
-            ) : (
-              <>
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><path d="m5 12 14-7-4.5 14-3.2-5-6.3-2Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
-                Dispatch workload
-              </>
-            )}
+            {isDispatching ? "Dispatching…" : "Dispatch workload"}
           </button>
         )}
       </div>
@@ -669,6 +659,8 @@ export default function HomePage() {
       setIsDispatching(false);
       setIsDispatched(true);
       setCountKey((key) => key + 1);
+      setActiveTab("command-center");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }, 950);
   }, [hasData, isDispatching, isDispatched]);
 
@@ -890,17 +882,9 @@ export default function HomePage() {
                     <button
                       onClick={runPlacementAnalysis}
                       disabled={isLoading}
-                      className="flex h-11 w-full items-center justify-between rounded-lg border border-blue-200 bg-blue-50 px-4 text-left text-blue-700 transition hover:border-blue-300 hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-70"
+                      className="flex h-10 w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition hover:border-blue-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                      <span className="flex items-center gap-2.5 text-sm font-semibold">
-                        {isLoading ? (
-                          <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-20" cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2.2" /><path d="M20 12a8 8 0 0 0-8-8" stroke="currentColor" strokeLinecap="round" strokeWidth="2.2" /></svg>
-                        ) : (
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" /></svg>
-                        )}
-                        {isLoading ? "Analyzing placement" : "Analyze placement"}
-                      </span>
-                      <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
+                      {isLoading ? "Analyzing placement…" : "Analyze placement"}
                     </button>
                   </div>
                 </motion.section>
