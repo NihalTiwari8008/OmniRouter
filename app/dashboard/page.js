@@ -657,6 +657,8 @@ export default function HomePage() {
     }, 950);
   }, [hasData, isDispatching, isDispatched]);
 
+  const currentTab = TABS.find((tab) => tab.id === activeTab) || TABS[0];
+
   const liveStreamRows = isDispatched
     ? [
         {
