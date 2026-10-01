@@ -66,10 +66,10 @@ function FeatureIcon({ type }) {
 
 function DashboardPreview() {
   return (
-    <div className="laptop-stage relative mx-auto w-full max-w-[730px] rounded-[30px] p-5 sm:p-7">
+    <div className="laptop-stage relative mx-auto w-full max-w-[690px] rounded-[28px] p-5 sm:p-6 lg:-mr-4">
       <div className="pointer-events-none absolute inset-0 rounded-[30px] bg-black/10" />
-      <div className="relative z-10 rotate-[1deg] px-1 pt-1">
-        <div className="laptop-screen overflow-hidden rounded-[18px] border-[10px] border-slate-900 bg-white shadow-2xl shadow-slate-900/30">
+      <div className="relative z-10 rotate-[1.2deg] px-1 pt-1">
+        <div className="laptop-screen overflow-hidden rounded-[18px] border-[9px] border-slate-900 bg-white shadow-2xl shadow-slate-900/30">
         <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
           <div className="flex items-center gap-2">
             <GlobeMark size="sm" />
@@ -152,7 +152,8 @@ function DashboardPreview() {
           </div>
         </div>
         </div>
-        <div className="laptop-base mx-auto h-5 w-[88%] rounded-b-[12px] bg-slate-800 shadow-lg" />
+        <div className="laptop-base mx-auto h-6 w-[90%] rounded-b-[14px] bg-slate-800 shadow-lg" />
+        <div className="laptop-hinge mx-auto h-1.5 w-[46%] rounded-b-md bg-slate-600/80" />
         <div className="mx-auto h-1.5 w-[34%] rounded-full bg-slate-700/90" />
       </div>
     </div>
@@ -238,7 +239,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
-      <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur">
+      <header className="relative z-40 border-b border-slate-200/70 bg-white/70 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
           <Logo />
 
@@ -258,22 +259,22 @@ export default function LandingPage() {
       <main>
         <section className="relative overflow-hidden bg-white">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(37,99,235,0.06),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(16,185,129,0.05),transparent_24%)]" />
-          <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-5 pb-18 pt-14 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-24 lg:pt-20">
+          <div className="relative z-10 mx-auto grid min-h-[610px] max-w-[1440px] items-center gap-8 px-6 pb-14 pt-12 lg:grid-cols-[0.86fr_1.14fr] lg:px-10 lg:pb-16 lg:pt-14">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-700">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700 shadow-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 Sustainable compute routing
               </div>
 
-              <h1 className="mt-6 max-w-xl text-4xl font-bold leading-[1.05] tracking-[-0.035em] text-slate-950 sm:text-5xl lg:text-6xl">
+              <h1 className="mt-6 max-w-[590px] text-[44px] font-bold leading-[1.04] tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[60px]">
                 Route AI workloads for a cleaner <span className="text-blue-600">planet.</span>
               </h1>
 
-              <p className="mt-6 max-w-xl rounded-xl bg-white/55 py-1 text-base leading-7 text-slate-700 sm:text-lg">
+              <p className="mt-5 max-w-[560px] text-[16px] leading-7 text-slate-600 sm:text-[18px]">
                 OmniRouter places AI workloads across data centers using carbon intensity, water stress, heat reuse, and operational constraints.
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                   Get started <Arrow />
                 </button>
@@ -282,12 +283,12 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              <div className="mt-9 grid max-w-lg grid-cols-3 gap-2 rounded-2xl border border-white/80 bg-white/80 p-2.5 shadow-sm backdrop-blur-md">
-                <div className="flex min-w-0 items-center gap-2.5 rounded-xl px-2 py-1.5">
+              <div className="mt-8 grid max-w-[560px] grid-cols-3 gap-2 rounded-2xl border border-white/85 bg-white/88 p-2.5 shadow-md backdrop-blur-md">
+                <div className="flex min-w-0 items-center gap-2 rounded-xl px-2.5 py-1.5">
                   <FeatureIcon type="leaf" />
                   <div><div className="text-xs font-bold text-slate-900">Lower emissions</div><div className="text-[11px] text-slate-600">Carbon-aware</div></div>
                 </div>
-                <div className="flex items-center gap-2.5">
+                <div className="flex min-w-0 items-center gap-2 rounded-xl px-2.5 py-1.5">
                   <FeatureIcon type="drop" />
                   <div><div className="text-xs font-bold text-slate-900">Conserve water</div><div className="text-[11px] text-slate-600">Water-aware</div></div>
                 </div>
