@@ -628,7 +628,6 @@ export default function HomePage() {
   const [isDispatched, setIsDispatched] = useState(false);
   const [isDispatching, setIsDispatching] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState("stockholm");
-  const [telemetryRefreshing, setTelemetryRefreshing] = useState(false);
   const [reportStatus, setReportStatus] = useState("idle");
   const [workloadName, setWorkloadName] = useState(DEFAULT_WORKLOAD.name);
   const [workloadCategory, setWorkloadCategory] = useState(DEFAULT_WORKLOAD.category);
@@ -637,12 +636,6 @@ export default function HomePage() {
   const [countKey, setCountKey] = useState(0);
 
   const switchTab = useCallback((tabId) => setActiveTab(tabId), []);
-
-  const refreshTelemetry = useCallback(() => {
-    if (telemetryRefreshing) return;
-    setTelemetryRefreshing(true);
-    setTimeout(() => setTelemetryRefreshing(false), 900);
-  }, [telemetryRefreshing]);
 
   const generateReport = useCallback(() => {
     if (!isDispatched || reportStatus === "generating") return;
@@ -759,20 +752,7 @@ export default function HomePage() {
             <h1 className="text-2xl font-bold tracking-tight text-slate-950">{currentTab.title}</h1>
             <p className="mt-1 text-sm text-slate-600">{currentTab.subtitle}</p>
           </div>
-          <div className="flex items-center gap-2">
-            <div className={telemetryRefreshing ? "inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700" : "inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"}>
-              <span className={telemetryRefreshing ? "h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" : "h-1.5 w-1.5 rounded-full bg-emerald-500"} />
-              {telemetryRefreshing ? "Syncing telemetry…" : "Telemetry synced"}
-            </div>
-            <button
-              onClick={refreshTelemetry}
-              disabled={telemetryRefreshing}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
-            >
-              <svg className={`h-3.5 w-3.5 text-slate-500 ${telemetryRefreshing ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>
-              Refresh telemetry
-            </button>
-          </div>
+
         </header>
 
         <AnimatePresence mode="wait">
