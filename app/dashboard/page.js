@@ -266,7 +266,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
             </g>
           ))}
 
-          <line x1={x(0)} y1={y(0)} x2={x(46)} y2={y(0.18)} stroke="#10b981" strokeWidth="2" strokeDasharray="6 6" opacity="0.35" />
           {ROUTER_REGIONS.map((region) => {
             const cx = x(region.carbon);
             const cy = y(region.waterStress);
@@ -341,6 +340,7 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
             workloadCategory,
             deadlineHours,
             geoFence,
+            targetRegion: "EU-North-1",
           }), null, 2)}</pre>
         </div>
       </details>
