@@ -266,7 +266,7 @@ export default function LandingPage() {
                 Route AI workloads for a cleaner <span className="text-blue-600">planet.</span>
               </h1>
 
-              <p className="mt-6 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
+              <p className="mt-6 max-w-xl rounded-xl bg-white/55 py-1 text-base leading-7 text-slate-700 sm:text-lg">
                 OmniRouter places AI workloads across data centers using carbon intensity, water stress, heat reuse, and operational constraints.
               </p>
 
@@ -279,18 +279,18 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              <div className="mt-9 grid max-w-lg grid-cols-3 gap-4 border-t border-slate-200 pt-6">
-                <div className="flex items-center gap-2.5">
+              <div className="mt-9 grid max-w-lg grid-cols-3 gap-2 rounded-2xl border border-white/80 bg-white/80 p-2.5 shadow-sm backdrop-blur-md">
+                <div className="flex min-w-0 items-center gap-2.5 rounded-xl px-2 py-1.5">
                   <FeatureIcon type="leaf" />
-                  <div><div className="text-xs font-semibold text-slate-800">Lower emissions</div><div className="text-[11px] text-slate-500">Carbon-aware placement</div></div>
+                  <div><div className="text-xs font-bold text-slate-900">Lower emissions</div><div className="text-[11px] text-slate-600">Carbon-aware</div></div>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <FeatureIcon type="drop" />
-                  <div><div className="text-xs font-semibold text-slate-800">Conserve water</div><div className="text-[11px] text-slate-500">Water-aware routing</div></div>
+                  <div><div className="text-xs font-bold text-slate-900">Conserve water</div><div className="text-[11px] text-slate-600">Water-aware</div></div>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <FeatureIcon type="heat" />
-                  <div><div className="text-xs font-semibold text-slate-800">Reuse heat</div><div className="text-[11px] text-slate-500">Thermal opportunities</div></div>
+                  <div><div className="text-xs font-bold text-slate-900">Reuse heat</div><div className="text-[11px] text-slate-600">Thermal</div></div>
                 </div>
               </div>
             </motion.div>
