@@ -3,6 +3,15 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "react-countup";
+import {
+  ROUTER_REGIONS,
+  FEASIBILITY_CHECKS,
+  ROUTING_STEPS,
+  STREAM_ROWS,
+  LEDGER_ROWS,
+  ROUTE_DECISION,
+  createDispatchPayload,
+} from "@/lib/router/mockRouter";
 
 const TABS = [
   {
@@ -42,18 +51,6 @@ const NAV_ICONS = {
     </svg>
   ),
 };
-
-const STREAM_ROWS = [
-  { id: "#R-9042", name: "Llama-3-70B-BF16", desc: "Batch inference · 500k tokens/sec", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-74.1%", water: "120 L/hr", status: "Dispatched", statusColor: "emerald" },
-  { id: "#R-9041", name: "Mistral-Large-Embed", desc: "Vector database embeddings", dest: "US-West-2 (Oregon)", destColor: "blue", carbon: "-58.4%", water: "85 L/hr", status: "Completed", statusColor: "slate" },
-  { id: "#R-9040", name: "StableDiffusion-XL-FineTune", desc: "3D rendering / diffusion", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-72.8%", water: "110 L/hr", status: "Completed", statusColor: "slate" },
-];
-
-const LEDGER_ROWS = [
-  { id: "#JOB-8841", time: "Just now", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-74.1%", carbonSaved: "38.2 kg saved", water: "-120 L", rationale: "Low carbon intensity; waste heat exported to the city grid." },
-  { id: "#JOB-8840", time: "12m ago", dest: "US-West-2 (Oregon)", destColor: "blue", carbon: "-58.4%", carbonSaved: "21.5 kg saved", water: "-85 L", rationale: "Hydro power used during the selected green-energy window." },
-  { id: "#JOB-8839", time: "45m ago", dest: "EU-North-1 (Stockholm)", destColor: "emerald", carbon: "-72.8%", carbonSaved: "44.0 kg saved", water: "-110 L", rationale: "Residency constraint applied; zero-carbon grid selected." },
-];
 
 const fadeInUp = {
   initial: { opacity: 0, y: 10 },
@@ -156,44 +153,247 @@ function RegionNode({ name, subtitle, hasData, selected, populated }) {
   );
 }
 
-function MapMarker({ region }) {
+function AnalysisTimeline({ stage, complete }) {
   return (
-    <div className="absolute z-20 -translate-x-1/2 -translate-y-1/2">
-      <div className="group flex flex-col items-center">
-        <div className={region.selected ? "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : "relative flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md"}>
-          {region.selected && <span className="absolute inset-1 rounded-full bg-white/90" />}
-          <span className={region.selected ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
+    <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Routing pipeline</div>
+          <div className="mt-1 text-sm font-semibold text-slate-700">
+            {complete ? "Decision ready for dispatch" : stage > 0 ? "Evaluating workload against live constraints" : "Ready to run"}
+          </div>
         </div>
-        <div className="mt-1 whitespace-nowrap rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur">
-          {region.name}
-        </div>
+        <span className={complete ? "rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : stage > 0 ? "rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700" : "rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-500"}>
+          {complete ? "Complete" : stage > 0 ? "In progress" : "Idle"}
+        </span>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-4">
+        {ROUTING_STEPS.map((label, index) => {
+          const stepNumber = index + 1;
+          const done = complete || stage > stepNumber;
+          const active = !complete && stage === stepNumber;
+          return (
+            <div key={label} className={done ? "rounded-lg border border-emerald-200 bg-white p-3" : active ? "rounded-lg border border-blue-200 bg-white p-3 shadow-sm" : "rounded-lg border border-slate-200 bg-white p-3"}>
+              <div className="flex items-center gap-2">
+                <span className={done ? "flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700" : active ? "flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700" : "flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-400"}>
+                  {done ? "✓" : stepNumber}
+                </span>
+                <span className="text-[11px] font-semibold leading-4 text-slate-700">{label}</span>
+              </div>
+              <div className={done ? "mt-2 text-[10px] font-medium text-emerald-600" : active ? "mt-2 text-[10px] font-medium text-blue-600" : "mt-2 text-[10px] font-medium text-slate-400"}>
+                {done ? "Passed" : active ? "Evaluating…" : "Waiting"}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function RegionDetailCard({ region }) {
+function FeasibilityPanel() {
   return (
-    <div className={region.selected ? "rounded-xl border border-emerald-300 bg-emerald-50/40 p-4 ring-1 ring-emerald-100" : "rounded-xl border border-slate-200 bg-white p-4"}>
+    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-base font-bold text-slate-950">Feasibility filter</h3>
+          <p className="mt-1 text-xs text-slate-500">Hard workload and policy checks run before environmental ranking.</p>
+        </div>
+        <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">4 / 4 passed</span>
+      </div>
+
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        {FEASIBILITY_CHECKS.map((check) => (
+          <div key={check.label} className="rounded-lg border border-slate-100 bg-slate-50/70 p-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex min-w-0 items-center gap-2">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700">✓</span>
+                <span className="text-xs font-semibold text-slate-700">{check.label}</span>
+              </div>
+              <span className="text-[10px] font-semibold text-emerald-600">{check.status}</span>
+            </div>
+            <div className="ml-7 mt-1 text-[10px] text-slate-500">{check.detail}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ParetoChart({ selectedRegionId = "stockholm" }) {
+  const width = 720;
+  const height = 300;
+  const pad = { left: 58, right: 28, top: 26, bottom: 48 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+  const maxCarbon = 420;
+  const maxWater = 5;
+  const x = (value) => pad.left + (value / maxCarbon) * plotW;
+  const y = (value) => pad.top + (1 - value / maxWater) * plotH;
+
+  return (
+    <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h3 className="text-base font-bold text-slate-950">Pareto environmental analysis</h3>
+          <p className="mt-1 text-xs text-slate-500">Lower carbon and lower water stress move toward the preferred operating corner.</p>
+        </div>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">2-variable view</span>
+      </div>
+
+      <div className="mt-4 overflow-hidden rounded-lg border border-slate-100 bg-slate-50/50">
+        <svg className="h-[290px] w-full" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Carbon intensity versus water stress chart">
+          <defs>
+            <linearGradient id="pareto-area" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stopColor="#dbeafe" />
+              <stop offset="100%" stopColor="#d1fae5" />
+            </linearGradient>
+          </defs>
+
+          <rect x={pad.left} y={pad.top} width={plotW} height={plotH} fill="url(#pareto-area)" opacity="0.32" rx="10" />
+          {[0, 1, 2, 3, 4, 5].map((tick) => (
+            <g key={tick}>
+              <line x1={pad.left} x2={pad.left + plotW} y1={y(tick)} y2={y(tick)} stroke="#e2e8f0" strokeWidth="1" />
+              <text x={pad.left - 10} y={y(tick) + 4} textAnchor="end" fontSize="10" fill="#94a3b8">{tick}</text>
+            </g>
+          ))}
+          {[0, 100, 200, 300, 400].map((tick) => (
+            <g key={tick}>
+              <line x1={x(tick)} x2={x(tick)} y1={pad.top} y2={pad.top + plotH} stroke="#eef2f7" strokeWidth="1" />
+              <text x={x(tick)} y={height - 22} textAnchor="middle" fontSize="10" fill="#94a3b8">{tick}</text>
+            </g>
+          ))}
+
+          <path d={`M ${x(14)} ${y(0.12)} L ${x(142)} ${y(4.2)} L ${x(380)} ${y(2.1)}`} fill="none" stroke="#10b981" strokeWidth="2" strokeDasharray="6 6" opacity="0.6" />
+
+          {ROUTER_REGIONS.map((region) => {
+            const cx = x(region.carbon);
+            const cy = y(region.waterStress);
+            const selected = region.id === selectedRegionId;
+            return (
+              <g key={region.id}>
+                {selected && <circle cx={cx} cy={cy} r="19" fill="#10b981" opacity="0.12" />}
+                <circle cx={cx} cy={cy} r={selected ? 9 : 7} fill={selected ? "#10b981" : region.tone === "risk" ? "#ef4444" : "#f59e0b"} stroke="#ffffff" strokeWidth="3" />
+                <text x={cx} y={cy - 15} textAnchor="middle" fontSize="10" fontWeight="600" fill="#334155">{region.name}</text>
+              </g>
+            );
+          })}
+
+          <text x={pad.left + plotW / 2} y={height - 6} textAnchor="middle" fontSize="10" fontWeight="600" fill="#64748b">Carbon intensity · gCO₂e/kWh</text>
+          <text x="14" y={pad.top + plotH / 2} transform={`rotate(-90 14 ${pad.top + plotH / 2})`} textAnchor="middle" fontSize="10" fontWeight="600" fill="#64748b">Water stress index</text>
+        </svg>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] text-slate-500">
+        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />Selected route</span>
+        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-red-500" />Water constraint</span>
+        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" />Thermal constraint</span>
+      </div>
+    </section>
+  );
+}
+
+function DispatchPanel({ dispatched, isDispatching, onDispatch }) {
+  return (
+    <section className={dispatched ? "rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 sm:p-6" : "rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"}>
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="min-w-0">
+          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Dispatch control</div>
+          <h3 className="mt-1 text-base font-bold text-slate-950">
+            {dispatched ? "Workload dispatched successfully" : `Ready to dispatch to ${ROUTE_DECISION.regionId === "stockholm" ? "EU-North-1 · Stockholm" : ROUTE_DECISION.regionId}`}
+          </h3>
+          <p className="mt-1 text-xs leading-5 text-slate-500">
+            {dispatched ? "Route decision recorded. The Audit Ledger has received the environmental rationale." : ROUTE_DECISION.rationale}
+          </p>
+        </div>
+
+        {dispatched ? (
+          <div className="shrink-0 rounded-lg border border-emerald-200 bg-white px-4 py-3">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-600">Dispatch status</div>
+            <div className="mt-1 text-sm font-bold text-emerald-900">Dispatched · EU-North-1</div>
+          </div>
+        ) : (
+          <button onClick={onDispatch} disabled={isDispatching} className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-80">
+            {isDispatching ? (
+              <>
+                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                Dispatching…
+              </>
+            ) : (
+              <>
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>
+                Dispatch workload
+              </>
+            )}
+          </button>
+        )}
+      </div>
+
+      <details className="mt-4 rounded-lg border border-slate-200 bg-white">
+        <summary className="cursor-pointer list-none px-4 py-3 text-xs font-semibold text-slate-700">View dispatch payload</summary>
+        <div className="border-t border-slate-100 bg-slate-950 p-4">
+          <pre className="overflow-x-auto text-[10px] leading-5 text-slate-200">{JSON.stringify(createDispatchPayload({
+            workloadName: "Llama-3 Fine-Tuning (70B-Instruct)",
+            workloadCategory: "LLM Batch Inference",
+            deadlineHours: 12,
+            geoFence: true,
+          }), null, 2)}</pre>
+        </div>
+      </details>
+    </section>
+  );
+}
+
+function MapMarker({ region, selected, onSelect }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(region.id)}
+      className="absolute z-20 -translate-x-1/2 -translate-y-1/2"
+      aria-label={`Select ${region.name}`}
+    >
+      <span className="group flex flex-col items-center">
+        <span className={selected ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : "relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md transition group-hover:scale-105"}>
+          {selected && <span className="absolute inset-1 rounded-full bg-white/90" />}
+          <span className={selected ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
+        </span>
+        <span className="mt-1 whitespace-nowrap rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur">{region.name}</span>
+      </span>
+    </button>
+  );
+}
+
+function RegionDetailCard({ region, selected, onSelect }) {
+  const accent = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
+  const dot = accent === "red" ? "bg-red-500" : accent === "amber" ? "bg-amber-500" : "bg-emerald-500";
+  const badge = accent === "red"
+    ? "border-red-200 bg-red-50 text-red-700"
+    : accent === "amber"
+      ? "border-amber-200 bg-amber-50 text-amber-700"
+      : "border-emerald-200 bg-emerald-50 text-emerald-700";
+
+  return (
+    <button type="button" onClick={() => onSelect(region.id)} className={`w-full text-left ${selected ? "rounded-xl border border-emerald-300 bg-emerald-50/40 p-4 ring-1 ring-emerald-100" : "rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:shadow-sm"}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <span className={region.selected ? "h-2 w-2 rounded-full bg-emerald-500" : region.status === "risk" ? "h-2 w-2 rounded-full bg-red-500" : "h-2 w-2 rounded-full bg-amber-500"} />
+            <span className={`h-2 w-2 rounded-full ${dot}`} />
             <h3 className="text-sm font-bold text-slate-950">{region.name}</h3>
           </div>
-          <p className="mt-1 text-xs text-slate-500">{region.code} · {region.window}</p>
+          <p className="mt-1 text-xs text-slate-500">{region.code} · {region.descriptor}</p>
         </div>
-        <span className={region.selected ? "shrink-0 rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] font-semibold text-emerald-700" : region.status === "risk" ? "shrink-0 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-[10px] font-semibold text-red-700" : "shrink-0 rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-[10px] font-semibold text-amber-700"}>{region.badge}</span>
+        <span className={`shrink-0 rounded-md border px-2 py-1 text-[10px] font-semibold ${selected ? "border-emerald-200 bg-white text-emerald-700" : badge}`}>{selected ? "Selected" : region.badge}</span>
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-slate-100 pt-3">
         <div>
           <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
-          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.carbon}</div>
+          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.carbon} gCO2e/kWh</div>
         </div>
         <div>
           <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water stress</div>
-          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.water}</div>
+          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.waterStress} · {region.waterLabel}</div>
         </div>
         <div>
           <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat loop</div>
@@ -201,77 +401,25 @@ function RegionDetailCard({ region }) {
         </div>
         <div>
           <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Latency</div>
-          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.latency}</div>
+          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.latency} ms</div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 
-function EnvironmentalMap() {
-  const regions = [
-    {
-      name: "Oregon",
-      code: "US-West",
-      window: "Hydro basin",
-      carbon: "142 gCO2e/kWh",
-      water: "4.2 · Critical",
-      heat: "N/A",
-      latency: "24 ms",
-      x: "23.5%",
-      y: "39%",
-      status: "risk",
-      badge: "High water stress",
-    },
-    {
-      name: "Stockholm",
-      code: "EU-North-1",
-      window: "District heat",
-      carbon: "14 gCO2e/kWh",
-      water: "0.12 · Ultra low",
-      heat: "82°C active",
-      latency: "38 ms",
-      x: "52.8%",
-      y: "30.5%",
-      status: "selected",
-      badge: "Recommended",
-      selected: true,
-    },
-    {
-      name: "Mumbai",
-      code: "AP-South",
-      window: "Solar sync",
-      carbon: "380 gCO2e/kWh",
-      water: "2.1 · Moderate",
-      heat: "Solar sync",
-      latency: "112 ms",
-      x: "70.2%",
-      y: "59%",
-      status: "constraint",
-      badge: "Thermal constraint",
-    },
-  ];
-
+function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
   return (
-    <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <div>
           <div className="text-sm font-bold text-slate-950">Global routing map</div>
-          <div className="mt-1 text-xs text-slate-500">Environmental conditions across eligible compute regions</div>
+          <div className="mt-1 text-xs text-slate-500">Candidate regions and live environmental inputs</div>
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-500">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
-            Evaluated
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Selected
-          </span>
-        </div>
+        <span className="text-xs font-semibold text-slate-400">{ROUTER_REGIONS.length} candidates evaluated</span>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.75fr)]">
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.4fr)_minmax(300px,0.8fr)]">
         <div className="relative min-h-[390px] border-b border-slate-100 bg-slate-50 xl:border-b-0 xl:border-r">
           <div className="absolute left-4 top-4 z-10 rounded-md border border-slate-200 bg-white/90 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 shadow-sm">
             Global compute network
@@ -279,26 +427,26 @@ function EnvironmentalMap() {
 
           <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
             <defs>
-              <pattern id="map-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+              <pattern id="map-grid-v2" width="50" height="50" patternUnits="userSpaceOnUse">
                 <path d="M50 0H0V50" fill="none" stroke="#dfe7ef" strokeWidth="1" />
               </pattern>
-              <linearGradient id="route-gradient" x1="0" y1="0" x2="1" y2="0">
+              <linearGradient id="route-gradient-v2" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%" stopColor="#60a5fa" />
                 <stop offset="100%" stopColor="#10b981" />
               </linearGradient>
-              <filter id="route-glow" x="-30%" y="-30%" width="160%" height="160%">
+              <filter id="route-glow-v2" x="-30%" y="-30%" width="160%" height="160%">
                 <feGaussianBlur stdDeviation="7" result="blur" />
               </filter>
             </defs>
 
-            <rect width="1000" height="520" fill="url(#map-grid)" opacity="0.54" />
+            <rect width="1000" height="520" fill="url(#map-grid-v2)" opacity="0.5" />
 
-            <g fill="#d9e2ec" stroke="#c4d1de" strokeWidth="1.25">
-              <path d="M66 123 95 94 145 100 181 126 178 151 158 166 148 191 113 206 89 193 67 202 46 178 52 151Z" />
-              <path d="m178 201 28-17 42 4 34 19 21 29-17 18-11 28-27 14-17 42-26-3-12-31-28-26 9-34Z" />
-              <path d="m297 130 28-32 48-13 65 7 41 26 9 42-22 28-9 38-30 20-35-15-15-30-39-16-26-24Z" />
-              <path d="m402 198 30-15 42 8 29 23 4 31-20 23-34 12-34-11-24-22Z" />
-              <path d="m506 225 24-46 42-28 53-5 57 21 46 35 5 34-28 19-8 38-35 22-49-10-29-20-43-14Z" />
+            <g fill="#d8e2ec" stroke="#c0cedc" strokeWidth="1.1">
+              <path d="M62 124 92 94 140 99 177 124 174 151 156 165 146 189 112 203 88 192 67 201 45 177 50 149Z" />
+              <path d="m174 202 31-17 45 4 31 20 20 30-17 18-12 31-27 13-18 43-27-4-12-31-28-25 8-34Z" />
+              <path d="m299 128 27-31 49-12 63 7 40 27 10 40-23 28-8 37-31 22-34-15-16-31-38-15-25-25Z" />
+              <path d="m405 198 29-15 43 8 30 23 4 31-21 23-34 12-35-11-23-22Z" />
+              <path d="m506 224 25-46 42-28 53-5 57 21 46 35 5 34-28 19-8 38-35 22-49-10-29-20-43-14Z" />
               <path d="m541 299 24-13 32 8 21 26-10 27-28 19-30-9-18-26Z" />
               <path d="m664 356 33-23 52 4 41 24 17 31-18 26-43 15-41-13-30-27Z" />
               <path d="m837 215 24-19 38 3 31 20-3 21-31 21-35-6-19-21Z" />
@@ -306,7 +454,7 @@ function EnvironmentalMap() {
               <path d="m753 429 17-8 21 5 12 15-8 10-23-2-18-9Z" />
             </g>
 
-            <g fill="none" stroke="#c4d1de" strokeWidth="0.9" opacity="0.8">
+            <g fill="none" stroke="#b8c6d5" strokeWidth="0.9" opacity="0.85">
               <path d="M86 142 116 129 151 132 166 148" />
               <path d="M101 178 139 162 171 168" />
               <path d="M205 214 242 207 274 219" />
@@ -315,29 +463,22 @@ function EnvironmentalMap() {
               <path d="M677 368 717 359 754 370 783 387" />
             </g>
 
-            <g fill="none" stroke="url(#route-gradient)" strokeLinecap="round">
-              <path d="M235 205 C318 150 414 118 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow)" />
+            <g fill="none" stroke="url(#route-gradient-v2)" strokeLinecap="round">
+              <path d="M235 205 C318 150 414 118 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow-v2)" />
               <path d="M235 205 C318 150 414 118 528 159" strokeWidth="4.5" strokeDasharray="11 11" />
-              <path d="M702 307 C657 250 604 202 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow)" />
+              <path d="M702 307 C657 250 604 202 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow-v2)" />
               <path d="M702 307 C657 250 604 202 528 159" strokeWidth="4.5" strokeDasharray="11 11" />
             </g>
-
-            <circle cx="528" cy="159" r="28" fill="#10b981" opacity="0.10" />
-            <circle cx="528" cy="159" r="13" fill="#10b981" stroke="#ffffff" strokeWidth="4" />
           </svg>
 
-          {regions.map((region) => (
-            <div key={region.name} className="absolute" style={{ left: region.x, top: region.y }}>
-              <MapMarker region={region} />
+          {ROUTER_REGIONS.map((region) => (
+            <div key={region.id} className="absolute" style={{ left: region.map.x, top: region.map.y }}>
+              <MapMarker region={region} selected={region.id === selectedRegionId} onSelect={onSelectRegion} />
             </div>
           ))}
 
-          <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-md border border-slate-200 bg-white/90 px-2.5 py-1.5 text-[10px] font-medium text-slate-500 shadow-sm">
-            <span className="h-2 w-2 rounded-full bg-blue-400" />
-            Candidate route
-            <span className="mx-1 h-3 w-px bg-slate-200" />
-            <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            Recommended
+          <div className="absolute bottom-4 left-4 rounded-md border border-slate-200 bg-white/90 px-2.5 py-1.5 text-[10px] font-medium text-slate-500 shadow-sm">
+            Select a region to inspect its routing inputs.
           </div>
         </div>
 
@@ -345,26 +486,27 @@ function EnvironmentalMap() {
           <div className="mb-3 flex items-center justify-between">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Region detail</div>
-              <div className="mt-1 text-xs text-slate-500">Decision inputs used for routing</div>
+              <div className="mt-1 text-xs text-slate-500">Each candidate is rendered from the same data model.</div>
             </div>
-            <span className="text-xs font-semibold text-slate-400">3 evaluated</span>
+            <span className="text-xs font-semibold text-slate-400">{ROUTER_REGIONS.length} evaluated</span>
           </div>
           <div className="space-y-3">
-            {regions.map((region) => <RegionDetailCard key={region.name} region={region} />)}
+            {ROUTER_REGIONS.map((region) => (
+              <RegionDetailCard key={region.id} region={region} selected={region.id === selectedRegionId} onSelect={onSelectRegion} />
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="border-t border-slate-200 bg-white px-4 py-4 sm:px-5">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="text-sm font-bold text-emerald-900">Recommended target · EU-North-1 (Stockholm)</div>
-            <div className="mt-1 text-xs text-emerald-700">74.1% lower carbon emissions · 120 L/hr water savings · district heat available</div>
-          </div>
-          <span className="inline-flex w-fit items-center rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">Selected route</span>
+      <div className="border-t border-slate-200 bg-slate-50/70 px-4 py-4 sm:px-5">
+        <div className="grid gap-3 sm:grid-cols-4">
+          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon delta</div><div className="mt-1 text-sm font-bold text-emerald-700">{ROUTE_DECISION.carbonDelta}</div></div>
+          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water impact</div><div className="mt-1 text-sm font-bold text-blue-700">{ROUTE_DECISION.waterDelta}</div></div>
+          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat reuse</div><div className="mt-1 text-sm font-bold text-amber-700">{ROUTE_DECISION.heatReuse}</div></div>
+          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Residency</div><div className="mt-1 text-sm font-bold text-slate-800">{ROUTE_DECISION.residency}</div></div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -386,29 +528,50 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState("command-center");
   const [hasData, setHasData] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [analysisStage, setAnalysisStage] = useState(0);
+  const [isDispatched, setIsDispatched] = useState(false);
+  const [isDispatching, setIsDispatching] = useState(false);
+  const [selectedRegionId, setSelectedRegionId] = useState("stockholm");
+  const [telemetryRefreshing, setTelemetryRefreshing] = useState(false);
   const [deadlineVal, setDeadlineVal] = useState(12);
   const [geoFence, setGeoFence] = useState(true);
   const [countKey, setCountKey] = useState(0);
 
   const switchTab = useCallback((tabId) => setActiveTab(tabId), []);
 
-  const toggleAppState = useCallback(() => {
-    setHasData((prev) => {
-      if (!prev) setCountKey((key) => key + 1);
-      return !prev;
-    });
-  }, []);
+  const refreshTelemetry = useCallback(() => {
+    if (telemetryRefreshing) return;
+    setTelemetryRefreshing(true);
+    setTimeout(() => setTelemetryRefreshing(false), 900);
+  }, [telemetryRefreshing]);
 
   const runPlacementAnalysis = useCallback(() => {
     if (isLoading) return;
     setIsLoading(true);
+    setIsDispatched(false);
+    setAnalysisStage(1);
+
+    setTimeout(() => setAnalysisStage(2), 420);
+    setTimeout(() => setAnalysisStage(3), 840);
+    setTimeout(() => setAnalysisStage(4), 1260);
     setTimeout(() => {
       setIsLoading(false);
       setHasData(true);
+      setAnalysisStage(4);
+      setSelectedRegionId("stockholm");
       setCountKey((key) => key + 1);
-      setActiveTab("command-center");
-    }, 1600);
+    }, 1680);
   }, [isLoading]);
+
+  const dispatchWorkload = useCallback(() => {
+    if (isDispatching || isDispatched || !hasData) return;
+    setIsDispatching(true);
+    setTimeout(() => {
+      setIsDispatching(false);
+      setIsDispatched(true);
+      setCountKey((key) => key + 1);
+    }, 950);
+  }, [hasData, isDispatching, isDispatched]);
 
   const currentTab = TABS.find((tab) => tab.id === activeTab) || TABS[0];
 
@@ -458,16 +621,17 @@ export default function HomePage() {
             <p className="mt-1 text-sm text-slate-600">{currentTab.subtitle}</p>
           </div>
           <div className="flex items-center gap-2">
-            <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${hasData ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-slate-200 bg-white text-slate-600"}`}>
-              <span className={`h-1.5 w-1.5 rounded-full ${hasData ? "bg-emerald-500" : "bg-slate-400"}`} />
-              {hasData ? "Telemetry active" : "Standby"}
+            <div className={telemetryRefreshing ? "inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700" : "inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"}>
+              <span className={telemetryRefreshing ? "h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" : "h-1.5 w-1.5 rounded-full bg-emerald-500"} />
+              {telemetryRefreshing ? "Refreshing telemetry…" : "Telemetry active"}
             </div>
             <button
-              onClick={toggleAppState}
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+              onClick={refreshTelemetry}
+              disabled={telemetryRefreshing}
+              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              <svg className="h-3.5 w-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>
-              Demo state
+              <svg className={`h-3.5 w-3.5 text-slate-500 ${telemetryRefreshing ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>
+              Refresh telemetry
             </button>
           </div>
         </header>
@@ -476,17 +640,17 @@ export default function HomePage() {
           {activeTab === "command-center" && (
             <motion.div key="command" className="space-y-6 pt-6" initial="initial" animate="animate" variants={stagger}>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <MetricCard label="Water conserved" tone="blue" detail={hasData ? "+18.4% vs baseline" : "No placement run yet"} icon={metricIcons.water}>
-                  {hasData ? <span key={countKey}><CountUp end={41850} duration={1.5} separator="," /> L</span> : "0 L"}
+                <MetricCard label="Water conserved" tone="blue" detail={isDispatched ? "+18.4% vs baseline" : "Awaiting dispatch"} icon={metricIcons.water}>
+                  {isDispatched ? <span key={countKey}><CountUp end={41850} duration={1.5} separator="," /> L</span> : "0 L"}
                 </MetricCard>
-                <MetricCard label="Emissions avoided" tone="green" detail={hasData ? "-68.2% vs default routing" : "No placement run yet"} icon={metricIcons.carbon}>
-                  {hasData ? <span key={countKey}><CountUp end={1420.8} decimals={1} duration={1.5} separator="," /> kg</span> : "0 kg"}
+                <MetricCard label="Emissions avoided" tone="green" detail={isDispatched ? "-68.2% vs default routing" : "Awaiting dispatch"} icon={metricIcons.carbon}>
+                  {isDispatched ? <span key={countKey}><CountUp end={1420.8} decimals={1} duration={1.5} separator="," /> kg</span> : "0 kg"}
                 </MetricCard>
-                <MetricCard label="Heat energy reused" tone="amber" detail={hasData ? "Stockholm district loop" : "Loop idle"} icon={metricIcons.heat}>
-                  {hasData ? <span key={countKey}><CountUp end={8.4} decimals={1} duration={1.5} /> MWh</span> : "0 MWh"}
+                <MetricCard label="Heat energy reused" tone="amber" detail={isDispatched ? "Stockholm district loop" : "Loop idle"} icon={metricIcons.heat}>
+                  {isDispatched ? <span key={countKey}><CountUp end={8.4} decimals={1} duration={1.5} /> MWh</span> : "0 MWh"}
                 </MetricCard>
                 <MetricCard label="Compliance status" tone={hasData ? "green" : "slate"} detail="CSRD Scope 2/3" icon={metricIcons.compliance}>
-                  {hasData ? <span key={countKey}><CountUp end={99.4} decimals={1} duration={1.5} />%</span> : "Standby"}
+                  {isDispatched ? <span key={countKey}><CountUp end={99.4} decimals={1} duration={1.5} />%</span> : "Standby"}
                 </MetricCard>
               </div>
 
@@ -505,7 +669,7 @@ export default function HomePage() {
                   <RegionNode name="AP-South (Mumbai)" subtitle="Solar curtailment corridor" hasData={hasData} selected={false} populated={{ dotColor: "bg-amber-500", badgeBg: "bg-amber-50 text-amber-700 border-amber-200", badgeText: "Thermal constraint", carbon: "380 gCO2e/kWh", wsi: "2.1 · Moderate", thermal: "Solar sync", latency: "112 ms" }} />
                 </motion.div>
 
-                {hasData && (
+                {isDispatched && (
                   <div className="mt-5 flex flex-col gap-3 rounded-lg border border-emerald-200 bg-emerald-50/70 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <div className="text-sm font-bold text-emerald-900">Current route · EU-North-1 (Stockholm)</div>
@@ -521,8 +685,8 @@ export default function HomePage() {
                   <h2 className="text-lg font-bold text-slate-950">Live activity</h2>
                   <p className="mt-1 text-sm text-slate-500">Recent workloads and routing outcomes</p>
                 </div>
-                {!hasData ? (
-                  <EmptyState compact title="No routing events" description="Run a placement analysis in Router Studio to populate this stream." />
+                {!isDispatched ? (
+                  <EmptyState compact title="No routing events" description="Dispatch a routed workload from Router Studio to populate this stream." />
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[760px] text-left text-sm">
@@ -623,14 +787,40 @@ export default function HomePage() {
                       <div className="flex flex-col gap-2 border-b border-slate-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
                         <div>
                           <h2 className="text-lg font-bold text-slate-950">Environmental impact</h2>
-                          <p className="mt-1 text-sm text-slate-500">Carbon intensity vs. water usage</p>
+                          <p className="mt-1 text-sm text-slate-500">Feasibility, environmental trade-offs, and route selection</p>
                         </div>
-                        <span className="text-xs font-medium text-emerald-700">Analysis complete</span>
+                        <span className={hasData ? "text-xs font-medium text-emerald-700" : "text-xs font-medium text-slate-400"}>{hasData ? "Analysis complete" : isLoading ? "Analysis running…" : "Ready"}</span>
                       </div>
 
-                      <EnvironmentalMap />
+                      <AnalysisTimeline stage={analysisStage} complete={hasData} />
 
-
+                      {!hasData ? (
+                        <div className="grid gap-4 xl:grid-cols-2">
+                          <FeasibilityPanel />
+                          <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                            <div className="flex items-start justify-between gap-4">
+                              <div>
+                                <h3 className="text-base font-bold text-slate-950">Optimization target</h3>
+                                <p className="mt-1 text-xs text-slate-500">Environmental ranking appears after the feasibility pass.</p>
+                              </div>
+                              <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">Waiting</span>
+                            </div>
+                            <div className="mt-7 rounded-lg border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center">
+                              <div className="text-sm font-semibold text-slate-700">Run analysis to rank candidates</div>
+                              <div className="mt-1 text-xs text-slate-500">The router will evaluate carbon, water, heat reuse, and latency together.</div>
+                            </div>
+                          </section>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <EnvironmentalMap selectedRegionId={selectedRegionId} onSelectRegion={setSelectedRegionId} />
+                          <div className="grid gap-4 xl:grid-cols-2">
+                            <ParetoChart selectedRegionId={selectedRegionId} />
+                            <FeasibilityPanel />
+                          </div>
+                          <DispatchPanel dispatched={isDispatched} isDispatching={isDispatching} onDispatch={dispatchWorkload} />
+                        </div>
+                      )}
 
                     </div>
                   )}
@@ -649,8 +839,8 @@ export default function HomePage() {
               </motion.div>
 
               <motion.section variants={fadeInUp} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                {!hasData ? (
-                  <div className="p-6 sm:p-8"><EmptyState title="No routing decisions logged" description="Run a placement analysis in Router Studio to generate an audited record." /></div>
+                {!isDispatched ? (
+                  <div className="p-6 sm:p-8"><EmptyState title="No routing decisions logged" description="Dispatch a routed workload in Router Studio to create an audited record." /></div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[900px] text-left text-sm">
