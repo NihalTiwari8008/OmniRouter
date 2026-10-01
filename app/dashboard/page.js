@@ -166,8 +166,8 @@ function GlobalNetworkOverview({ dispatched }) {
 
         <div className="bg-white">
           <div className="border-b border-slate-100 px-5 py-4">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Region comparison</div>
-            <div className="mt-1 text-xs text-slate-500">Carbon · water · latency</div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">Region comparison</div>
+            <div className="mt-1 text-sm text-slate-500">Carbon · water · latency</div>
           </div>
 
           <div className="divide-y divide-slate-100">
@@ -182,27 +182,27 @@ function GlobalNetworkOverview({ dispatched }) {
                       <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${dot}`} />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="text-sm font-bold text-slate-900">{region.name}</span>
+                          <span className="text-base font-bold text-slate-900">{region.name}</span>
                           {route && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">{dispatched ? "Active route" : "Recommended"}</span>}
                         </div>
-                        <div className="mt-0.5 text-[10px] text-slate-500">{region.code}</div>
+                        <div className="mt-1 text-xs text-slate-500">{region.code}</div>
                       </div>
                     </div>
-                    <span className={route ? "shrink-0 text-xs font-bold text-emerald-700" : "shrink-0 text-xs font-bold text-slate-800"}>{region.latency} ms</span>
+                    <span className={route ? "shrink-0 text-sm font-bold text-emerald-700" : "shrink-0 text-sm font-bold text-slate-800"}>{region.latency} ms</span>
                   </div>
 
                   <div className="mt-3 grid grid-cols-3 gap-3 border-t border-slate-100 pt-3">
                     <div>
-                      <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
-                      <div className="mt-1 text-xs font-semibold text-slate-800">{region.carbon} gCO2e/kWh</div>
+                      <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-800">{region.carbon} gCO2e/kWh</div>
                     </div>
                     <div>
-                      <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Water</div>
-                      <div className="mt-1 text-xs font-semibold text-slate-800">{region.waterStress} · {region.waterLabel}</div>
+                      <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water</div>
+                      <div className="mt-1 text-sm font-semibold text-slate-800">{region.waterStress} · {region.waterLabel}</div>
                     </div>
                     <div>
-                      <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Heat</div>
-                      <div className="mt-1 truncate text-xs font-semibold text-slate-800">{region.id === "stockholm" ? "District heat" : region.heat}</div>
+                      <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat</div>
+                      <div className="mt-1 truncate text-sm font-semibold text-slate-800">{region.id === "stockholm" ? "District heat" : region.heat}</div>
                     </div>
                   </div>
                 </div>
@@ -211,9 +211,9 @@ function GlobalNetworkOverview({ dispatched }) {
           </div>
 
           <div className="border-t border-slate-200 bg-slate-50/70 px-5 py-4">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">Route target</div>
-            <div className="mt-1 text-sm font-bold text-slate-900">{recommended.name} · {recommended.code}</div>
-            <div className="mt-1 text-[10px] leading-4 text-slate-500">{ROUTE_DECISION.rationale}</div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-400">Route target</div>
+            <div className="mt-1 text-base font-bold text-slate-900">{recommended.name} · {recommended.code}</div>
+            <div className="mt-1 text-xs leading-5 text-slate-500">{ROUTE_DECISION.rationale}</div>
           </div>
         </div>
       </div>
