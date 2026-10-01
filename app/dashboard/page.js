@@ -250,17 +250,17 @@ function EnvironmentalMap() {
 
         {regions.map((region) => (
           <div key={region.name}>
-            <span className={\`absolute \${region.pos} z-10 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-sm \${region.dot}\`} />
-            <div className={\`absolute \${region.card} z-20 w-[205px] rounded-xl border bg-white p-3.5 shadow-lg \${region.selected ? "border-emerald-300 ring-4 ring-emerald-100/60" : "border-slate-200"}\`}>
+            <span className={`absolute ${region.pos} z-10 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-sm ${region.dot}`} />
+            <div className={`absolute ${region.card} z-20 w-[205px] rounded-xl border bg-white p-3.5 shadow-lg ${region.selected ? "border-emerald-300 ring-4 ring-emerald-100/60" : "border-slate-200"}`}>
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <span className={\`h-2 w-2 rounded-full \${region.dot}\`} />
+                    <span className={`h-2 w-2 rounded-full ${region.dot}`} />
                     <span className="text-sm font-bold text-slate-950">{region.name}</span>
                   </div>
                   <div className="mt-0.5 text-[10px] font-medium text-slate-400">{region.code}</div>
                 </div>
-                <span className={\`shrink-0 rounded border px-1.5 py-1 text-[9px] font-semibold \${region.badgeClass}\`}>{region.badge}</span>
+                <span className={`shrink-0 rounded border px-1.5 py-1 text-[9px] font-semibold ${region.badgeClass}`}>{region.badge}</span>
               </div>
 
               <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 border-t border-slate-100 pt-3 text-[10px]">
