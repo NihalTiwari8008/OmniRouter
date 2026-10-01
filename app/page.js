@@ -184,20 +184,41 @@ function SignInModal({ open, onClose }) {
             </div>
 
             <div className="mt-6 space-y-2.5">
-              {[
-                { label: "Continue with Google", icon: "G" },
-                { label: "Continue with GitHub", icon: "GH" },
-                { label: "Continue with Microsoft", icon: "MS" },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  onClick={continueToDashboard}
-                  className="flex h-11 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                >
-                  <span className="flex w-6 justify-center text-xs font-bold text-slate-700">{item.icon}</span>
-                  {item.label}
-                </button>
-              ))}
+              <button
+                onClick={continueToDashboard}
+                className="flex h-11 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                <svg aria-hidden="true" className="h-[18px] w-[18px]" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M21.6 12.23c0-.78-.07-1.54-.23-2.27H12v4.3h5.38a4.6 4.6 0 0 1-1.99 3.02v2.51h3.23c1.89-1.74 2.98-4.3 2.98-7.56Z"/>
+                  <path fill="#34A853" d="M12 22c2.7 0 4.96-.9 6.62-2.43l-3.23-2.51c-.9.6-2.05.96-3.39.96-2.61 0-4.82-1.76-5.61-4.13H3.05v2.59A10 10 0 0 0 12 22Z"/>
+                  <path fill="#FBBC05" d="M6.39 13.89A6 6 0 0 1 6.07 12c0-.66.12-1.3.32-1.89V7.52H3.05A10 10 0 0 0 2 12c0 1.61.38 3.14 1.05 4.48l3.34-2.59Z"/>
+                  <path fill="#EA4335" d="M12 5.98c1.47 0 2.79.5 3.83 1.49l2.87-2.87C16.95 2.97 14.7 2 12 2a10 10 0 0 0-8.95 5.52l3.34 2.59C7.18 7.74 9.39 5.98 12 5.98Z"/>
+                </svg>
+                Continue with Google
+              </button>
+
+              <button
+                onClick={continueToDashboard}
+                className="flex h-11 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                <svg aria-hidden="true" className="h-[18px] w-[18px] text-slate-900" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.58 2 12.23 2 16.74 4.87 20.58 8.84 21.93c.5.1.68-.22.68-.49v-1.69c-2.78.62-3.36-1.21-3.36-1.21-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .08 1.52 1.06 1.52 1.06.89 1.56 2.33 1.11 2.9.85.09-.66.35-1.11.63-1.36-2.22-.26-4.56-1.15-4.56-5.04 0-1.11.39-2.01 1.03-2.72-.1-.26-.45-1.29.1-2.68 0 0 .84-.28 2.75 1.04A9.34 9.34 0 0 1 12 7.36c.85 0 1.71.12 2.51.35 1.91-1.32 2.75-1.04 2.75-1.04.55 1.39.2 2.42.1 2.68.64.71 1.03 1.61 1.03 2.72 0 3.9-2.35 4.77-4.59 5.03.36.32.67.94.67 1.9v2.82c0 .27.18.6.69.49A10.28 10.28 0 0 0 22 12.23C22 6.58 17.52 2 12 2Z"/>
+                </svg>
+                Continue with GitHub
+              </button>
+
+              <button
+                onClick={continueToDashboard}
+                className="flex h-11 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+              >
+                <svg aria-hidden="true" className="h-[18px] w-[18px]" viewBox="0 0 24 24">
+                  <rect x="2.5" y="2.5" width="8.6" height="8.6" rx="1.4" fill="#f25022"/>
+                  <rect x="12.9" y="2.5" width="8.6" height="8.6" rx="1.4" fill="#7fba00"/>
+                  <rect x="2.5" y="12.9" width="8.6" height="8.6" rx="1.4" fill="#00a4ef"/>
+                  <rect x="12.9" y="12.9" width="8.6" height="8.6" rx="1.4" fill="#ffb900"/>
+                </svg>
+                Continue with Microsoft
+              </button>
             </div>
 
             <div className="my-5 flex items-center gap-3 text-xs text-slate-400">
