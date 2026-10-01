@@ -57,15 +57,31 @@ input[type="range"] {
 
 
 
-.laptop-stage {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)),
-    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1800&q=85");
-  background-size: cover;
-  background-position: center;
-  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
+.hero-landing {
+  isolation: isolate;
 }
 
+.hero-scene {
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.02) 60%, rgba(255,255,255,0.04) 100%),
+    url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2200&q=88");
+  background-size: cover;
+  background-position: center;
+  filter: saturate(1.1) contrast(1.02);
+  border-radius: 44px 0 0 44px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.18) 18%, #000 42%, #000 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.18) 18%, #000 42%, #000 100%);
+}
+
+.hero-scene-fade {
+  background: linear-gradient(90deg, #fff 8%, rgba(255,255,255,0.94) 24%, rgba(255,255,255,0.5) 44%, rgba(255,255,255,0) 68%);
+}
+
+.laptop-device {
+  transform: perspective(1500px) rotateX(2deg) rotateY(-6deg) rotateZ(-2.6deg);
+  transform-origin: center bottom;
+  filter: drop-shadow(0 28px 42px rgba(15,23,42,0.16));
+}
 
 .laptop-screen {
   transform-origin: center bottom;
@@ -74,23 +90,30 @@ input[type="range"] {
 .laptop-base {
   background: linear-gradient(180deg, #475569 0%, #0f172a 100%);
 }
+
 .laptop-hinge {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
+.hero-auth-card {
+  transform: translate(-14%, 3%);
+}
+
 @media (max-width: 767px) {
-  .laptop-stage {
-    border-radius: 24px;
-    padding: 12px;
-    background-position: 60% center;
-    box-shadow: 0 22px 46px rgba(15, 23, 42, 0.15);
+  .hero-landing {
+    min-height: auto;
   }
 
-  .laptop-base {
-    width: 82%;
+  .hero-scene,
+  .hero-scene-fade {
+    display: none;
   }
 
-  .laptop-hinge {
-    width: 42%;
+  .laptop-device {
+    transform: rotate(-2deg);
+  }
+
+  .hero-auth-card {
+    display: none;
   }
 }
