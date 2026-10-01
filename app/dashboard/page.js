@@ -656,7 +656,38 @@ export default function HomePage() {
     }, 950);
   }, [hasData, isDispatching, isDispatched]);
 
-  const currentTab = TABS.find((tab) => tab.id === activeTab) || TABS[0];
+  const liveStreamRows = isDispatched
+    ? [
+        {
+          id: "#R-9043",
+          name: workloadName,
+          desc: `${workloadCategory} · routed by OmniRouter`,
+          dest: "EU-North-1 (Stockholm)",
+          destColor: "emerald",
+          carbon: "-74.1%",
+          water: "120 L/hr",
+          status: "Dispatched",
+          statusColor: "emerald",
+        },
+        ...STREAM_ROWS,
+      ]
+    : STREAM_ROWS;
+
+  const liveLedgerRows = isDispatched
+    ? [
+        {
+          id: "#JOB-8842",
+          time: "Just now",
+          dest: "EU-North-1 (Stockholm)",
+          destColor: "emerald",
+          carbon: "-74.1%",
+          carbonSaved: "38.2 kg saved",
+          water: "-120 L",
+          rationale: `${workloadName} routed to the lowest combined environmental burden within policy constraints.`,
+        },
+        ...LEDGER_ROWS,
+      ]
+    : LEDGER_ROWS;
 
   const metricIcons = {
     water: <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>,
@@ -740,8 +771,11 @@ export default function HomePage() {
               <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-5 flex items-end justify-between gap-4">
                   <div>
-                    <h2 className="text-lg font-bold text-slate-950">Global data center network</h2>
-                    <p className="mt-1 text-sm text-slate-500">{hasData ? "Current operating conditions by region" : "Available compute regions"}</p>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-lg font-bold text-slate-950">Global data center network</h2>
+                      {isDispatched && <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700">Routing active</span>}
+                    </div>
+                    <p className="mt-1 text-sm text-slate-500">{isDispatched ? "Current operating conditions and active route" : "Available compute regions"}</p>
                   </div>
                   {hasData && <span className="text-xs font-medium text-slate-500">3 regions evaluated</span>}
                 </div>
@@ -784,7 +818,7 @@ export default function HomePage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {STREAM_ROWS.map((row) => (
+                        {liveStreamRows.map((row) => (
                           <tr key={row.id} className="hover:bg-slate-50">
                             <td className="px-3 py-4 font-semibold text-slate-900">{row.id}</td>
                             <td className="px-3 py-4"><div className="font-semibold text-slate-900">{row.name}</div><div className="mt-0.5 text-xs text-slate-500">{row.desc}</div></td>
@@ -930,7 +964,11 @@ export default function HomePage() {
 
           {activeTab === "audit-ledger" && (
             <motion.div key="audit" className="space-y-5 pt-6" initial="initial" animate="animate" variants={stagger}>
-              <motion.div variants={fadeInUp} className="flex items-center justify-end gap-3">
+              <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-end gap-3">
+                <span className={isDispatched ? "inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700" : "inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-500"}>
+                  <span className={isDispatched ? "h-1.5 w-1.5 rounded-full bg-emerald-500" : "h-1.5 w-1.5 rounded-full bg-slate-400"} />
+                  {isDispatched ? "Ledger synced · 1 new decision" : "Ledger ready for new decisions"}
+                </span>
                 {reportStatus === "ready" && <span className="text-xs font-medium text-emerald-700">CSRD report generated · PDF ready</span>}
                 <button onClick={generateReport} disabled={reportStatus === "generating"} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70">
                   <svg className={`h-4 w-4 text-slate-500 ${reportStatus === "generating" ? "animate-spin" : ""}`} fill="none" viewBox="0 0 24 24">
@@ -952,8 +990,8 @@ export default function HomePage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {LEDGER_ROWS.map((row) => (
-                          <tr key={row.id} className="transition hover:bg-slate-50">
+                        {liveLedgerRows.map((row, index) => (
+                          <tr key={row.id} className={index === 0 && isDispatched ? "bg-emerald-50/35 transition hover:bg-emerald-50/60" : "transition hover:bg-slate-50"}>
                             <td className="px-4 py-4 font-semibold text-slate-900">{row.id}</td>
                             <td className="whitespace-nowrap px-4 py-4 text-slate-600">{row.time}</td>
                             <td className="px-4 py-4"><DestBadge dest={row.dest} color={row.destColor} /></td>
