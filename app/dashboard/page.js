@@ -147,7 +147,7 @@ function AnalysisTimeline({ stage, complete }) {
         <div>
           <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Routing pipeline</div>
           <div className="mt-1 text-sm font-semibold text-slate-700">
-            {complete ? "Decision ready for dispatch" : stage > 0 ? "Evaluating workload against live constraints" : "Ready to run"}
+            {complete ? "Decision ready for dispatch" : stage > 0 ? "Evaluating workload against current constraints" : "Ready to run"}
           </div>
         </div>
         <span className={complete ? "rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : stage > 0 ? "rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700" : "rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-500"}>
@@ -379,47 +379,6 @@ function MapMarker({ region, selected, onSelect }) {
     </button>
   );
 }
-function RegionDetailCard({ region, selected, onSelect }) {
-  const accent = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
-  const dot = accent === "red" ? "bg-red-500" : accent === "amber" ? "bg-amber-500" : "bg-emerald-500";
-  const badge = accent === "red"
-    ? "border-red-200 bg-red-50 text-red-700"
-    : accent === "amber"
-      ? "border-amber-200 bg-amber-50 text-amber-700"
-      : "border-emerald-200 bg-emerald-50 text-emerald-700";
-  return (
-    <button type="button" onClick={() => onSelect(region.id)} className={`w-full text-left ${selected ? "rounded-xl border border-emerald-300 bg-emerald-50/40 p-4 ring-1 ring-emerald-100" : "rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:shadow-sm"}`}>
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <span className={`h-2 w-2 rounded-full ${dot}`} />
-            <h3 className="text-sm font-bold text-slate-950">{region.name}</h3>
-          </div>
-          <p className="mt-1 text-xs text-slate-500">{region.code} · {region.descriptor}</p>
-        </div>
-        <span className={`shrink-0 rounded-md border px-2 py-1 text-[10px] font-semibold ${selected ? "border-emerald-200 bg-white text-emerald-700" : badge}`}>{selected ? "Selected" : region.badge}</span>
-      </div>
-      <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-slate-100 pt-3">
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
-          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.carbon} gCO2e/kWh</div>
-        </div>
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water stress</div>
-          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.waterStress} · {region.waterLabel}</div>
-        </div>
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat loop</div>
-          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.heat}</div>
-        </div>
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Latency</div>
-          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.latency} ms</div>
-        </div>
-      </div>
-    </button>
-  );
-}
 function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
   const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
   return (
@@ -427,7 +386,7 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
       <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <div>
           <div className="text-base font-bold text-slate-950">Global routing map</div>
-          <div className="mt-1 text-xs text-slate-500">Eligible compute regions, environmental conditions, and candidate routes.</div>
+          <div className="mt-1 text-xs text-slate-500">Eligible compute regions and candidate routes.</div>
         </div>
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
@@ -708,14 +667,14 @@ export default function HomePage() {
                       <h2 className="text-lg font-bold text-slate-950">Global data center network</h2>
                       {isDispatched && <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700">Routing active</span>}
                     </div>
-                    <p className="mt-1 text-sm text-slate-500">Current operating conditions by region</p>
+                    <p className="mt-1 text-sm text-slate-500">Operating conditions by region</p>
                   </div>
                   <span className="text-xs font-medium text-slate-500">3 regions</span>
                 </div>
                 <motion.div className="grid grid-cols-1 gap-4 xl:grid-cols-3" variants={stagger}>
-                  <RegionNode name="US-West (Oregon)" subtitle="Hydroelectric & Wind Basin" hasData={true} selected={false} populated={{ dotColor: "bg-red-500", badgeBg: "bg-red-50 text-red-700 border-red-200", badgeText: "High water stress", carbon: "142 gCO2e/kWh", wsi: "4.2 · Critical", thermal: "N/A", latency: "24 ms" }} />
-                  <RegionNode name="EU-North (Stockholm)" subtitle="Fossil-free grid + district heat" hasData={true} selected={isDispatched} populated={{ dotColor: "bg-emerald-500", badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200", badgeText: "Recommended target", carbon: "14 gCO2e/kWh", wsi: "0.12 · Ultra low", thermal: "82°C active", latency: "38 ms" }} />
-                  <RegionNode name="AP-South (Mumbai)" subtitle="Solar curtailment corridor" hasData={true} selected={false} populated={{ dotColor: "bg-amber-500", badgeBg: "bg-amber-50 text-amber-700 border-amber-200", badgeText: "Thermal constraint", carbon: "380 gCO2e/kWh", wsi: "2.1 · Moderate", thermal: "Solar sync", latency: "112 ms" }} />
+                  {ROUTER_REGIONS.map((region) => (
+                    <RegionNode key={region.id} region={region} selected={isDispatched && region.id === ROUTE_DECISION.regionId} />
+                  ))}
                 </motion.div>
                 {isDispatched && (
                   <div className="mt-5 flex flex-col gap-3 rounded-lg border border-emerald-200 bg-emerald-50/70 p-4 sm:flex-row sm:items-center sm:justify-between">
