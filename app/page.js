@@ -68,7 +68,7 @@ function DashboardPreview() {
   return (
     <div className="laptop-device relative mx-auto w-full max-w-[730px]">
       <div className="relative z-10 px-1 pt-1">
-        <div className="laptop-screen premium-screen overflow-hidden rounded-[18px] border border-white/90 bg-white/95 shadow-[0_28px_70px_rgba(15,23,42,0.22),0_0_0_1px_rgba(148,163,184,0.24)]">
+        <div className="laptop-screen premium-screen overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-[0_28px_70px_rgba(15,23,42,0.18),0_0_0_4px_rgba(255,255,255,0.92)]">
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <div className="flex items-center gap-2">
               <GlobeMark size="sm" />
@@ -149,8 +149,6 @@ function DashboardPreview() {
             </div>
           </div>
         </div>
-        <div className="laptop-base mx-auto h-5 w-[88%] rounded-b-[14px] shadow-[0_14px_22px_rgba(15,23,42,0.18)]" />
-        <div className="laptop-hinge mx-auto h-1 w-[42%] rounded-b-md" />
       </div>
     </div>
   );
