@@ -309,7 +309,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
           </div>
           <div className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-center">
             <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Latency</div>
-            <div className="mt-1 text-sm font-bold text-slate-900">{selected.latency} ms</div>
+            <div className="mt-1 text-sm font-bold text-slate-900">{recommended.latency} ms</div>
           </div>
         </div>
       </div>
