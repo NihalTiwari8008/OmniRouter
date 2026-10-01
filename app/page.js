@@ -149,8 +149,6 @@ function DashboardPreview() {
             </div>
           </div>
         </div>
-        <div className="laptop-base mx-auto h-5 w-[88%] rounded-b-[14px] shadow-[0_14px_22px_rgba(15,23,42,0.18)]" />
-        <div className="laptop-hinge mx-auto h-1 w-[42%] rounded-b-md" />
       </div>
     </div>
   );
