@@ -366,7 +366,7 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
           <button
             onClick={onDispatch}
             disabled={isDispatching}
-            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-blue-600 bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-75"
+            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-blue-200 bg-white px-4 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isDispatching ? (
               <>
@@ -386,7 +386,7 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
       <details className="mt-3 group">
         <summary className="flex cursor-pointer list-none items-center gap-2 text-[11px] font-semibold text-slate-500 transition hover:text-slate-800">
           <svg className="h-3.5 w-3.5 text-slate-400 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
-          View dispatch payload
+          View payload
         </summary>
         <div className="mt-3 overflow-hidden rounded-lg border border-slate-200 bg-slate-950 p-4">
           <pre className="overflow-x-auto text-[10px] leading-5 text-slate-200">{JSON.stringify(createDispatchPayload({
@@ -544,7 +544,7 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
               <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Candidate regions</div>
-              <span className="text-[10px] font-semibold text-slate-400">Select to inspect</span>
+              
             </div>
             <div className="space-y-2">
               {ROUTER_REGIONS.map((region) => {
@@ -894,7 +894,6 @@ export default function HomePage() {
                       <div className="mt-1 flex justify-between text-xs text-slate-500">
                         <span>0h · Start now</span><span>24h · Flexible</span><span>48h · Max shift</span>
                       </div>
-                      <p className="mt-2 text-[11px] leading-4 text-slate-500">Sets how long OmniRouter may delay the workload before dispatch. It does not limit the workload's runtime.</p>
                     </div>
 
                     <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-4">
@@ -911,22 +910,17 @@ export default function HomePage() {
                     <button
                       onClick={runPlacementAnalysis}
                       disabled={isLoading}
-                      className="group flex h-11 w-full items-center justify-between rounded-lg border border-slate-300 bg-white px-4 text-left shadow-sm transition hover:border-blue-300 hover:bg-blue-50/30 disabled:cursor-not-allowed disabled:opacity-70"
+                      className="flex h-11 w-full items-center justify-between rounded-lg border border-blue-200 bg-blue-50 px-4 text-left text-blue-700 transition hover:border-blue-300 hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-70"
                     >
-                      <span className="flex items-center gap-3">
-                        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-50 text-blue-600 ring-1 ring-blue-100">
-                          {isLoading ? (
-                            <svg className="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.2" /><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" strokeLinecap="round" strokeWidth="2.2" /></svg>
-                          ) : (
-                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><path d="M5 19 19 5m0 0h-7m7 0v7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" /></svg>
-                          )}
-                        </span>
-                        <span>
-                          <span className="block text-sm font-semibold text-slate-900">{isLoading ? "Analyzing placement" : "Analyze placement"}</span>
-                          <span className="mt-0.5 block text-[10px] text-slate-500">{isLoading ? "Checking constraints and environmental signals" : "Evaluate eligible regions for this workload"}</span>
-                        </span>
+                      <span className="flex items-center gap-2.5 text-sm font-semibold">
+                        {isLoading ? (
+                          <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-20" cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2.2" /><path d="M20 12a8 8 0 0 0-8-8" stroke="currentColor" strokeLinecap="round" strokeWidth="2.2" /></svg>
+                        ) : (
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" /></svg>
+                        )}
+                        {isLoading ? "Analyzing placement" : "Analyze placement"}
                       </span>
-                      <svg className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
+                      <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
                     </button>
                   </div>
                 </motion.section>
