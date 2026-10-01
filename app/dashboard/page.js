@@ -207,7 +207,8 @@ function FeasibilityPanel({ complete = false, running = false }) {
 function ParetoChart({ selectedRegionId = "stockholm" }) {
   const maxCarbon = Math.max(...ROUTER_REGIONS.map((region) => region.carbon));
   const maxWater = Math.max(...ROUTER_REGIONS.map((region) => region.waterStress));
-  const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
+  const inspected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
+  const recommended = ROUTER_REGIONS.find((region) => region.id === "stockholm") || ROUTER_REGIONS[1];
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -230,22 +231,22 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
         </div>
         <div className="divide-y divide-slate-100">
           {ROUTER_REGIONS.map((region) => {
-            const selectedRow = region.id === selectedRegionId;
-            const isEfficient = region.id === "stockholm";
+            const inspectedRow = region.id === selectedRegionId;
+            const isRecommended = region.id === "stockholm";
             const carbonWidth = Math.max(8, (region.carbon / maxCarbon) * 100);
             const waterWidth = Math.max(8, (region.waterStress / maxWater) * 100);
             const carbonTone = region.tone === "risk" ? "bg-red-400" : region.tone === "constraint" ? "bg-amber-400" : "bg-emerald-500";
             const waterTone = region.tone === "risk" ? "bg-red-300" : region.tone === "constraint" ? "bg-amber-300" : "bg-emerald-400";
             return (
-              <div key={region.id} className={selectedRow ? "bg-emerald-50/45 px-4 py-4" : "bg-white px-4 py-4"}>
+              <div key={region.id} className={inspectedRow ? "bg-blue-50/45 px-4 py-4" : isRecommended ? "bg-emerald-50/20 px-4 py-4" : "bg-white px-4 py-4"}>
                 <div className="grid gap-4 md:grid-cols-[170px_1fr_1fr_130px_88px] md:items-center">
                   <div className="flex items-start gap-2.5">
                     <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${region.tone === "risk" ? "bg-red-500" : region.tone === "constraint" ? "bg-amber-500" : "bg-emerald-500"}`} />
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-xs font-bold text-slate-900">{region.name}</span>
-                        {selectedRow && <span className="rounded border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[8px] font-semibold text-blue-700">Selected</span>}
-                        {isEfficient && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">Non-dominated</span>}
+                        {inspectedRow && <span className="rounded border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[8px] font-semibold text-blue-700">Inspecting</span>}
+                        {isRecommended && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">Route target</span>}
                       </div>
                       <div className="mt-0.5 text-[10px] text-slate-500">{region.code}</div>
                     </div>
@@ -291,8 +292,8 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" /></svg>
             </div>
             <div className="min-w-0">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Current decision</div>
-              <div className="mt-1 text-sm font-bold text-slate-900">{selected.name} · {selected.code}</div>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Current route</div>
+              <div className="mt-1 text-sm font-bold text-slate-900">{recommended.name} · {recommended.code}</div>
               <div className="mt-0.5 text-[10px] leading-4 text-slate-500">{ROUTE_DECISION.rationale}</div>
             </div>
           </div>
@@ -361,7 +362,7 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
     </section>
   );
 }
-function MapMarker({ region, selected, onSelect }) {
+function MapMarker({ region, selected, recommended, onSelect }) {
   return (
     <button
       type="button"
@@ -370,17 +371,18 @@ function MapMarker({ region, selected, onSelect }) {
       aria-label={`Select ${region.name}`}
     >
       <span className="group flex flex-col items-center">
-        <span className={selected ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : "relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md transition group-hover:scale-105"}>
-          {selected && <span className="absolute inset-1 rounded-full bg-white/90" />}
-          <span className={selected ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
+        <span className={recommended ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : selected ? "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-blue-500 shadow-md ring-4 ring-blue-100 transition group-hover:scale-105" : "relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md transition group-hover:scale-105"}>
+          {recommended && <span className="absolute inset-1 rounded-full bg-white/90" />}
+          <span className={recommended ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
         </span>
         <span className="mt-1 whitespace-nowrap rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur">{region.name}</span>
       </span>
     </button>
   );
 }
-function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
+function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegion }) {
   const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
+  const recommended = ROUTER_REGIONS.find((region) => region.id === recommendedRegionId) || ROUTER_REGIONS[1];
   return (
     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
@@ -411,7 +413,7 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
           </div>
           {ROUTER_REGIONS.map((region) => (
             <div key={region.id} className="absolute" style={{ left: region.map.x, top: region.map.y }}>
-              <MapMarker region={region} selected={region.id === selectedRegionId} onSelect={onSelectRegion} />
+              <MapMarker region={region} selected={region.id === selectedRegionId} recommended={region.id === recommendedRegionId} onSelect={onSelectRegion} />
             </div>
           ))}
           <div className="absolute left-4 top-4 rounded-md border border-slate-200/90 bg-white/95 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur">
@@ -432,11 +434,13 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
           <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-600">Selected target</div>
+                <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Inspected region</div>
                 <div className="mt-1 text-lg font-bold text-slate-950">{selected.name}</div>
                 <div className="mt-0.5 text-xs text-slate-500">{selected.code} · {selected.descriptor}</div>
               </div>
-              <span className="rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] font-semibold text-emerald-700">Route target</span>
+              <span className={selected.id === recommendedRegionId ? "rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] font-semibold text-emerald-700" : "rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-700"}>
+                {selected.id === recommendedRegionId ? "Recommended" : "Inspecting"}
+              </span>
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3 border-t border-emerald-100 pt-3">
               <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div><div className="mt-1 text-sm font-bold text-emerald-700">{selected.carbon} gCO2e/kWh</div></div>
@@ -465,7 +469,7 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
                         <div className="mt-0.5 text-[10px] text-slate-500">{region.carbon} gCO2e/kWh · {region.latency} ms</div>
                       </div>
                     </div>
-                    <span className={`shrink-0 rounded border px-2 py-1 text-[9px] font-semibold ${active ? "border-blue-200 bg-white text-blue-700" : badge}`}>{active ? "Inspecting" : region.badge}</span>
+                    <span className={`shrink-0 rounded border px-2 py-1 text-[9px] font-semibold ${active ? "border-blue-200 bg-blue-50 text-blue-700" : badge}`}>{active ? "Inspecting" : region.badge}</span>
                   </button>
                 );
               })}
@@ -822,7 +826,7 @@ export default function HomePage() {
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <EnvironmentalMap selectedRegionId={selectedRegionId} onSelectRegion={setSelectedRegionId} />
+                        <EnvironmentalMap selectedRegionId={selectedRegionId} recommendedRegionId={ROUTE_DECISION.regionId} onSelectRegion={setSelectedRegionId} />
                         <div className="grid gap-4 xl:grid-cols-2">
                           <ParetoChart selectedRegionId={selectedRegionId} />
                           <FeasibilityPanel complete />
