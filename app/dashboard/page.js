@@ -363,15 +363,19 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
             <div className="mt-1 text-sm font-bold text-emerald-900">Dispatched · EU-North-1</div>
           </div>
         ) : (
-          <button onClick={onDispatch} disabled={isDispatching} className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-80">
+          <button
+            onClick={onDispatch}
+            disabled={isDispatching}
+            className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-blue-600 bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-75"
+          >
             {isDispatching ? (
               <>
-                <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                Dispatching…
+                <svg className="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-20" cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2.2" /><path d="M20 12a8 8 0 0 0-8-8" stroke="currentColor" strokeLinecap="round" strokeWidth="2.2" /></svg>
+                Dispatching
               </>
             ) : (
               <>
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><path d="m5 12 14-7-4.5 14-3.2-5-6.3-2Z" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
                 Dispatch workload
               </>
             )}
@@ -379,9 +383,12 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
         )}
       </div>
 
-      <details className="mt-4 rounded-lg border border-slate-200 bg-white">
-        <summary className="cursor-pointer list-none px-4 py-3 text-xs font-semibold text-slate-700">View dispatch payload</summary>
-        <div className="border-t border-slate-100 bg-slate-950 p-4">
+      <details className="mt-3 group">
+        <summary className="flex cursor-pointer list-none items-center gap-2 text-[11px] font-semibold text-slate-500 transition hover:text-slate-800">
+          <svg className="h-3.5 w-3.5 text-slate-400 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
+          View dispatch payload
+        </summary>
+        <div className="mt-3 overflow-hidden rounded-lg border border-slate-200 bg-slate-950 p-4">
           <pre className="overflow-x-auto text-[10px] leading-5 text-slate-200">{JSON.stringify(createDispatchPayload({
             workloadName,
             workloadCategory,
@@ -901,8 +908,25 @@ export default function HomePage() {
                       </label>
                     </div>
 
-                    <button onClick={runPlacementAnalysis} disabled={isLoading} className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-blue-600 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-80">
-                      {isLoading ? <><svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Running placement analysis…</> : <><svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>Run placement analysis</>}
+                    <button
+                      onClick={runPlacementAnalysis}
+                      disabled={isLoading}
+                      className="group flex h-11 w-full items-center justify-between rounded-lg border border-slate-300 bg-white px-4 text-left shadow-sm transition hover:border-blue-300 hover:bg-blue-50/30 disabled:cursor-not-allowed disabled:opacity-70"
+                    >
+                      <span className="flex items-center gap-3">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-50 text-blue-600 ring-1 ring-blue-100">
+                          {isLoading ? (
+                            <svg className="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.2" /><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" strokeLinecap="round" strokeWidth="2.2" /></svg>
+                          ) : (
+                            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"><path d="M5 19 19 5m0 0h-7m7 0v7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" /></svg>
+                          )}
+                        </span>
+                        <span>
+                          <span className="block text-sm font-semibold text-slate-900">{isLoading ? "Analyzing placement" : "Analyze placement"}</span>
+                          <span className="mt-0.5 block text-[10px] text-slate-500">{isLoading ? "Checking constraints and environmental signals" : "Evaluate eligible regions for this workload"}</span>
+                        </span>
+                      </span>
+                      <svg className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
                     </button>
                   </div>
                 </motion.section>
