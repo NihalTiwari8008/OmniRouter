@@ -97,57 +97,6 @@ function MetricCard({ label, value, suffix, detail, icon, tone = "blue", childre
     </motion.div>
   );
 }
-function RegionNode({ region, selected }) {
-  const tone = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
-  const dot = tone === "red" ? "bg-red-500" : tone === "amber" ? "bg-amber-500" : "bg-emerald-500";
-  const badge = tone === "red"
-    ? "border-red-200 bg-red-50 text-red-700"
-    : tone === "amber"
-      ? "border-amber-200 bg-amber-50 text-amber-700"
-      : "border-emerald-200 bg-emerald-50 text-emerald-700";
-
-  return (
-    <motion.div
-      variants={fadeInUp}
-      className={`rounded-xl border p-5 transition-colors ${selected ? "border-emerald-300 bg-emerald-50/30" : "border-slate-200 bg-slate-50/40"}`}
-    >
-      <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <div className="flex items-start gap-2">
-            <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${dot}`} />
-            <div>
-              <h3 className="text-lg font-bold leading-tight text-slate-950">{region.name}</h3>
-              <p className="mt-1 text-sm leading-5 text-slate-600">{region.code} · {region.descriptor}</p>
-            </div>
-          </div>
-        </div>
-        <span className={`shrink-0 rounded-md border px-2.5 py-1 text-xs font-semibold ${badge}`}>
-          {selected ? "Active route" : region.badge}
-        </span>
-      </div>
-
-      <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-slate-200/80 pt-4 text-sm">
-        <div>
-          <span className="block text-xs text-slate-500">Carbon intensity</span>
-          <span className="font-semibold text-slate-800">{region.carbon} gCO2e/kWh</span>
-        </div>
-        <div>
-          <span className="block text-xs text-slate-500">Water stress</span>
-          <span className="font-semibold text-slate-800">{region.waterStress} · {region.waterLabel}</span>
-        </div>
-        <div>
-          <span className="block text-xs text-slate-500">Thermal loop</span>
-          <span className="font-semibold text-slate-800">{region.heat}</span>
-        </div>
-        <div>
-          <span className="block text-xs text-slate-500">Latency</span>
-          <span className="font-semibold text-slate-800">{region.latency} ms</span>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 function AnalysisTimeline({ stage, complete }) {
   return (
     <div className="mb-5 rounded-xl border border-slate-200 bg-white px-4 py-4">
@@ -672,32 +621,9 @@ export default function HomePage() {
                   <span key={countKey}><CountUp start={isDispatched ? BASELINE_IMPACT.compliance : 0} end={isDispatched ? 99.4 : BASELINE_IMPACT.compliance} decimals={1} duration={1.5} />%</span>
                 </MetricCard>
               </div>
-              <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                <div className="mb-5 flex items-end justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-lg font-bold text-slate-950">Global data center network</h2>
-                      {isDispatched && <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700">Routing active</span>}
-                    </div>
-                    <p className="mt-1 text-sm text-slate-500">Operating conditions by region</p>
-                  </div>
-                  <span className="text-xs font-medium text-slate-500">3 regions</span>
-                </div>
-                <motion.div className="grid grid-cols-1 gap-4 xl:grid-cols-3" variants={stagger}>
-                  {ROUTER_REGIONS.map((region) => (
-                    <RegionNode key={region.id} region={region} selected={isDispatched && region.id === ROUTE_DECISION.regionId} />
-                  ))}
-                </motion.div>
-                {isDispatched && (
-                  <div className="mt-5 flex flex-col gap-3 rounded-lg border border-emerald-200 bg-emerald-50/70 p-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="min-w-0">
-                      <div className="text-sm font-bold text-emerald-900">Current route · EU-North-1 (Stockholm)</div>
-                      <div className="mt-1 text-sm text-emerald-700">74.1% lower carbon · 120 L/hr water savings · district heat available</div>
-                    </div>
-                    <span className="shrink-0 rounded-md border border-emerald-300 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800">Recommended</span>
-                  </div>
-                )}
-              </motion.section>
+                            <motion.div variants={fadeInUp}>
+                <GlobalNetworkOverview dispatched={isDispatched} />
+              </motion.div>
               <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-5">
                   <h2 className="text-lg font-bold text-slate-950">Live activity</h2>
