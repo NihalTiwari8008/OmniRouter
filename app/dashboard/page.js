@@ -549,7 +549,6 @@ export default function HomePage() {
 
                       <EnvironmentalMap />
 
-/div>
 
 
                     </div>
