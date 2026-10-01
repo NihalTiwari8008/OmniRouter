@@ -292,136 +292,107 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
   const maxLatency = Math.max(...ROUTER_REGIONS.map((region) => region.latency));
 
   const center = 180;
-  const radius = 112;
+  const radius = 102;
   const angles = [-Math.PI / 2, 0, Math.PI / 2, Math.PI];
 
-  const pointAt = (index, value) => ({
-    x: center + Math.cos(angles[index]) * radius * value,
-    y: center + Math.sin(angles[index]) * radius * value,
-  });
-
-  const valuesFor = (region) => [
+  const normalize = (region) => [
     1 - region.carbon / maxCarbon,
     1 - region.waterStress / maxWater,
     region.heatScore ?? 0,
     1 - region.latency / maxLatency,
   ];
 
-  const polygonPoints = (region) => valuesFor(region).map((value, index) => {
+  const pointAt = (index, value) => ({
+    x: center + Math.cos(angles[index]) * radius * value,
+    y: center + Math.sin(angles[index]) * radius * value,
+  });
+
+  const polygonPoints = (region) => normalize(region).map((value, index) => {
     const point = pointAt(index, Math.max(0, Math.min(1, value)));
     return `${point.x},${point.y}`;
   }).join(" ");
 
-  const strokeFor = (id) => id === "stockholm" ? "#059669" : id === "oregon" ? "#f43f5e" : "#f59e0b";
-  const fillFor = (id) => id === "stockholm" ? "#10b981" : id === "oregon" ? "#f43f5e" : "#f59e0b";
+  const metricLabels = [
+    { label: "Carbon", value: `${selected.carbon} gCO₂e/kWh`, score: Math.round(normalize(selected)[0] * 100), angle: -Math.PI / 2, x: center, y: 28, anchor: "middle" },
+    { label: "Water", value: `${selected.waterStress} · ${selected.waterLabel}`, score: Math.round(normalize(selected)[1] * 100), angle: 0, x: 330, y: center + 3, anchor: "start" },
+    { label: "Heat recovery", value: selected.heat, score: Math.round(normalize(selected)[2] * 100), angle: Math.PI / 2, x: center, y: 346, anchor: "middle" },
+    { label: "Latency", value: `${selected.latency} ms`, score: Math.round(normalize(selected)[3] * 100), angle: Math.PI, x: 30, y: center + 3, anchor: "end" },
+  ];
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h3 className="text-base font-bold text-slate-950">Environmental trade-off matrix</h3>
-          <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">Normalized comparison across carbon, water stress, heat recovery, and latency.</p>
+          <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">Candidate profiles normalized to the same four routing signals.</p>
         </div>
-        <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">Higher profile = better fit</span>
+        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">Route target highlighted</span>
       </div>
 
-      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(300px,1fr)_250px] lg:items-center">
-        <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-3">
-          <svg viewBox="0 0 360 360" className="mx-auto h-[300px] w-full max-w-[420px]" role="img" aria-label="Normalized comparison of candidate regions across carbon, water stress, heat recovery and latency">
+      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(320px,1fr)_280px] lg:items-center">
+        <div className="rounded-xl border border-slate-200 bg-slate-50/45 p-2 sm:p-3">
+          <svg viewBox="0 0 360 360" className="mx-auto h-[315px] w-full max-w-[430px]" role="img" aria-label="Normalized environmental profile">
             {[0.25, 0.5, 0.75, 1].map((scale) => (
-              <polygon key={scale} points={angles.map((_, index) => {
-                const point = pointAt(index, scale);
-                return `${point.x},${point.y}`;
-              }).join(" ")} fill="none" stroke="#dbe4ee" strokeWidth="1" />
+              <circle key={scale} cx={center} cy={center} r={radius * scale} fill="none" stroke="#dbe5ef" strokeWidth="1" />
             ))}
 
             {angles.map((angle, index) => {
               const end = pointAt(index, 1);
-              return <line key={index} x1={center} y1={center} x2={end.x} y2={end.y} stroke="#dbe4ee" strokeWidth="1" />;
+              return <line key={index} x1={center} y1={center} x2={end.x} y2={end.y} stroke="#dbe5ef" strokeWidth="1" />;
             })}
 
-            {ROUTER_REGIONS.map((region) => {
-              const isSelected = region.id === selectedRegionId;
-              return (
-                <polygon
-                  key={region.id}
-                  points={polygonPoints(region)}
-                  fill={fillFor(region.id)}
-                  fillOpacity={isSelected ? 0.14 : 0.07}
-                  stroke={strokeFor(region.id)}
-                  strokeWidth={isSelected ? 2.8 : 1.8}
-                  strokeLinejoin="round"
-                />
-              );
-            })}
+            {ROUTER_REGIONS.filter((region) => region.id !== selected.id).map((region) => (
+              <polygon key={region.id} points={polygonPoints(region)} fill="none" stroke={region.id === "oregon" ? "#f43f5e" : "#f59e0b"} strokeWidth="1.4" strokeDasharray="5 6" opacity="0.38" strokeLinejoin="round" />
+            ))}
 
-            {ROUTER_REGIONS.map((region) => valuesFor(region).map((value, index) => {
+            <polygon points={polygonPoints(selected)} fill="#10b981" fillOpacity="0.12" stroke="#059669" strokeWidth="3" strokeLinejoin="round" />
+
+            {normalize(selected).map((value, index) => {
               const point = pointAt(index, Math.max(0, Math.min(1, value)));
-              return <circle key={`${region.id}-${index}`} cx={point.x} cy={point.y} r={region.id === selectedRegionId ? 3.8 : 2.5} fill={strokeFor(region.id)} />;
-            }))}
+              return <circle key={index} cx={point.x} cy={point.y} r="5" fill="#059669" stroke="#ffffff" strokeWidth="2" />;
+            })}
 
-            <g fontSize="9" fontFamily="inherit" fill="#64748b" textAnchor="middle">
-              <text x={center} y="27">Carbon intensity</text>
-              <text x="333" y={center + 3}>Water stress</text>
-              <text x={center} y="348">Heat recovery</text>
-              <text x="27" y={center + 3}>Latency</text>
-            </g>
+            <circle cx={center} cy={center} r="30" fill="#ffffff" stroke="#d5e2ec" strokeWidth="1.2" />
+            <text x={center} y="174" textAnchor="middle" fontSize="8" fontFamily="inherit" fill="#94a3b8" letterSpacing="1.15">SELECTED</text>
+            <text x={center} y="194" textAnchor="middle" fontSize="15" fontFamily="inherit" fontWeight="700" fill="#0f172a">{selected.name}</text>
+
+            {metricLabels.map((metric) => (
+              <g key={metric.label}>
+                <text x={metric.x} y={metric.y} textAnchor={metric.anchor} fontSize="8.5" fontFamily="inherit" fontWeight="600" fill="#64748b">{metric.label}</text>
+              </g>
+            ))}
           </svg>
 
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 px-2 pb-2 text-[10px]">
-            {ROUTER_REGIONS.map((region) => (
-              <span key={region.id} className="inline-flex items-center gap-1.5 font-medium text-slate-600">
-                <span className={`h-2 w-2 rounded-full ${region.id === "stockholm" ? "bg-emerald-500" : region.id === "oregon" ? "bg-red-500" : "bg-amber-500"}`} />
-                {region.name}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pb-1 text-[10px]">
+            <span className="inline-flex items-center gap-1.5 font-medium text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" />{selected.name}</span>
+            {ROUTER_REGIONS.filter((region) => region.id !== selected.id).map((region) => (
+              <span key={region.id} className="inline-flex items-center gap-1.5 text-slate-500">
+                <span className={`h-2 w-2 rounded-full ${region.id === "oregon" ? "bg-red-400" : "bg-amber-400"}`} />{region.name}
               </span>
             ))}
           </div>
         </div>
 
         <div className="space-y-2.5">
-          {ROUTER_REGIONS.map((region) => {
-            const isSelected = region.id === selectedRegionId;
-            const isRoute = region.id === "stockholm";
-            const overall = Math.round(valuesFor(region).reduce((sum, value) => sum + value, 0) * 25);
-            return (
-              <div key={region.id} className={isSelected ? "rounded-xl border border-blue-200 bg-blue-50/55 p-3.5" : isRoute ? "rounded-xl border border-emerald-200 bg-emerald-50/45 p-3.5" : "rounded-xl border border-slate-200 bg-white p-3.5"}>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <span className={`h-2 w-2 shrink-0 rounded-full ${region.id === "stockholm" ? "bg-emerald-500" : region.id === "oregon" ? "bg-red-500" : "bg-amber-500"}`} />
-                    <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-xs font-bold text-slate-900">{region.name}</span>
-                        {isRoute && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">Route target</span>}
-                        {isSelected && !isRoute && <span className="rounded border border-blue-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-blue-700">Inspecting</span>}
-                      </div>
-                      <div className="mt-0.5 text-[9px] text-slate-500">{region.code}</div>
-                    </div>
-                  </div>
-                  <span className="text-sm font-bold text-slate-900">{overall}</span>
+          {metricLabels.map((metric) => (
+            <div key={metric.label} className="rounded-xl border border-slate-200 bg-white p-3.5">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">{metric.label}</div>
+                  <div className="mt-1 text-xs font-bold text-slate-900">{metric.value}</div>
                 </div>
-                <div className="mt-2.5 grid grid-cols-4 gap-1.5">
-                  {[
-                    ["C", Math.round(valuesFor(region)[0] * 100)],
-                    ["W", Math.round(valuesFor(region)[1] * 100)],
-                    ["H", Math.round(valuesFor(region)[2] * 100)],
-                    ["L", Math.round(valuesFor(region)[3] * 100)],
-                  ].map(([key, score]) => (
-                    <div key={key} className="rounded-md bg-white/80 px-1.5 py-1.5 text-center ring-1 ring-slate-100">
-                      <div className="text-[8px] font-semibold text-slate-400">{key}</div>
-                      <div className="mt-0.5 text-[10px] font-bold text-slate-800">{score}</div>
-                    </div>
-                  ))}
-                </div>
+                <div className="text-sm font-bold text-emerald-700">{metric.score}</div>
               </div>
-            );
-          })}
-        </div>
-      </div>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-full rounded-full bg-emerald-500" style={{ width: `${metric.score}%` }} />
+              </div>
+            </div>
+          ))}
 
-      <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/55 px-3.5 py-3">
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Route target</span>
-          <span className="text-xs font-bold text-slate-900">Stockholm · EU-North-1</span>
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Route target</div>
+            <div className="mt-1 text-sm font-bold text-slate-900">{selected.name} · {selected.code}</div>
+          </div>
         </div>
       </div>
     </section>
@@ -613,7 +584,7 @@ function LiveActivityTimeline({ rows }) {
 
       <div className="mt-5">
         {rows.map((row, index) => {
-          const isNew = index === 0 && row.status === "Dispatched";
+          const isNew = isDispatched && row.id === "#R-9043";
           const dot = row.destColor === "blue" ? "bg-blue-500" : "bg-emerald-500";
           return (
             <div key={row.id} className="grid grid-cols-[68px_18px_minmax(0,1fr)] gap-3 sm:grid-cols-[86px_18px_minmax(0,1fr)] sm:gap-4">
@@ -736,6 +707,7 @@ export default function HomePage() {
     ? [
         {
           id: "#R-9043",
+          time: "Just now",
           name: workloadName,
           desc: `${workloadCategory} · routed by OmniRouter`,
           dest: "EU-North-1 (Stockholm)",
