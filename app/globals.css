@@ -97,17 +97,6 @@ input[type="range"] {
   background: linear-gradient(180deg, rgba(148,163,184,0.98), rgba(71,85,105,0.92));
 }
 
-.laptop-screen {
-  transform-origin: center bottom;
-}
-
-.laptop-base {
-  background: linear-gradient(180deg, #475569 0%, #0f172a 100%);
-}
-
-.laptop-hinge {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
-}
 
 .hero-auth-card {
   transform: translate(-14%, 3%);
