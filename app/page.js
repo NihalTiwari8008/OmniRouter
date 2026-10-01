@@ -298,11 +298,11 @@ export default function LandingPage() {
       </header>
 
       <main>
-        <section className="hero-landing relative min-h-[700px] overflow-hidden bg-white">
-          <div className="hero-scene pointer-events-none absolute inset-y-[-100px] right-0 z-0 w-[68%]" />
-          <div className="hero-scene-fade pointer-events-none absolute inset-y-0 left-[34%] right-0 z-[1]" />
+        <section className="hero-landing relative min-h-[700px] overflow-hidden">
+          <div className="hero-scene pointer-events-none absolute inset-0 z-0" />
+          <div className="hero-scene-fade pointer-events-none absolute inset-0 z-[1]" />
 
-          <div className="relative z-10 mx-auto grid min-h-[700px] max-w-[1440px] items-center gap-5 px-6 pb-16 pt-24 lg:grid-cols-[0.82fr_1.18fr] lg:px-10 lg:pb-16 lg:pt-20">
+          <div className="relative z-10 mx-auto grid min-h-[700px] max-w-[1440px] items-center gap-4 px-6 pb-14 pt-24 lg:grid-cols-[0.84fr_1.16fr] lg:px-10 lg:pb-14 lg:pt-20">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="relative z-20">
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700 shadow-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -345,7 +345,6 @@ export default function LandingPage() {
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="relative z-10">
               <div className="relative min-h-[590px]">
                 <DashboardPreview />
-                <HeroAuthCard onContinue={() => { window.location.href = "/dashboard"; }} />
               </div>
             </motion.div>
           </div>
