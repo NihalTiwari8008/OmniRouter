@@ -425,7 +425,6 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
             </div>
             <div className="flex items-center gap-3 rounded-lg border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] font-medium text-slate-500 shadow-sm backdrop-blur">
               <span>Click a node to inspect</span>
-              <span className="hidden text-slate-600 sm:inline">Map: simple-world-map</span>
             </div>
           </div>
         </div>
