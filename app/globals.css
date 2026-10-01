@@ -59,29 +59,38 @@ input[type="range"] {
 
 .laptop-stage {
   background-image:
-    linear-gradient(rgba(255,255,255,0.12), rgba(255,255,255,0.12)),
+    linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)),
     url("https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1800&q=85");
   background-size: cover;
   background-position: center;
   box-shadow: 0 30px 70px rgba(15, 23, 42, 0.18);
 }
 
+
 .laptop-screen {
   transform-origin: center bottom;
 }
 
 .laptop-base {
-  background: linear-gradient(180deg, #334155 0%, #0f172a 100%);
+  background: linear-gradient(180deg, #475569 0%, #0f172a 100%);
+}
+.laptop-hinge {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
 @media (max-width: 767px) {
   .laptop-stage {
     border-radius: 24px;
-    padding: 14px;
+    padding: 12px;
     background-position: 60% center;
+    box-shadow: 0 22px 46px rgba(15, 23, 42, 0.15);
   }
 
   .laptop-base {
     width: 82%;
+  }
+
+  .laptop-hinge {
+    width: 42%;
   }
 }
