@@ -76,9 +76,25 @@ input[type="range"] {
 }
 
 .laptop-device {
-  transform: perspective(1500px) rotateX(2deg) rotateY(-6deg) rotateZ(-2.6deg);
+  transform: perspective(1500px) rotateX(2deg) rotateY(5deg) rotateZ(2deg);
   transform-origin: center bottom;
-  filter: drop-shadow(0 28px 42px rgba(15,23,42,0.16));
+  filter: drop-shadow(0 30px 42px rgba(15,23,42,0.15));
+}
+
+.premium-screen {
+  aspect-ratio: 16 / 10;
+}
+
+.premium-screen > div {
+  min-height: 100%;
+}
+
+.laptop-base {
+  background: linear-gradient(180deg, rgba(226,232,240,0.98) 0%, rgba(148,163,184,0.98) 48%, rgba(71,85,105,0.96) 100%);
+}
+
+.laptop-hinge {
+  background: linear-gradient(180deg, rgba(148,163,184,0.98), rgba(71,85,105,0.92));
 }
 
 .laptop-screen {
