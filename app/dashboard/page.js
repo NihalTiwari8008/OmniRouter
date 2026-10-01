@@ -156,6 +156,137 @@ function RegionNode({ name, subtitle, hasData, selected, populated }) {
   );
 }
 
+function EnvironmentalMap() {
+  const regions = [
+    {
+      name: "Oregon",
+      code: "US-West",
+      carbon: "142 gCO2e/kWh",
+      water: "4.2 · Critical",
+      heat: "N/A",
+      latency: "24 ms",
+      pos: "left-[25%] top-[39%]",
+      card: "left-[8%] top-[48%]",
+      dot: "bg-red-500",
+      badge: "High water stress",
+      badgeClass: "border-red-200 bg-red-50 text-red-700",
+    },
+    {
+      name: "Stockholm",
+      code: "EU-North-1",
+      carbon: "14 gCO2e/kWh",
+      water: "0.12 · Ultra low",
+      heat: "82°C active",
+      latency: "38 ms",
+      pos: "left-[56%] top-[27%]",
+      card: "left-[59%] top-[9%]",
+      dot: "bg-emerald-500",
+      badge: "Recommended",
+      badgeClass: "border-emerald-200 bg-emerald-50 text-emerald-700",
+      selected: true,
+    },
+    {
+      name: "Mumbai",
+      code: "AP-South",
+      carbon: "380 gCO2e/kWh",
+      water: "2.1 · Moderate",
+      heat: "Solar sync",
+      latency: "112 ms",
+      pos: "left-[75%] top-[63%]",
+      card: "left-[65%] top-[67%]",
+      dot: "bg-amber-500",
+      badge: "Thermal constraint",
+      badgeClass: "border-amber-200 bg-amber-50 text-amber-700",
+    },
+  ];
+
+  return (
+    <div className="relative mt-5 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
+      <div className="absolute left-4 top-3 z-10 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+        Global compute network
+      </div>
+
+      <div className="relative h-[360px] sm:h-[390px]">
+        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" aria-hidden="true">
+          <defs>
+            <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
+              <path d="M46 0H0V46" fill="none" stroke="#e2e8f0" strokeWidth="1" />
+            </pattern>
+            <linearGradient id="route" x1="0" x2="1">
+              <stop offset="0%" stopColor="#60a5fa" />
+              <stop offset="100%" stopColor="#10b981" />
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="7" result="blur" />
+            </filter>
+          </defs>
+
+          <rect width="1000" height="520" fill="url(#grid)" opacity="0.58" />
+
+          <g fill="#dbe5ef" opacity="0.92">
+            <path d="M85 144l35-35 40 7 27 25-16 31-23 12-18 34-33 2-19-27z" />
+            <path d="M188 204l36-19 44 8 22 24-18 24-8 42-27 36-29-9-9-39-28-20z" />
+            <path d="M306 131l34-19 52 4 30 24-7 32-24 18-5 34-32 19-27-18-17-35-22-10z" />
+            <path d="M401 197l35-11 41 12 29 25-7 31-28 17-36-3-26-21z" />
+            <path d="M533 170l41-24 49 7 35 25-8 29-34 13-18 31-39-7-23-32z" />
+            <path d="M583 265l32-17 35 12 19 28-14 27-32 10-24-18z" />
+            <path d="M718 304l37-20 35 6 26 26-13 27-34 9-32-11z" />
+            <path d="M805 170l34-18 38 4 25 21-9 28-34 15-31-18z" />
+          </g>
+
+          <g stroke="url(#route)" strokeWidth="5" strokeDasharray="12 12" fill="none" strokeLinecap="round">
+            <path d="M254 206 C355 125 460 114 560 143" />
+            <path d="M754 335 C690 258 622 207 560 143" />
+          </g>
+
+          <circle cx="560" cy="143" r="20" fill="#10b981" opacity="0.16" filter="url(#glow)" />
+          <circle cx="560" cy="143" r="11" fill="#10b981" stroke="#fff" strokeWidth="4" />
+          <circle cx="254" cy="206" r="9" fill="#ef4444" stroke="#fff" strokeWidth="4" />
+          <circle cx="754" cy="335" r="9" fill="#f59e0b" stroke="#fff" strokeWidth="4" />
+
+          <text x="34" y="490" fill="#94a3b8" fontSize="13" fontFamily="inherit">West</text>
+          <text x="916" y="490" fill="#94a3b8" fontSize="13" fontFamily="inherit">East</text>
+        </svg>
+
+        {regions.map((region) => (
+          <div key={region.name}>
+            <span className={`absolute ${region.pos} z-10 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-sm ${region.dot}`} />
+            <div className={`absolute ${region.card} z-20 w-[205px] rounded-xl border bg-white p-3.5 shadow-lg ${region.selected ? "border-emerald-300 ring-4 ring-emerald-100/60" : "border-slate-200"}`}>
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className={`h-2 w-2 rounded-full ${region.dot}`} />
+                    <span className="text-sm font-bold text-slate-950">{region.name}</span>
+                  </div>
+                  <div className="mt-0.5 text-[10px] font-medium text-slate-400">{region.code}</div>
+                </div>
+                <span className={`shrink-0 rounded border px-1.5 py-1 text-[9px] font-semibold ${region.badgeClass}`}>{region.badge}</span>
+              </div>
+
+              <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 border-t border-slate-100 pt-3 text-[10px]">
+                <div><span className="block text-slate-400">Carbon</span><span className="font-semibold text-slate-800">{region.carbon}</span></div>
+                <div><span className="block text-slate-400">Water stress</span><span className="font-semibold text-slate-800">{region.water}</span></div>
+                <div><span className="block text-slate-400">Heat loop</span><span className="font-semibold text-slate-800">{region.heat}</span></div>
+                <div><span className="block text-slate-400">Latency</span><span className="font-semibold text-slate-800">{region.latency}</span></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="border-t border-slate-200 bg-white p-4 sm:p-5">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="text-sm font-bold text-emerald-900">Recommended target · EU-North-1 (Stockholm)</div>
+            <div className="mt-1 text-xs leading-5 text-emerald-700">74.1% lower carbon emissions · 120 L/hr water savings · district heat available</div>
+          </div>
+          <span className="inline-flex w-fit items-center rounded-md border border-emerald-300 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800">Selected route</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function EmptyState({ title, description, compact = false }) {
   return (
     <div className={`flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/60 text-center ${compact ? "min-h-52 p-8" : "min-h-64 p-10"}`}>
@@ -416,46 +547,11 @@ export default function HomePage() {
                         <span className="text-xs font-medium text-emerald-700">Analysis complete</span>
                       </div>
 
-                      <div className="relative mt-5 h-64 overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-                        <div className="absolute inset-0 grid grid-rows-4 opacity-60">
-                          <div className="border-b border-slate-200" /><div className="border-b border-slate-200" /><div className="border-b border-slate-200" /><div />
-                        </div>
-                        <span className="absolute left-3 top-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Higher carbon ↑</span>
-                        <span className="absolute bottom-3 right-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Higher water →</span>
+                      <EnvironmentalMap />
 
-                        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 600 260" preserveAspectRatio="none">
-                          <path d="M95 58 C220 80 360 135 510 205" fill="none" stroke="#2563eb" strokeWidth="2" strokeDasharray="5 5" />
-                        </svg>
+/div>
 
-                        <div className="absolute left-[16%] top-[18%]">
-                          <div className="h-4 w-4 rounded-full border-2 border-white bg-emerald-600 shadow ring-8 ring-emerald-100" />
-                          <div className="absolute left-7 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg border border-emerald-300 bg-white px-3 py-2 shadow-sm">
-                            <div className="text-xs font-bold text-emerald-800">Stockholm</div>
-                            <div className="text-[11px] text-emerald-600">Lowest combined impact</div>
-                          </div>
-                        </div>
 
-                        <div className="absolute left-[63%] top-[38%]">
-                          <div className="h-3.5 w-3.5 rounded-full border-2 border-white bg-slate-500 shadow-sm" />
-                          <div className="absolute left-6 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-sm">
-                            <div className="text-xs font-semibold text-slate-700">Oregon</div>
-                            <div className="text-[11px] text-slate-500">High water stress</div>
-                          </div>
-                        </div>
-
-                        <div className="absolute left-[80%] top-[69%]">
-                          <div className="h-3.5 w-3.5 rounded-full border-2 border-white bg-slate-500 shadow-sm" />
-                          <div className="absolute right-6 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-sm">
-                            <div className="text-xs font-semibold text-slate-700">Mumbai</div>
-                            <div className="text-[11px] text-slate-500">Higher carbon intensity</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="mt-5 rounded-lg border border-emerald-200 bg-emerald-50/70 p-4">
-                        <div className="text-sm font-bold text-emerald-900">Recommended target · EU-North-1 (Stockholm)</div>
-                        <div className="mt-1 text-sm leading-6 text-emerald-700">74.1% lower carbon emissions · 120 L/hr water savings · district heat available</div>
-                      </div>
                     </div>
                   )}
                 </motion.section>
