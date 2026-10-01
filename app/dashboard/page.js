@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "react-countup";
@@ -14,7 +13,6 @@ import {
   BASELINE_IMPACT,
   createDispatchPayload,
 } from "@/lib/router/mockRouter";
-
 const TABS = [
   {
     id: "command-center",
@@ -35,7 +33,6 @@ const TABS = [
     subtitle: "Traceable records for sustainability reporting",
   },
 ];
-
 const NAV_ICONS = {
   "command-center": (
     <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,23 +50,18 @@ const NAV_ICONS = {
     </svg>
   ),
 };
-
 const fadeInUp = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" } },
 };
-
 const stagger = {
   animate: { transition: { staggerChildren: 0.06 } },
 };
-
 function DestBadge({ dest, color }) {
   const styles = color === "blue"
     ? "bg-blue-50 text-blue-700 border-blue-200"
     : "bg-emerald-50 text-emerald-700 border-emerald-200";
-
   const dot = color === "blue" ? "bg-blue-500" : "bg-emerald-500";
-
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-sm font-medium ${styles}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
@@ -77,15 +69,12 @@ function DestBadge({ dest, color }) {
     </span>
   );
 }
-
 function StatusBadge({ status, color }) {
   const styles = color === "emerald"
     ? "bg-emerald-50 text-emerald-700"
     : "bg-slate-100 text-slate-600";
-
   return <span className={`inline-flex rounded px-2.5 py-1 text-xs font-semibold ${styles}`}>{status}</span>;
 }
-
 function MetricCard({ label, value, suffix, detail, icon, tone = "blue", children }) {
   const tones = {
     blue: "bg-blue-50 text-blue-600",
@@ -93,7 +82,6 @@ function MetricCard({ label, value, suffix, detail, icon, tone = "blue", childre
     amber: "bg-amber-50 text-amber-600",
     slate: "bg-slate-100 text-slate-600",
   };
-
   return (
     <motion.div variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between gap-4">
@@ -109,7 +97,6 @@ function MetricCard({ label, value, suffix, detail, icon, tone = "blue", childre
     </motion.div>
   );
 }
-
 function RegionNode({ name, subtitle, hasData, selected, populated }) {
   return (
     <motion.div
@@ -132,7 +119,6 @@ function RegionNode({ name, subtitle, hasData, selected, populated }) {
           <span className="shrink-0 rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-500">Standby</span>
         )}
       </div>
-
       <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-slate-200/80 pt-4 text-sm">
         <div>
           <span className="block text-xs text-slate-500">Carbon intensity</span>
@@ -154,7 +140,6 @@ function RegionNode({ name, subtitle, hasData, selected, populated }) {
     </motion.div>
   );
 }
-
 function AnalysisTimeline({ stage, complete }) {
   return (
     <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
@@ -169,7 +154,6 @@ function AnalysisTimeline({ stage, complete }) {
           {complete ? "Complete" : stage > 0 ? "In progress" : "Idle"}
         </span>
       </div>
-
       <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-4">
         {ROUTING_STEPS.map((label, index) => {
           const stepNumber = index + 1;
@@ -193,7 +177,6 @@ function AnalysisTimeline({ stage, complete }) {
     </div>
   );
 }
-
 function FeasibilityPanel({ complete = false, running = false }) {
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
@@ -204,7 +187,6 @@ function FeasibilityPanel({ complete = false, running = false }) {
         </div>
         <span className={complete ? "shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : running ? "shrink-0 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700" : "shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500"}>{complete ? "4 / 4 passed" : running ? "Checking…" : "Ready"}</span>
       </div>
-
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {FEASIBILITY_CHECKS.map((check) => (
           <div key={check.label} className="rounded-lg border border-slate-100 bg-slate-50/70 p-3">
@@ -222,12 +204,10 @@ function FeasibilityPanel({ complete = false, running = false }) {
     </section>
   );
 }
-
 function ParetoChart({ selectedRegionId = "stockholm" }) {
   const maxCarbon = Math.max(...ROUTER_REGIONS.map((region) => region.carbon));
   const maxWater = Math.max(...ROUTER_REGIONS.map((region) => region.waterStress));
   const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
-
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -240,7 +220,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
           <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">Lower is better</span>
         </div>
       </div>
-
       <div className="mt-5 overflow-hidden rounded-xl border border-slate-200">
         <div className="hidden grid-cols-[170px_1fr_1fr_130px_88px] gap-4 bg-slate-50/80 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.11em] text-slate-400 md:grid">
           <div>Region</div>
@@ -249,7 +228,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
           <div>Heat recovery</div>
           <div className="text-right">Latency</div>
         </div>
-
         <div className="divide-y divide-slate-100">
           {ROUTER_REGIONS.map((region) => {
             const selectedRow = region.id === selectedRegionId;
@@ -258,7 +236,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
             const waterWidth = Math.max(8, (region.waterStress / maxWater) * 100);
             const carbonTone = region.tone === "risk" ? "bg-red-400" : region.tone === "constraint" ? "bg-amber-400" : "bg-emerald-500";
             const waterTone = region.tone === "risk" ? "bg-red-300" : region.tone === "constraint" ? "bg-amber-300" : "bg-emerald-400";
-
             return (
               <div key={region.id} className={selectedRow ? "bg-emerald-50/45 px-4 py-4" : "bg-white px-4 py-4"}>
                 <div className="grid gap-4 md:grid-cols-[170px_1fr_1fr_130px_88px] md:items-center">
@@ -273,7 +250,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
                       <div className="mt-0.5 text-[10px] text-slate-500">{region.code}</div>
                     </div>
                   </div>
-
                   <div>
                     <div className="mb-1 flex items-center justify-between gap-2 text-[10px]">
                       <span className="text-slate-500 md:hidden">Carbon intensity</span>
@@ -283,7 +259,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
                       <div className={`h-full rounded-full ${carbonTone}`} style={{ width: `${carbonWidth}%` }} />
                     </div>
                   </div>
-
                   <div>
                     <div className="mb-1 flex items-center justify-between gap-2 text-[10px]">
                       <span className="text-slate-500 md:hidden">Water stress</span>
@@ -293,14 +268,12 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
                       <div className={`h-full rounded-full ${waterTone}`} style={{ width: `${waterWidth}%` }} />
                     </div>
                   </div>
-
                   <div className="flex items-center gap-2 md:block">
                     <span className="text-[10px] text-slate-500 md:hidden">Heat recovery</span>
                     <span className={region.id === "stockholm" ? "inline-flex rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700" : "inline-flex rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold text-slate-600"}>
                       {region.id === "stockholm" ? "District heat" : region.heat}
                     </span>
                   </div>
-
                   <div className="text-left md:text-right">
                     <span className="text-[10px] text-slate-500 md:hidden">Latency · </span>
                     <span className="text-xs font-bold text-slate-900">{region.latency} ms</span>
@@ -311,7 +284,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
           })}
         </div>
       </div>
-
       <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
         <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">
           <div className="flex items-start gap-3">
@@ -343,7 +315,6 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
     </section>
   );
 }
-
 function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, workloadCategory, deadlineHours, geoFence }) {
   return (
     <section className={dispatched ? "rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 sm:p-6" : "rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"}>
@@ -357,7 +328,6 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
             {dispatched ? "Route decision recorded. The Audit Ledger has received the environmental rationale." : ROUTE_DECISION.rationale}
           </p>
         </div>
-
         {dispatched ? (
           <div className="shrink-0 rounded-lg border border-emerald-200 bg-white px-4 py-3">
             <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-600">Dispatch status</div>
@@ -373,7 +343,6 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
           </button>
         )}
       </div>
-
       <details className="mt-3 group">
         <summary className="flex cursor-pointer list-none items-center gap-2 text-[11px] font-semibold text-slate-500 transition hover:text-slate-800">
           <svg className="h-3.5 w-3.5 text-slate-400 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
@@ -392,7 +361,6 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
     </section>
   );
 }
-
 function MapMarker({ region, selected, onSelect }) {
   return (
     <button
@@ -411,7 +379,6 @@ function MapMarker({ region, selected, onSelect }) {
     </button>
   );
 }
-
 function RegionDetailCard({ region, selected, onSelect }) {
   const accent = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
   const dot = accent === "red" ? "bg-red-500" : accent === "amber" ? "bg-amber-500" : "bg-emerald-500";
@@ -420,7 +387,6 @@ function RegionDetailCard({ region, selected, onSelect }) {
     : accent === "amber"
       ? "border-amber-200 bg-amber-50 text-amber-700"
       : "border-emerald-200 bg-emerald-50 text-emerald-700";
-
   return (
     <button type="button" onClick={() => onSelect(region.id)} className={`w-full text-left ${selected ? "rounded-xl border border-emerald-300 bg-emerald-50/40 p-4 ring-1 ring-emerald-100" : "rounded-xl border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:shadow-sm"}`}>
       <div className="flex items-start justify-between gap-3">
@@ -433,7 +399,6 @@ function RegionDetailCard({ region, selected, onSelect }) {
         </div>
         <span className={`shrink-0 rounded-md border px-2 py-1 text-[10px] font-semibold ${selected ? "border-emerald-200 bg-white text-emerald-700" : badge}`}>{selected ? "Selected" : region.badge}</span>
       </div>
-
       <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-slate-100 pt-3">
         <div>
           <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
@@ -455,10 +420,8 @@ function RegionDetailCard({ region, selected, onSelect }) {
     </button>
   );
 }
-
 function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
   const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
-
   return (
     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
@@ -475,11 +438,9 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
           </span>
         </div>
       </div>
-
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.6fr)_minmax(315px,0.75fr)]">
         <div className="relative min-h-[370px] overflow-hidden bg-[#0b1420] xl:min-h-[400px]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_36%,rgba(16,185,129,0.10),transparent_34%),radial-gradient(circle_at_20%_68%,rgba(59,130,246,0.10),transparent_38%)]" />
-
           <div className="absolute inset-0 overflow-hidden bg-[#0b1420]">
             <img
               src="/world-map.svg"
@@ -489,17 +450,14 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
             />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(240,246,252,0.34))]" />
           </div>
-
           {ROUTER_REGIONS.map((region) => (
             <div key={region.id} className="absolute" style={{ left: region.map.x, top: region.map.y }}>
               <MapMarker region={region} selected={region.id === selectedRegionId} onSelect={onSelectRegion} />
             </div>
           ))}
-
           <div className="absolute left-4 top-4 rounded-md border border-slate-200/90 bg-white/95 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur">
             Global compute network
           </div>
-
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3 rounded-lg border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] text-slate-600 shadow-sm backdrop-blur">
               <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-blue-400" />Candidate route</span>
@@ -512,7 +470,6 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
             </div>
           </div>
         </div>
-
         <div className="bg-white p-4 sm:p-5">
           <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
             <div className="flex items-start justify-between gap-3">
@@ -523,7 +480,6 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
               </div>
               <span className="rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] font-semibold text-emerald-700">Route target</span>
             </div>
-
             <div className="mt-4 grid grid-cols-2 gap-3 border-t border-emerald-100 pt-3">
               <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div><div className="mt-1 text-sm font-bold text-emerald-700">{selected.carbon} gCO2e/kWh</div></div>
               <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water stress</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.waterStress} · {selected.waterLabel}</div></div>
@@ -531,7 +487,6 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
               <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Latency</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.latency} ms</div></div>
             </div>
           </div>
-
           <div className="mt-4">
             <div className="mb-2 flex items-center justify-between">
               <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Candidate regions</div>
@@ -560,7 +515,6 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
           </div>
         </div>
       </div>
-
       <div className="border-t border-slate-200 bg-slate-50/70 px-4 py-4 sm:px-5">
         <div className="grid gap-3 sm:grid-cols-4">
           <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon delta</div><div className="mt-1 text-sm font-bold text-emerald-700">{ROUTE_DECISION.carbonDelta}</div></div>
@@ -572,7 +526,6 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
     </section>
   );
 }
-
 function AuditOverview({ dispatched, reportStatus }) {
   const items = [
     { label: "Logged decisions", value: dispatched ? "4" : "3", detail: dispatched ? "+1 this session" : "Awaiting new dispatch", tone: dispatched ? "emerald" : "slate" },
@@ -580,7 +533,6 @@ function AuditOverview({ dispatched, reportStatus }) {
     { label: "Impact fields", value: "Carbon + water", detail: "Heat reuse tracked", tone: "amber" },
     { label: "Report status", value: reportStatus === "ready" ? "PDF ready" : "Available", detail: "CSRD export workflow", tone: reportStatus === "ready" ? "emerald" : "slate" },
   ];
-
   return (
     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {items.map((item) => {
@@ -596,7 +548,6 @@ function AuditOverview({ dispatched, reportStatus }) {
     </div>
   );
 }
-
 function EmptyState({ title, description, compact = false }) {
   return (
     <div className={`flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/60 text-center ${compact ? "min-h-52 p-8" : "min-h-64 p-10"}`}>
@@ -610,7 +561,6 @@ function EmptyState({ title, description, compact = false }) {
     </div>
   );
 }
-
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState("command-center");
   const [hasData, setHasData] = useState(false);
@@ -625,22 +575,18 @@ export default function HomePage() {
   const [deadlineVal, setDeadlineVal] = useState(DEFAULT_WORKLOAD.deadlineHours);
   const [geoFence, setGeoFence] = useState(true);
   const [countKey, setCountKey] = useState(0);
-
   const switchTab = useCallback((tabId) => setActiveTab(tabId), []);
-
   const generateReport = useCallback(() => {
     if (!isDispatched || reportStatus === "generating") return;
     setReportStatus("generating");
     setTimeout(() => setReportStatus("ready"), 1100);
   }, [isDispatched, reportStatus]);
-
   const runPlacementAnalysis = useCallback(() => {
     if (isLoading) return;
     setIsLoading(true);
     setHasData(false);
     setIsDispatched(false);
     setAnalysisStage(1);
-
     setTimeout(() => setAnalysisStage(2), 420);
     setTimeout(() => setAnalysisStage(3), 840);
     setTimeout(() => setAnalysisStage(4), 1260);
@@ -652,7 +598,6 @@ export default function HomePage() {
       setCountKey((key) => key + 1);
     }, 1680);
   }, [isLoading]);
-
   const dispatchWorkload = useCallback(() => {
     if (isDispatching || isDispatched || !hasData) return;
     setIsDispatching(true);
@@ -664,9 +609,7 @@ export default function HomePage() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, 950);
   }, [hasData, isDispatching, isDispatched]);
-
   const currentTab = TABS.find((tab) => tab.id === activeTab) || TABS[0];
-
   const liveStreamRows = isDispatched
     ? [
         {
@@ -683,7 +626,6 @@ export default function HomePage() {
         ...STREAM_ROWS,
       ]
     : STREAM_ROWS;
-
   const liveLedgerRows = isDispatched
     ? [
         {
@@ -699,14 +641,12 @@ export default function HomePage() {
         ...LEDGER_ROWS,
       ]
     : LEDGER_ROWS;
-
   const metricIcons = {
     water: <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>,
     carbon: <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>,
     heat: <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>,
     compliance: <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>,
   };
-
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800 antialiased">
       {/* Desktop sidebar */}
@@ -717,7 +657,6 @@ export default function HomePage() {
         </div>
         <UserFooter />
       </aside>
-
       {/* Mobile header */}
       <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur md:hidden">
         <div className="flex items-center justify-between gap-3">
@@ -738,16 +677,13 @@ export default function HomePage() {
           ))}
         </nav>
       </div>
-
       <main className="min-h-screen px-4 py-5 md:ml-64 md:px-8 md:py-7 lg:px-10">
         <header className="flex flex-col gap-4 border-b border-slate-200/80 pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-950">{currentTab.title}</h1>
             <p className="mt-1 text-sm text-slate-600">{currentTab.subtitle}</p>
           </div>
-
         </header>
-
         <AnimatePresence mode="wait">
           {activeTab === "command-center" && (
             <motion.div key="command" className="space-y-6 pt-6" initial="initial" animate="animate" variants={stagger}>
@@ -765,7 +701,6 @@ export default function HomePage() {
                   <span key={countKey}><CountUp start={isDispatched ? BASELINE_IMPACT.compliance : 0} end={isDispatched ? 99.4 : BASELINE_IMPACT.compliance} decimals={1} duration={1.5} />%</span>
                 </MetricCard>
               </div>
-
               <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-5 flex items-end justify-between gap-4">
                   <div>
@@ -777,13 +712,11 @@ export default function HomePage() {
                   </div>
                   <span className="text-xs font-medium text-slate-500">3 regions</span>
                 </div>
-
                 <motion.div className="grid grid-cols-1 gap-4 xl:grid-cols-3" variants={stagger}>
                   <RegionNode name="US-West (Oregon)" subtitle="Hydroelectric & Wind Basin" hasData={true} selected={false} populated={{ dotColor: "bg-red-500", badgeBg: "bg-red-50 text-red-700 border-red-200", badgeText: "High water stress", carbon: "142 gCO2e/kWh", wsi: "4.2 · Critical", thermal: "N/A", latency: "24 ms" }} />
                   <RegionNode name="EU-North (Stockholm)" subtitle="Fossil-free grid + district heat" hasData={true} selected={isDispatched} populated={{ dotColor: "bg-emerald-500", badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200", badgeText: "Recommended target", carbon: "14 gCO2e/kWh", wsi: "0.12 · Ultra low", thermal: "82°C active", latency: "38 ms" }} />
                   <RegionNode name="AP-South (Mumbai)" subtitle="Solar curtailment corridor" hasData={true} selected={false} populated={{ dotColor: "bg-amber-500", badgeBg: "bg-amber-50 text-amber-700 border-amber-200", badgeText: "Thermal constraint", carbon: "380 gCO2e/kWh", wsi: "2.1 · Moderate", thermal: "Solar sync", latency: "112 ms" }} />
                 </motion.div>
-
                 {isDispatched && (
                   <div className="mt-5 flex flex-col gap-3 rounded-lg border border-emerald-200 bg-emerald-50/70 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
@@ -794,7 +727,6 @@ export default function HomePage() {
                   </div>
                 )}
               </motion.section>
-
               <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-5">
                   <h2 className="text-lg font-bold text-slate-950">Live activity</h2>
@@ -830,11 +762,9 @@ export default function HomePage() {
                       </tbody>
                     </table>
                   </div>
-                )}
               </motion.section>
             </motion.div>
           )}
-
           {activeTab === "router-studio" && (
             <motion.div key="router" className="pt-6" initial="initial" animate="animate" variants={stagger}>
               <div className="grid grid-cols-1 gap-5 xl:grid-cols-12">
@@ -843,13 +773,11 @@ export default function HomePage() {
                     <h2 className="text-lg font-bold text-slate-950">Workload constraints</h2>
                     <p className="mt-1 text-sm text-slate-500">Set workload requirements and deadline flexibility.</p>
                   </div>
-
                   <div className="space-y-5 pt-5">
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-slate-700">Workload name / job identifier</span>
                       <input value={workloadName} onChange={(e) => setWorkloadName(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
                     </label>
-
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-slate-700">Workload category</span>
                       <select value={workloadCategory} onChange={(e) => setWorkloadCategory(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
@@ -858,7 +786,6 @@ export default function HomePage() {
                         <option value="Diffusion / Rendering">Diffusion / Rendering</option>
                       </select>
                     </label>
-
                     <div>
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-sm font-semibold text-slate-700">Start-time flexibility</span>
@@ -869,7 +796,6 @@ export default function HomePage() {
                         <span>0h · Start now</span><span>24h · Flexible</span><span>48h · Max shift</span>
                       </div>
                     </div>
-
                     <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-4">
                       <div>
                         <div className="text-sm font-semibold text-slate-800">Strict data residency</div>
@@ -880,7 +806,6 @@ export default function HomePage() {
                         <span className="h-6 w-11 rounded-full bg-slate-300 transition peer-checked:bg-blue-600 after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow-sm after:transition peer-checked:after:translate-x-5" />
                       </label>
                     </div>
-
                     <button
                       onClick={runPlacementAnalysis}
                       disabled={isLoading}
@@ -890,7 +815,6 @@ export default function HomePage() {
                     </button>
                   </div>
                 </motion.section>
-
                 <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 xl:col-span-7">
                   <div className="flex flex-col gap-2 border-b border-slate-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
                     <div>
@@ -899,10 +823,8 @@ export default function HomePage() {
                     </div>
                     <span className={hasData ? "text-xs font-medium text-emerald-700" : isLoading ? "text-xs font-medium text-blue-600" : "text-xs font-medium text-slate-400"}>{hasData ? "Analysis complete" : isLoading ? "Analysis running…" : "Ready"}</span>
                   </div>
-
                   <div className="pt-5">
                     <AnalysisTimeline stage={analysisStage} complete={hasData} />
-
                     {isLoading ? (
                       <div className="grid gap-4 xl:grid-cols-2">
                         <FeasibilityPanel running />
@@ -964,7 +886,6 @@ export default function HomePage() {
               </div>
             </motion.div>
           )}
-
           {activeTab === "audit-ledger" && (
             <motion.div key="audit" className="space-y-5 pt-6" initial="initial" animate="animate" variants={stagger}>
               <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-end gap-3">
@@ -976,9 +897,7 @@ export default function HomePage() {
                   {reportStatus === "generating" ? "Generating report…" : reportStatus === "ready" ? "Regenerate CSRD report" : isDispatched ? "Generate CSRD report" : "Dispatch a workload first"}
                 </button>
               </motion.div>
-
               <AuditOverview dispatched={isDispatched} reportStatus={reportStatus} />
-
               <motion.section variants={fadeInUp} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
                 <div className="mb-4 flex items-center justify-between">
                   <span className="text-xs text-slate-500">{isDispatched ? "Newest decision appears at the top." : "Most recent routing decisions"}</span>
@@ -1005,7 +924,6 @@ export default function HomePage() {
                       </tbody>
                     </table>
                   </div>
-                )}
               </motion.section>
             </motion.div>
           )}
@@ -1014,11 +932,9 @@ export default function HomePage() {
     </div>
   );
 }
-
 function GlobeMark({ size = "md" }) {
   const sizes = size === "sm" ? "h-8 w-8" : "h-11 w-11";
   const icon = size === "sm" ? "h-6 w-6" : "h-6 w-6";
-
   return (
     <span className={`relative flex shrink-0 items-center justify-center ${sizes} text-blue-600`}>
       <svg className={`${icon} overflow-visible`} viewBox="0 0 36 36" fill="none" stroke="currentColor" aria-hidden="true">
@@ -1030,7 +946,6 @@ function GlobeMark({ size = "md" }) {
     </span>
   );
 }
-
 function Brand({ compact = false }) {
   return (
     <div className={`flex items-center gap-2.5 ${compact ? "" : "border-b border-slate-100 px-6 py-4"}`}>
@@ -1044,7 +959,6 @@ function Brand({ compact = false }) {
     </div>
   );
 }
-
 function Navigation({ activeTab, switchTab }) {
   return (
     <div className="p-3">
@@ -1059,7 +973,6 @@ function Navigation({ activeTab, switchTab }) {
     </div>
   );
 }
-
 function UserFooter() {
   return (
     <div className="border-t border-slate-100 p-4">
