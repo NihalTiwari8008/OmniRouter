@@ -25,7 +25,7 @@ const TABS = [
     id: "router-studio",
     label: "Router Studio",
     title: "Router Studio",
-    subtitle: "Choose where and when workloads should run",
+    subtitle: "Choose where workloads should run and how flexibly they can be scheduled",
   },
   {
     id: "audit-ledger",
@@ -575,38 +575,6 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
   );
 }
 
-function TelemetrySignalBar({ dispatched }) {
-  const signals = [
-    { label: "Grid carbon", value: "Active", tone: "emerald" },
-    { label: "Water stress", value: "Active", tone: "blue" },
-    { label: "Thermal reuse", value: "Tracking", tone: "amber" },
-    { label: "Policy engine", value: dispatched ? "Applied" : "Ready", tone: "slate" },
-  ];
-
-  return (
-    <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Decision inputs</div>
-          <div className="mt-1 text-xs text-slate-500">Telemetry signals available to the routing layer.</div>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {signals.map((signal) => {
-            const dot = signal.tone === "emerald" ? "bg-emerald-500" : signal.tone === "blue" ? "bg-blue-500" : signal.tone === "amber" ? "bg-amber-500" : "bg-slate-400";
-            return (
-              <span key={signal.label} className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-[10px] font-semibold text-slate-600">
-                <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
-                {signal.label}
-                <span className="font-medium text-slate-400">{signal.value}</span>
-              </span>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function AuditOverview({ dispatched, reportStatus }) {
   const items = [
     { label: "Logged decisions", value: dispatched ? "4" : "3", detail: dispatched ? "+1 this session" : "Awaiting new dispatch", tone: dispatched ? "emerald" : "slate" },
@@ -787,7 +755,7 @@ export default function HomePage() {
           <div className="flex items-center gap-2">
             <div className={telemetryRefreshing ? "inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700" : "inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700"}>
               <span className={telemetryRefreshing ? "h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" : "h-1.5 w-1.5 rounded-full bg-emerald-500"} />
-              {telemetryRefreshing ? "Refreshing telemetry…" : "Telemetry active"}
+              {telemetryRefreshing ? "Syncing telemetry…" : "Telemetry synced"}
             </div>
             <button
               onClick={refreshTelemetry}
@@ -817,10 +785,6 @@ export default function HomePage() {
                   {isDispatched ? <span key={countKey}><CountUp end={99.4} decimals={1} duration={1.5} />%</span> : "Standby"}
                 </MetricCard>
               </div>
-
-              <motion.div variants={fadeInUp}>
-                <TelemetrySignalBar dispatched={isDispatched} />
-              </motion.div>
 
               <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                 <div className="mb-5 flex items-end justify-between gap-4">
@@ -916,13 +880,14 @@ export default function HomePage() {
 
                     <div>
                       <div className="flex items-center justify-between gap-3">
-                        <span className="text-sm font-semibold text-slate-700">Execution window</span>
-                        <span className="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{deadlineVal} hours</span>
+                        <span className="text-sm font-semibold text-slate-700">Start-time flexibility</span>
+                        <span className="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{deadlineVal}h delay</span>
                       </div>
                       <input type="range" min="0" max="48" step="12" value={deadlineVal} onChange={(e) => setDeadlineVal(Number(e.target.value))} className="mt-4 w-full accent-blue-600" />
                       <div className="mt-1 flex justify-between text-xs text-slate-500">
-                        <span>0h · Instant</span><span>24h · Standard</span><span>48h · Max shift</span>
+                        <span>0h · Start now</span><span>24h · Flexible</span><span>48h · Max shift</span>
                       </div>
+                      <p className="mt-2 text-[11px] leading-4 text-slate-500">Sets how long OmniRouter may delay the workload before dispatch. It does not limit the workload's runtime.</p>
                     </div>
 
                     <div className="flex items-center justify-between gap-4 rounded-lg border border-slate-200 bg-slate-50/60 p-4">
