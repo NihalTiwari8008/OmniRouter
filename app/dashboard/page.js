@@ -322,7 +322,7 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
         <div className="min-w-0">
           <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Dispatch control</div>
           <h3 className="mt-1 text-base font-bold text-slate-950">
-            {dispatched ? "Workload dispatched successfully" : `Ready to dispatch to ${ROUTE_DECISION.regionId === "stockholm" ? "EU-North-1 · Stockholm" : ROUTE_DECISION.regionId}`}
+            {dispatched ? "Workload dispatched successfully" : `Ready to dispatch to ${ROUTE_DECISION.targetLabel}`}
           </h3>
           <p className="mt-1 text-xs leading-5 text-slate-500">
             {dispatched ? "Route decision recorded. The Audit Ledger has received the environmental rationale." : ROUTE_DECISION.rationale}
@@ -331,7 +331,7 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
         {dispatched ? (
           <div className="shrink-0 rounded-lg border border-emerald-200 bg-white px-4 py-3">
             <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-600">Dispatch status</div>
-            <div className="mt-1 text-sm font-bold text-emerald-900">Dispatched · EU-North-1</div>
+            <div className="mt-1 text-sm font-bold text-emerald-900">Dispatched · {ROUTE_DECISION.targetCode}</div>
           </div>
         ) : (
           <button
@@ -354,7 +354,7 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
             workloadCategory,
             deadlineHours,
             geoFence,
-            targetRegion: "EU-North-1",
+            targetRegion: ROUTE_DECISION.targetCode,
           }), null, 2)}</pre>
         </div>
       </details>
