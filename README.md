@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# OmniRouter
 
-## Getting Started
+OmniRouter is a climate-conscious workload routing control plane for AI and other delay-tolerant compute.
 
-First, run the development server:
+## The problem
+
+Cloud schedulers typically optimize around availability, cost, or latency. OmniRouter is designed to add environmental and operational signals to that decision:
+
+- Carbon intensity
+- Regional water stress
+- Waste-heat reuse opportunities
+- Latency and SLA constraints
+- Data-residency policies
+
+The product concept is to place workloads where the combined operational and environmental impact is lower, while preserving hard workload requirements.
+
+## Product flow
+
+```
+Developer / ML pipeline
+        |
+        v
+Workload constraints
+        |
+        v
+Feasibility filter
+        |
+        v
+Environmental telemetry
+        |
+        v
+Multi-objective / Pareto analysis
+        |
+        v
+Route decision
+        |
+        v
+Dispatch
+        |
+        v
+Audit Ledger
+```
+
+## Dashboard
+
+### Command Center
+Executive view of routing outcomes and aggregate impact:
+
+- Water conserved
+- Emissions avoided
+- Heat energy reused
+- Compliance status
+- Regional operating conditions
+- Recent routing activity
+
+### Router Studio
+Technical placement workflow:
+
+1. Define workload requirements.
+2. Set execution-window flexibility.
+3. Apply data-residency constraints.
+4. Run the feasibility and environmental analysis.
+5. Inspect candidate regions on the map.
+6. Compare carbon intensity against water stress.
+7. Review the selected route and rationale.
+8. Dispatch the workload.
+
+### Audit Ledger
+Traceable routing records containing the target region, environmental delta, water impact, timestamp, and routing rationale. The UI also includes a simulated CSRD report-generation flow.
+
+## Prototype architecture
+
+The current repository is intentionally **demo-first**. The interaction flow is simulated locally so the hackathon presentation can demonstrate the complete product journey without requiring production cloud integrations.
+
+Mock routing data and the integration boundary live in:
+
+```
+lib/router/mockRouter.js
+```
+
+The dashboard consumes those data structures through components rather than embedding the routing workflow into the visual elements themselves.
+
+That boundary is designed to make later integration straightforward: the mock analysis/dispatch layer can be replaced with API calls without rebuilding the dashboard UI.
+
+## Current technical stack
+
+- Next.js
+- React
+- Tailwind CSS
+- Framer Motion
+- React CountUp
+
+## Demo sequence
+
+```
+Landing page
+  -> Get Started
+  -> Command Center
+  -> Router Studio
+  -> Configure workload
+  -> Run placement analysis
+  -> Watch staged routing pipeline
+  -> Inspect regions
+  -> Review Pareto analysis
+  -> Dispatch workload
+  -> Command Center updates
+  -> Audit Ledger receives the decision
+  -> Generate CSRD report
+```
+
+## Future implementation
+
+The prototype can be extended with:
+
+- Real telemetry providers such as grid and weather APIs
+- A backend placement-analysis service
+- Real feasibility and optimization logic
+- Kubernetes / SDK workload interception
+- Persistent audit storage
+- Authentication and enterprise policy management
+- Actual CSRD report generation and export
+- Cloud-provider dispatch adapters
+
+## Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Build for production:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build
+```
