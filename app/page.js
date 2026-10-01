@@ -13,8 +13,8 @@ const navItems = [
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 function GlobeMark({ size = "md", dark = false }) {
-  const sizes = size === "sm" ? "h-7 w-7" : size === "lg" ? "h-10 w-10" : "h-9 w-9";
-  const icon = size === "sm" ? "h-5 w-5" : size === "lg" ? "h-6 w-6" : "h-5 w-5";
+  const sizes = size === "sm" ? "h-8 w-8" : size === "lg" ? "h-12 w-12" : "h-11 w-11";
+  const icon = size === "sm" ? "h-6 w-6" : size === "lg" ? "h-7 w-7" : "h-6 w-6";
 
   return (
     <span className={cx("relative flex shrink-0 items-center justify-center", sizes, dark ? "text-white" : "text-blue-600")}>
@@ -32,7 +32,7 @@ function Logo({ dark = false, size = "md" }) {
   return (
     <a href="/" className="flex items-center gap-2.5">
       <GlobeMark size={size} dark={dark} />
-      <span className={cx("text-lg font-bold tracking-tight", dark ? "text-white" : "text-slate-950")}>
+      <span className={cx("text-[22px] font-bold tracking-tight", dark ? "text-white" : "text-slate-950")}>
         Omni<span className="text-blue-600">Router</span>
       </span>
     </a>
@@ -72,7 +72,7 @@ function DashboardPreview() {
         <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
           <div className="flex items-center gap-2">
             <GlobeMark size="sm" />
-            <span className="text-sm font-bold tracking-tight text-slate-950">
+            <span className="text-base font-bold tracking-tight text-slate-950">
               Omni<span className="text-blue-600">Router</span>
             </span>
           </div>
@@ -253,9 +253,9 @@ export default function LandingPage() {
 
       <main>
         <section className="hero-environment relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.84)_38%,rgba(255,255,255,0.28)_72%,rgba(255,255,255,0.08)_100%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.22))]" />
-          <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-18 pt-14 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-24 lg:pt-20">
+          <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(248,250,252,0.78)_0%,rgba(248,250,252,0.56)_38%,rgba(248,250,252,0.16)_72%,rgba(248,250,252,0.06)_100%)]" />
+          <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.01))]" />
+          <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-5 pb-18 pt-14 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-24 lg:pt-20">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-700">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
