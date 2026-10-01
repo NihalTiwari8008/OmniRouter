@@ -421,7 +421,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
       <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/55 px-3.5 py-3">
         <div className="flex items-center justify-between gap-3">
           <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Route target</span>
-          <span className="text-xs font-bold text-slate-900">{selected.name} · {selected.code}</span>
+          <span className="text-xs font-bold text-slate-900">Stockholm · EU-North-1</span>
         </div>
       </div>
     </section>
