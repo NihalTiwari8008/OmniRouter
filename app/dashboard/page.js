@@ -11,6 +11,7 @@ import {
   LEDGER_ROWS,
   ROUTE_DECISION,
   DEFAULT_WORKLOAD,
+  BASELINE_IMPACT,
   createDispatchPayload,
 } from "@/lib/router/mockRouter";
 
@@ -751,17 +752,17 @@ export default function HomePage() {
           {activeTab === "command-center" && (
             <motion.div key="command" className="space-y-6 pt-6" initial="initial" animate="animate" variants={stagger}>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                <MetricCard label="Water conserved" tone="blue" detail={isDispatched ? "+18.4% vs baseline" : "Awaiting dispatch"} icon={metricIcons.water}>
-                  {isDispatched ? <span key={countKey}><CountUp end={41850} duration={1.5} separator="," /> L</span> : "0 L"}
+                <MetricCard label="Water conserved" tone="blue" detail={isDispatched ? "+4,200 L from this dispatch" : "Cumulative routed impact"} icon={metricIcons.water}>
+                  <span key={countKey}><CountUp start={isDispatched ? BASELINE_IMPACT.water : 0} end={isDispatched ? BASELINE_IMPACT.water + 4200 : BASELINE_IMPACT.water} duration={1.5} separator="," /> L</span>
                 </MetricCard>
-                <MetricCard label="Emissions avoided" tone="green" detail={isDispatched ? "-68.2% vs default routing" : "Awaiting dispatch"} icon={metricIcons.carbon}>
-                  {isDispatched ? <span key={countKey}><CountUp end={1420.8} decimals={1} duration={1.5} separator="," /> kg</span> : "0 kg"}
+                <MetricCard label="Emissions avoided" tone="green" detail={isDispatched ? "+238.2 kg from this dispatch" : "Cumulative routed impact"} icon={metricIcons.carbon}>
+                  <span key={countKey}><CountUp start={isDispatched ? BASELINE_IMPACT.emissions : 0} end={isDispatched ? BASELINE_IMPACT.emissions + 238.2 : BASELINE_IMPACT.emissions} decimals={1} duration={1.5} separator="," /> kg</span>
                 </MetricCard>
-                <MetricCard label="Heat energy reused" tone="amber" detail={isDispatched ? "Stockholm district loop" : "Loop idle"} icon={metricIcons.heat}>
-                  {isDispatched ? <span key={countKey}><CountUp end={8.4} decimals={1} duration={1.5} /> MWh</span> : "0 MWh"}
+                <MetricCard label="Heat energy reused" tone="amber" detail={isDispatched ? "+1.5 MWh from this dispatch" : "Cumulative routed impact"} icon={metricIcons.heat}>
+                  <span key={countKey}><CountUp start={isDispatched ? BASELINE_IMPACT.heat : 0} end={isDispatched ? BASELINE_IMPACT.heat + 1.5 : BASELINE_IMPACT.heat} decimals={1} duration={1.5} /> MWh</span>
                 </MetricCard>
-                <MetricCard label="Compliance status" tone={isDispatched ? "green" : "slate"} detail="CSRD Scope 2/3" icon={metricIcons.compliance}>
-                  {isDispatched ? <span key={countKey}><CountUp end={99.4} decimals={1} duration={1.5} />%</span> : "Standby"}
+                <MetricCard label="Compliance status" tone="green" detail={isDispatched ? "Policy check applied" : "CSRD Scope 2/3"} icon={metricIcons.compliance}>
+                  <span key={countKey}><CountUp start={isDispatched ? BASELINE_IMPACT.compliance : 0} end={isDispatched ? 99.4 : BASELINE_IMPACT.compliance} decimals={1} duration={1.5} />%</span>
                 </MetricCard>
               </div>
 
@@ -772,15 +773,15 @@ export default function HomePage() {
                       <h2 className="text-lg font-bold text-slate-950">Global data center network</h2>
                       {isDispatched && <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700">Routing active</span>}
                     </div>
-                    <p className="mt-1 text-sm text-slate-500">{isDispatched ? "Current operating conditions and active route" : "Available compute regions"}</p>
+                    <p className="mt-1 text-sm text-slate-500">Current operating conditions by region</p>
                   </div>
-                  {hasData && <span className="text-xs font-medium text-slate-500">3 regions evaluated</span>}
+                  <span className="text-xs font-medium text-slate-500">3 regions</span>
                 </div>
 
                 <motion.div className="grid grid-cols-1 gap-4 xl:grid-cols-3" variants={stagger}>
-                  <RegionNode name="US-West (Oregon)" subtitle="Hydroelectric & Wind Basin" hasData={hasData} selected={false} populated={{ dotColor: "bg-red-500", badgeBg: "bg-red-50 text-red-700 border-red-200", badgeText: "High water stress", carbon: "142 gCO2e/kWh", wsi: "4.2 · Critical", thermal: "N/A", latency: "24 ms" }} />
-                  <RegionNode name="EU-North (Stockholm)" subtitle="Fossil-free grid + district heat" hasData={hasData} selected={hasData} populated={{ dotColor: "bg-emerald-500", badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200", badgeText: "Recommended target", carbon: "14 gCO2e/kWh", wsi: "0.12 · Ultra low", thermal: "82°C active", latency: "38 ms" }} />
-                  <RegionNode name="AP-South (Mumbai)" subtitle="Solar curtailment corridor" hasData={hasData} selected={false} populated={{ dotColor: "bg-amber-500", badgeBg: "bg-amber-50 text-amber-700 border-amber-200", badgeText: "Thermal constraint", carbon: "380 gCO2e/kWh", wsi: "2.1 · Moderate", thermal: "Solar sync", latency: "112 ms" }} />
+                  <RegionNode name="US-West (Oregon)" subtitle="Hydroelectric & Wind Basin" hasData={true} selected={false} populated={{ dotColor: "bg-red-500", badgeBg: "bg-red-50 text-red-700 border-red-200", badgeText: "High water stress", carbon: "142 gCO2e/kWh", wsi: "4.2 · Critical", thermal: "N/A", latency: "24 ms" }} />
+                  <RegionNode name="EU-North (Stockholm)" subtitle="Fossil-free grid + district heat" hasData={true} selected={isDispatched} populated={{ dotColor: "bg-emerald-500", badgeBg: "bg-emerald-50 text-emerald-700 border-emerald-200", badgeText: "Recommended target", carbon: "14 gCO2e/kWh", wsi: "0.12 · Ultra low", thermal: "82°C active", latency: "38 ms" }} />
+                  <RegionNode name="AP-South (Mumbai)" subtitle="Solar curtailment corridor" hasData={true} selected={false} populated={{ dotColor: "bg-amber-500", badgeBg: "bg-amber-50 text-amber-700 border-amber-200", badgeText: "Thermal constraint", carbon: "380 gCO2e/kWh", wsi: "2.1 · Moderate", thermal: "Solar sync", latency: "112 ms" }} />
                 </motion.div>
 
                 {isDispatched && (
@@ -799,10 +800,11 @@ export default function HomePage() {
                   <h2 className="text-lg font-bold text-slate-950">Live activity</h2>
                   <p className="mt-1 text-sm text-slate-500">Recent workloads and routing outcomes</p>
                 </div>
-                {!isDispatched ? (
-                  <EmptyState compact title="No routing events" description="Dispatch a routed workload from Router Studio to populate this stream." />
-                ) : (
-                  <div className="overflow-x-auto">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="text-xs text-slate-500">{isDispatched ? "1 new dispatch this session" : "Recent system activity"}</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">{liveStreamRows.length} records</span>
+                </div>
+                <div className="overflow-x-auto">
                     <table className="w-full min-w-[760px] text-left text-sm">
                       <thead>
                         <tr className="border-b border-slate-100 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
@@ -978,10 +980,11 @@ export default function HomePage() {
               <AuditOverview dispatched={isDispatched} reportStatus={reportStatus} />
 
               <motion.section variants={fadeInUp} className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-                {!isDispatched ? (
-                  <div className="p-6 sm:p-8"><EmptyState title="No routing decisions logged" description="Dispatch a routed workload in Router Studio to create an audited record." /></div>
-                ) : (
-                  <div className="overflow-x-auto">
+                <div className="mb-4 flex items-center justify-between">
+                  <span className="text-xs text-slate-500">{isDispatched ? "Newest decision appears at the top." : "Most recent routing decisions"}</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">{liveLedgerRows.length} records</span>
+                </div>
+                <div className="overflow-x-auto">
                     <table className="w-full min-w-[900px] text-left text-sm">
                       <thead>
                         <tr className="border-b border-slate-100 bg-slate-50/70 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
