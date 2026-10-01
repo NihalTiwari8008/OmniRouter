@@ -287,6 +287,7 @@ function FeasibilityPanel({ complete = false, running = false }) {
 }
 function ParetoChart({ selectedRegionId = "stockholm" }) {
   const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
+  const routeTarget = ROUTER_REGIONS.find((region) => region.id === ROUTE_DECISION.regionId) || ROUTER_REGIONS[1];
   const maxCarbon = Math.max(...ROUTER_REGIONS.map((region) => region.carbon));
   const maxWater = Math.max(...ROUTER_REGIONS.map((region) => region.waterStress));
   const maxLatency = Math.max(...ROUTER_REGIONS.map((region) => region.latency));
