@@ -97,7 +97,15 @@ function MetricCard({ label, value, suffix, detail, icon, tone = "blue", childre
     </motion.div>
   );
 }
-function RegionNode({ name, subtitle, hasData, selected, populated }) {
+function RegionNode({ region, selected }) {
+  const tone = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
+  const dot = tone === "red" ? "bg-red-500" : tone === "amber" ? "bg-amber-500" : "bg-emerald-500";
+  const badge = tone === "red"
+    ? "border-red-200 bg-red-50 text-red-700"
+    : tone === "amber"
+      ? "border-amber-200 bg-amber-50 text-amber-700"
+      : "border-emerald-200 bg-emerald-50 text-emerald-700";
+
   return (
     <motion.div
       variants={fadeInUp}
@@ -106,40 +114,40 @@ function RegionNode({ name, subtitle, hasData, selected, populated }) {
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-start gap-2">
-            <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${hasData ? populated.dotColor : "bg-slate-400"}`} />
+            <span className={`mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full ${dot}`} />
             <div>
-              <h3 className="text-lg font-bold leading-tight text-slate-950">{name}</h3>
-              <p className="mt-1 text-sm leading-5 text-slate-600">{subtitle}</p>
+              <h3 className="text-lg font-bold leading-tight text-slate-950">{region.name}</h3>
+              <p className="mt-1 text-sm leading-5 text-slate-600">{region.code} · {region.descriptor}</p>
             </div>
           </div>
         </div>
-        {hasData ? (
-          <span className={`shrink-0 rounded-md border px-2.5 py-1 text-xs font-semibold ${populated.badgeBg}`}>{populated.badgeText}</span>
-        ) : (
-          <span className="shrink-0 rounded-md border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-slate-500">Standby</span>
-        )}
+        <span className={`shrink-0 rounded-md border px-2.5 py-1 text-xs font-semibold ${badge}`}>
+          {selected ? "Active route" : region.badge}
+        </span>
       </div>
+
       <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-4 border-t border-slate-200/80 pt-4 text-sm">
         <div>
           <span className="block text-xs text-slate-500">Carbon intensity</span>
-          <span className="font-semibold text-slate-800">{hasData ? populated.carbon : "-- gCO2e/kWh"}</span>
+          <span className="font-semibold text-slate-800">{region.carbon} gCO2e/kWh</span>
         </div>
         <div>
           <span className="block text-xs text-slate-500">Water stress</span>
-          <span className="font-semibold text-slate-800">{hasData ? populated.wsi : "--"}</span>
+          <span className="font-semibold text-slate-800">{region.waterStress} · {region.waterLabel}</span>
         </div>
         <div>
           <span className="block text-xs text-slate-500">Thermal loop</span>
-          <span className="font-semibold text-slate-800">{hasData ? populated.thermal : "--"}</span>
+          <span className="font-semibold text-slate-800">{region.heat}</span>
         </div>
         <div>
-          <span className="block text-xs text-slate-500">Latency SLA</span>
-          <span className="font-semibold text-slate-800">{hasData ? populated.latency : "-- ms"}</span>
+          <span className="block text-xs text-slate-500">Latency</span>
+          <span className="font-semibold text-slate-800">{region.latency} ms</span>
         </div>
       </div>
     </motion.div>
   );
 }
+
 function AnalysisTimeline({ stage, complete }) {
   return (
     <div className="mb-5 rounded-xl border border-slate-200 bg-white px-4 py-4">
