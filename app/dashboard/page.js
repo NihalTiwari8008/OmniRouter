@@ -435,71 +435,15 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
         <div className="relative min-h-[370px] overflow-hidden bg-[#0b1420] xl:min-h-[400px]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_40%,rgba(16,185,129,0.08),transparent_34%),radial-gradient(circle_at_20%_65%,rgba(59,130,246,0.08),transparent_38%)]" />
 
-          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <pattern id="network-grid" width="48" height="48" patternUnits="userSpaceOnUse">
-                <path d="M48 0H0V48" fill="none" stroke="#1d3043" strokeWidth="1" />
-              </pattern>
-              <linearGradient id="network-route" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#60a5fa" />
-                <stop offset="55%" stopColor="#34d399" />
-                <stop offset="100%" stopColor="#10b981" />
-              </linearGradient>
-              <filter id="network-glow" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="8" />
-              </filter>
-            </defs>
-
-            <rect width="1000" height="520" fill="url(#network-grid)" />
-
-            <g fill="#1d3449" stroke="#35516a" strokeWidth="1.4" strokeLinejoin="round">
-              <path d="M74 120 111 87 161 93 196 118 190 147 165 164 151 187 115 203 91 194 65 204 44 181 52 148Z" />
-              <path d="M302 58 343 34 397 39 438 67 427 96 399 108 385 136 351 139 327 112 303 91Z" />
-              <path d="M284 224 320 207 351 219 372 249 361 281 345 307 335 349 315 381 296 372 286 335 270 309 278 275 264 247Z" />
-              <path d="M461 166 493 145 528 149 551 167 548 189 528 201 497 199 475 189Z" />
-              <path d="M475 213 508 203 546 214 575 242 570 274 548 304 539 340 510 362 484 346 478 315 461 286 466 252Z" />
-              <path d="M548 144 589 121 647 119 702 129 759 151 813 158 859 178 879 205 862 225 833 233 806 258 767 260 735 243 698 251 663 235 626 227 593 207 563 193Z" />
-              <path d="M762 300 803 286 837 294 855 315 846 336 818 346 786 341 766 325Z" />
-              <path d="M790 362 830 351 872 359 908 380 902 403 864 414 827 406 800 392Z" />
-              <path d="M926 235 950 221 972 228 981 247 972 266 948 270 929 259Z" />
-            </g>
-
-            <g fill="none" stroke="#47647b" strokeWidth="0.9" opacity="0.85">
-              <path d="M81 131 111 119 146 122 174 139" />
-              <path d="M91 175 122 158 156 165 178 179" />
-              <path d="M320 72 348 91 379 88 411 102" />
-              <path d="M487 167 516 180 540 174" />
-              <path d="M494 233 524 251 553 246 567 261" />
-              <path d="M584 160 625 145 664 155 703 170 744 181 778 206 817 207 846 219" />
-              <path d="M625 207 664 216 704 210 735 225" />
-              <path d="M784 304 811 313 839 309" />
-              <path d="M808 377 840 369 877 382" />
-            </g>
-
-            <g fill="#8aa1b5" opacity="0.75">
-              <circle cx="105" cy="228" r="1.5" /><circle cx="182" cy="254" r="1.5" />
-              <circle cx="421" cy="121" r="1.5" /><circle cx="438" cy="225" r="1.5" />
-              <circle cx="596" cy="101" r="1.5" /><circle cx="711" cy="284" r="1.5" />
-              <circle cx="897" cy="306" r="1.5" /><circle cx="912" cy="155" r="1.5" />
-            </g>
-
-            <g fill="none" stroke="url(#network-route)" strokeLinecap="round">
-              <path d="M235 221 C336 144 414 120 528 164" strokeWidth="10" opacity="0.14" filter="url(#network-glow)" />
-              <path d="M235 221 C336 144 414 120 528 164" strokeWidth="4.5" strokeDasharray="12 12" />
-              <path d="M700 306 C651 250 607 203 528 164" strokeWidth="10" opacity="0.14" filter="url(#network-glow)" />
-              <path d="M700 306 C651 250 607 203 528 164" strokeWidth="4.5" strokeDasharray="12 12" />
-            </g>
-
-            <circle cx="528" cy="164" r="30" fill="#10b981" opacity="0.1" />
-            <circle cx="528" cy="164" r="15" fill="#10b981" stroke="#d1fae5" strokeWidth="4" />
-            <circle cx="528" cy="164" r="5" fill="#ffffff" />
-
-            <g fontSize="10" fontFamily="inherit" fill="#7890a6" letterSpacing="1.2">
-              <text x="35" y="35">WEST</text>
-              <text x="472" y="35">EUROPE</text>
-              <text x="850" y="35">EAST</text>
-            </g>
-          </svg>
+          <div className="absolute inset-0 overflow-hidden bg-[#0b1420]">
+            <img
+              src="/world-map.svg"
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover opacity-95"
+              draggable="false"
+            />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_38%,rgba(16,185,129,0.10),transparent_34%),linear-gradient(180deg,rgba(11,20,32,0.04),rgba(11,20,32,0.18))]" />
+          </div>
 
           {ROUTER_REGIONS.map((region) => (
             <div key={region.id} className="absolute" style={{ left: region.map.x, top: region.map.y }}>
@@ -511,14 +455,15 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
             Global compute network
           </div>
 
-          <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-[10px] text-slate-300 backdrop-blur">
               <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-blue-400" />Candidate route</span>
               <span className="h-3 w-px bg-white/10" />
               <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Selected route</span>
             </div>
-            <div className="rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-[10px] font-medium text-slate-400 backdrop-blur">
-              Click a node to inspect
+            <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-[10px] font-medium text-slate-400 backdrop-blur">
+              <span>Click a node to inspect</span>
+              <span className="hidden text-slate-600 sm:inline">Map: simple-world-map</span>
             </div>
           </div>
         </div>
