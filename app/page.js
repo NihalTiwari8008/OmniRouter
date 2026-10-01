@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Pricing, SavingsCalculator, SocialProof, Integrations, FAQ, About, Resources, BookDemoCTA } from "../components/MarketingSections";
 
 const navItems = [
   { label: "Product", href: "#product" },
@@ -56,8 +57,8 @@ function FeatureIcon({ type }) {
   };
 
   return (
-    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-blue-600 ring-1 ring-slate-200">
-      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 text-blue-600 ring-1 ring-blue-100 shadow-sm">
+      <svg className="h-5 w-5 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d={paths[type]} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
       </svg>
     </span>
@@ -252,7 +253,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
-      <header className="absolute inset-x-0 top-0 z-40 border-b border-white/40 bg-white/35 backdrop-blur-sm">
+      <header className="absolute inset-x-0 top-0 z-40 border-b border-blue-100/50 bg-white/60 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
           <Logo />
 
@@ -282,7 +283,7 @@ export default function LandingPage() {
               </div>
 
               <h1 className="mt-6 max-w-[570px] text-[44px] font-bold leading-[1.03] tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[62px]">
-                Route AI workloads for a cleaner <span className="text-blue-600">planet.</span>
+                Route AI workloads for a cleaner <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-emerald-500">planet.</span>
               </h1>
 
               <p className="mt-5 max-w-[560px] text-[16px] leading-7 text-slate-600 sm:text-[18px]">
@@ -290,10 +291,10 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+                <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-6 text-sm font-bold text-white shadow-lg shadow-blue-500/25 transition-all hover:scale-105 hover:from-blue-700 hover:to-indigo-700">
                   Get started <Arrow />
                 </button>
-                <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-200 bg-white/50 backdrop-blur-sm px-6 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 shadow-sm">
                   Sign in
                 </button>
               </div>
@@ -333,11 +334,14 @@ export default function LandingPage() {
           </div>
         </section>
 
-                <section id="product" className="scroll-mt-20 border-t border-slate-200">
-          <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
+        <SocialProof />
+
+        <section id="product" className="scroll-mt-20 border-t border-slate-200 bg-gradient-to-b from-blue-50/40 to-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mr-40 -mt-40 h-96 w-96 rounded-full bg-blue-400/5 blur-3xl"></div>
+          <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24 relative z-10">
             <div className="max-w-3xl">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Product</div>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">A climate-conscious control plane for compute.</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-700">Product</div>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">A climate-conscious control plane for compute.</h2>
               <p className="mt-4 text-base leading-7 text-slate-600">OmniRouter sits between your workload pipeline and cloud infrastructure, turning workload requirements and environmental conditions into an auditable routing decision.</p>
             </div>
 
@@ -348,7 +352,7 @@ export default function LandingPage() {
                 { icon: "leaf", step: "03", title: "Optimize", text: "Compare eligible regions across carbon intensity, water stress, heat reuse, and latency." },
                 { icon: "drop", step: "04", title: "Dispatch & audit", text: "Send a lightweight route command and preserve the decision, environmental delta, and rationale." },
               ].map((item) => (
-                <div key={item.step} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div key={item.step} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-blue-200 hover:-translate-y-1">
                   <div className="flex items-center justify-between">
                     <FeatureIcon type={item.icon} />
                     <span className="text-[11px] font-semibold tracking-[0.14em] text-slate-300">{item.step}</span>
@@ -375,11 +379,11 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="use-cases" className="scroll-mt-20 border-y border-slate-200 bg-slate-50/70">
+        <section id="use-cases" className="scroll-mt-20 border-y border-slate-200 bg-gradient-to-br from-indigo-50/40 via-white to-blue-50/40">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Use cases</div>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Designed around flexible compute.</h2>
+              <div className="inline-flex items-center gap-2 rounded-full bg-blue-100/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-blue-700">Use cases</div>
+              <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Designed around flexible compute.</h2>
               <p className="mt-4 text-base leading-7 text-slate-600">Workloads with some scheduling flexibility give the router room to respond to environmental and operational changes.</p>
             </div>
 
@@ -389,7 +393,7 @@ export default function LandingPage() {
                 { eyebrow: "Inference & embeddings", title: "Balance sustained traffic with local constraints.", text: "Use carbon, water stress, latency, and residency together when selecting where recurring AI workloads should run." },
                 { eyebrow: "HPC & rendering", title: "Route non-urgent compute around heat and water pressure.", text: "Use environmental conditions and recovery opportunities to place batch rendering, simulations, and other delay-tolerant workloads." },
               ].map((item) => (
-                <div key={item.eyebrow} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+                <div key={item.eyebrow} className="group rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:shadow-lg hover:border-indigo-200 hover:-translate-y-1">
                   <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-blue-600">{item.eyebrow}</div>
                   <h3 className="mt-3 text-xl font-bold leading-snug text-slate-950">{item.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-slate-600">{item.text}</p>
@@ -410,15 +414,15 @@ export default function LandingPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 {[
-                  { title: "Carbon", metric: "Grid intensity", text: "Compare the emissions profile of eligible regions instead of routing on availability alone." },
-                  { title: "Water", metric: "Regional stress", text: "Account for water scarcity so a lower-carbon destination does not create a blind water trade-off." },
-                  { title: "Heat", metric: "Recovery potential", text: "Surface locations where data-center heat can connect to district or industrial heat demand." },
-                  { title: "Compliance", metric: "Decision history", text: "Preserve timestamps, constraints, deltas, and rationale for traceable sustainability reporting." },
+                  { title: "Carbon", metric: "Grid intensity", text: "Compare the emissions profile of eligible regions instead of routing on availability alone.", color: "group-hover:text-emerald-600" },
+                  { title: "Water", metric: "Regional stress", text: "Account for water scarcity so a lower-carbon destination does not create a blind water trade-off.", color: "group-hover:text-blue-500" },
+                  { title: "Heat", metric: "Recovery potential", text: "Surface locations where data-center heat can connect to district or industrial heat demand.", color: "group-hover:text-orange-500" },
+                  { title: "Compliance", metric: "Decision history", text: "Preserve timestamps, constraints, deltas, and rationale for traceable sustainability reporting.", color: "group-hover:text-indigo-500" },
                 ].map((item) => (
-                  <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div key={item.title} className="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:-translate-y-1">
                     <div className="flex items-center justify-between gap-3">
-                      <div className="text-lg font-bold text-slate-950">{item.title}</div>
-                      <span className="rounded-md bg-slate-50 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.1em] text-slate-400">{item.metric}</span>
+                      <div className={`text-lg font-bold text-slate-950 transition-colors ${item.color}`}>{item.title}</div>
+                      <span className="rounded-md bg-slate-50 border border-slate-100 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.1em] text-slate-500 group-hover:bg-white transition-colors">{item.metric}</span>
                     </div>
                     <p className="mt-3 text-sm leading-6 text-slate-600">{item.text}</p>
                   </div>
@@ -427,6 +431,9 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+
+        <SavingsCalculator />
+        <About />
 
         <section id="docs" className="scroll-mt-20 border-t border-slate-200 bg-slate-50/70">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
@@ -456,6 +463,12 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <Integrations />
+        <Resources />
+        <Pricing />
+        <FAQ />
+        <BookDemoCTA />
+
 <section className="border-t border-slate-200 bg-slate-950">
           <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-14 lg:flex-row lg:items-end lg:justify-between lg:px-8">
             <div>
@@ -476,3 +489,8 @@ export default function LandingPage() {
     </div>
   );
 }
+
+
+
+
+
