@@ -286,117 +286,148 @@ function FeasibilityPanel({ complete = false, running = false }) {
   );
 }
 function ParetoChart({ selectedRegionId = "stockholm" }) {
+  const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
   const maxCarbon = Math.max(...ROUTER_REGIONS.map((region) => region.carbon));
   const maxWater = Math.max(...ROUTER_REGIONS.map((region) => region.waterStress));
-  const inspected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
-  const recommended = ROUTER_REGIONS.find((region) => region.id === "stockholm") || ROUTER_REGIONS[1];
+  const maxLatency = Math.max(...ROUTER_REGIONS.map((region) => region.latency));
+
+  const center = 180;
+  const radius = 112;
+  const angles = [-Math.PI / 2, 0, Math.PI / 2, Math.PI];
+
+  const pointAt = (index, value) => ({
+    x: center + Math.cos(angles[index]) * radius * value,
+    y: center + Math.sin(angles[index]) * radius * value,
+  });
+
+  const valuesFor = (region) => [
+    1 - region.carbon / maxCarbon,
+    1 - region.waterStress / maxWater,
+    region.heatScore ?? 0,
+    1 - region.latency / maxLatency,
+  ];
+
+  const polygonPoints = (region) => valuesFor(region).map((value, index) => {
+    const point = pointAt(index, Math.max(0, Math.min(1, value)));
+    return `${point.x},${point.y}`;
+  }).join(" ");
+
+  const strokeFor = (id) => id === "stockholm" ? "#059669" : id === "oregon" ? "#f43f5e" : "#f59e0b";
+  const fillFor = (id) => id === "stockholm" ? "#10b981" : id === "oregon" ? "#f43f5e" : "#f59e0b";
+
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h3 className="text-base font-bold text-slate-950">Environmental trade-off matrix</h3>
-          <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">A compact Pareto view of the same candidates across carbon, water stress, heat reuse, and latency.</p>
+          <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">Normalized comparison across carbon, water stress, heat recovery, and latency.</p>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">Pareto-efficient</span>
-          <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">Lower is better</span>
-        </div>
+        <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">Higher profile = better fit</span>
       </div>
-      <div className="mt-5 overflow-hidden rounded-xl border border-slate-200">
-        <div className="hidden grid-cols-[170px_1fr_1fr_130px_88px] gap-4 bg-slate-50/80 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.11em] text-slate-400 md:grid">
-          <div>Region</div>
-          <div>Carbon intensity</div>
-          <div>Water stress</div>
-          <div>Heat recovery</div>
-          <div className="text-right">Latency</div>
+
+      <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(300px,1fr)_250px] lg:items-center">
+        <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-3">
+          <svg viewBox="0 0 360 360" className="mx-auto h-[300px] w-full max-w-[420px]" role="img" aria-label="Normalized comparison of candidate regions across carbon, water stress, heat recovery and latency">
+            {[0.25, 0.5, 0.75, 1].map((scale) => (
+              <polygon key={scale} points={angles.map((_, index) => {
+                const point = pointAt(index, scale);
+                return `${point.x},${point.y}`;
+              }).join(" ")} fill="none" stroke="#dbe4ee" strokeWidth="1" />
+            ))}
+
+            {angles.map((angle, index) => {
+              const end = pointAt(index, 1);
+              return <line key={index} x1={center} y1={center} x2={end.x} y2={end.y} stroke="#dbe4ee" strokeWidth="1" />;
+            })}
+
+            {ROUTER_REGIONS.map((region) => {
+              const isSelected = region.id === selectedRegionId;
+              return (
+                <polygon
+                  key={region.id}
+                  points={polygonPoints(region)}
+                  fill={fillFor(region.id)}
+                  fillOpacity={isSelected ? 0.14 : 0.07}
+                  stroke={strokeFor(region.id)}
+                  strokeWidth={isSelected ? 2.8 : 1.8}
+                  strokeLinejoin="round"
+                />
+              );
+            })}
+
+            {ROUTER_REGIONS.map((region) => valuesFor(region).map((value, index) => {
+              const point = pointAt(index, Math.max(0, Math.min(1, value)));
+              return <circle key={`${region.id}-${index}`} cx={point.x} cy={point.y} r={region.id === selectedRegionId ? 3.8 : 2.5} fill={strokeFor(region.id)} />;
+            }))}
+
+            <g fontSize="9" fontFamily="inherit" fill="#64748b" textAnchor="middle">
+              <text x={center} y="27">Carbon intensity</text>
+              <text x="333" y={center + 3}>Water stress</text>
+              <text x={center} y="348">Heat recovery</text>
+              <text x="27" y={center + 3}>Latency</text>
+            </g>
+          </svg>
+
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 px-2 pb-2 text-[10px]">
+            {ROUTER_REGIONS.map((region) => (
+              <span key={region.id} className="inline-flex items-center gap-1.5 font-medium text-slate-600">
+                <span className={`h-2 w-2 rounded-full ${region.id === "stockholm" ? "bg-emerald-500" : region.id === "oregon" ? "bg-red-500" : "bg-amber-500"}`} />
+                {region.name}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="divide-y divide-slate-100">
+
+        <div className="space-y-2.5">
           {ROUTER_REGIONS.map((region) => {
-            const inspectedRow = region.id === selectedRegionId;
-            const isRecommended = region.id === "stockholm";
-            const carbonWidth = Math.max(8, (region.carbon / maxCarbon) * 100);
-            const waterWidth = Math.max(8, (region.waterStress / maxWater) * 100);
-            const carbonTone = region.tone === "risk" ? "bg-red-400" : region.tone === "constraint" ? "bg-amber-400" : "bg-emerald-500";
-            const waterTone = region.tone === "risk" ? "bg-red-300" : region.tone === "constraint" ? "bg-amber-300" : "bg-emerald-400";
+            const isSelected = region.id === selectedRegionId;
+            const isRoute = region.id === "stockholm";
+            const overall = Math.round(valuesFor(region).reduce((sum, value) => sum + value, 0) * 25);
             return (
-              <div key={region.id} className={inspectedRow ? "bg-blue-50/45 px-4 py-4" : isRecommended ? "bg-emerald-50/20 px-4 py-4" : "bg-white px-4 py-4"}>
-                <div className="grid gap-4 md:grid-cols-[170px_1fr_1fr_130px_88px] md:items-center">
-                  <div className="flex items-start gap-2.5">
-                    <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${region.tone === "risk" ? "bg-red-500" : region.tone === "constraint" ? "bg-amber-500" : "bg-emerald-500"}`} />
+              <div key={region.id} className={isSelected ? "rounded-xl border border-blue-200 bg-blue-50/55 p-3.5" : isRoute ? "rounded-xl border border-emerald-200 bg-emerald-50/45 p-3.5" : "rounded-xl border border-slate-200 bg-white p-3.5"}>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <span className={`h-2 w-2 shrink-0 rounded-full ${region.id === "stockholm" ? "bg-emerald-500" : region.id === "oregon" ? "bg-red-500" : "bg-amber-500"}`} />
                     <div className="min-w-0">
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-1.5">
                         <span className="text-xs font-bold text-slate-900">{region.name}</span>
-                        {inspectedRow && <span className="rounded border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[8px] font-semibold text-blue-700">Inspecting</span>}
-                        {isRecommended && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">Route target</span>}
+                        {isRoute && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">Route target</span>}
+                        {isSelected && !isRoute && <span className="rounded border border-blue-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-blue-700">Inspecting</span>}
                       </div>
-                      <div className="mt-0.5 text-[10px] text-slate-500">{region.code}</div>
+                      <div className="mt-0.5 text-[9px] text-slate-500">{region.code}</div>
                     </div>
                   </div>
-                  <div>
-                    <div className="mb-1 flex items-center justify-between gap-2 text-[10px]">
-                      <span className="text-slate-500 md:hidden">Carbon intensity</span>
-                      <span className="font-semibold text-slate-800">{region.carbon} gCO₂e/kWh</span>
+                  <span className="text-sm font-bold text-slate-900">{overall}</span>
+                </div>
+                <div className="mt-2.5 grid grid-cols-4 gap-1.5">
+                  {[
+                    ["C", Math.round(valuesFor(region)[0] * 100)],
+                    ["W", Math.round(valuesFor(region)[1] * 100)],
+                    ["H", Math.round(valuesFor(region)[2] * 100)],
+                    ["L", Math.round(valuesFor(region)[3] * 100)],
+                  ].map(([key, score]) => (
+                    <div key={key} className="rounded-md bg-white/80 px-1.5 py-1.5 text-center ring-1 ring-slate-100">
+                      <div className="text-[8px] font-semibold text-slate-400">{key}</div>
+                      <div className="mt-0.5 text-[10px] font-bold text-slate-800">{score}</div>
                     </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                      <div className={`h-full rounded-full ${carbonTone}`} style={{ width: `${carbonWidth}%` }} />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="mb-1 flex items-center justify-between gap-2 text-[10px]">
-                      <span className="text-slate-500 md:hidden">Water stress</span>
-                      <span className="font-semibold text-slate-800">{region.waterStress} · {region.waterLabel}</span>
-                    </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-slate-100">
-                      <div className={`h-full rounded-full ${waterTone}`} style={{ width: `${waterWidth}%` }} />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 md:block">
-                    <span className="text-[10px] text-slate-500 md:hidden">Heat recovery</span>
-                    <span className={region.id === "stockholm" ? "inline-flex rounded-md border border-emerald-200 bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700" : "inline-flex rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-semibold text-slate-600"}>
-                      {region.id === "stockholm" ? "District heat" : region.heat}
-                    </span>
-                  </div>
-                  <div className="text-left md:text-right">
-                    <span className="text-[10px] text-slate-500 md:hidden">Latency · </span>
-                    <span className="text-xs font-bold text-slate-900">{region.latency} ms</span>
-                  </div>
+                  ))}
                 </div>
               </div>
             );
           })}
         </div>
       </div>
-      <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-center">
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">
-          <div className="flex items-start gap-3">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-emerald-600 ring-1 ring-emerald-100">
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" /></svg>
-            </div>
-            <div className="min-w-0">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Current route</div>
-              <div className="mt-1 text-sm font-bold text-slate-900">{recommended.name} · {recommended.code}</div>
-              <div className="mt-0.5 text-[10px] leading-4 text-slate-500">{ROUTE_DECISION.rationale}</div>
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-3 gap-2 sm:min-w-[300px]">
-          <div className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-center">
-            <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
-            <div className="mt-1 text-sm font-bold text-emerald-700">{ROUTE_DECISION.carbonDelta}</div>
-          </div>
-          <div className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-center">
-            <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Water</div>
-            <div className="mt-1 text-sm font-bold text-blue-700">-120 L/hr</div>
-          </div>
-          <div className="rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-center">
-            <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Latency</div>
-            <div className="mt-1 text-sm font-bold text-slate-900">{recommended.latency} ms</div>
-          </div>
+
+      <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/55 px-3.5 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Route target</span>
+          <span className="text-xs font-bold text-slate-900">{selected.name} · {selected.code}</span>
         </div>
       </div>
     </section>
   );
 }
+
 function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, workloadCategory, deadlineHours, geoFence }) {
   return (
     <section className={dispatched ? "rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 sm:p-6" : "rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"}>
@@ -569,6 +600,53 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
     </section>
   );
 }
+function LiveActivityTimeline({ rows }) {
+  return (
+    <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-bold text-slate-950">Live activity</h2>
+          <p className="mt-1 text-sm text-slate-500">Recent workloads and routing outcomes</p>
+        </div>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">{rows.length} records</span>
+      </div>
+
+      <div className="mt-5">
+        {rows.map((row, index) => {
+          const isNew = index === 0 && row.status === "Dispatched";
+          const dot = row.destColor === "blue" ? "bg-blue-500" : "bg-emerald-500";
+          return (
+            <div key={row.id} className="grid grid-cols-[68px_18px_minmax(0,1fr)] gap-3 sm:grid-cols-[86px_18px_minmax(0,1fr)] sm:gap-4">
+              <div className="pt-2 text-[10px] text-slate-400">{isNew ? "Just now" : row.time}</div>
+              <div className="relative flex justify-center">
+                {index < rows.length - 1 && <span className="absolute top-4 bottom-0 w-px bg-slate-200" />}
+                <span className={`relative z-10 mt-2 h-2.5 w-2.5 rounded-full ${isNew ? "bg-emerald-500 ring-4 ring-emerald-50" : dot}`} />
+              </div>
+              <div className={isNew ? "mb-3 rounded-xl border border-emerald-200 bg-emerald-50/45 p-4" : "mb-3 rounded-xl border border-slate-200 bg-white p-4"}>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[10px] font-semibold text-slate-400">{row.id}</span>
+                      <span className="text-sm font-bold text-slate-900">{row.name}</span>
+                    </div>
+                    <div className="mt-1 text-xs text-slate-500">{row.desc}</div>
+                  </div>
+                  <StatusBadge status={row.status} color={row.statusColor} />
+                </div>
+                <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-100 pt-3 text-[10px]">
+                  <span className="inline-flex items-center gap-1.5 text-slate-600"><span className={`h-1.5 w-1.5 rounded-full ${dot}`} />{row.dest}</span>
+                  <span className="font-semibold text-emerald-600">{row.carbon}</span>
+                  <span className="font-semibold text-blue-600">{row.water}</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </motion.section>
+  );
+}
+
 function AuditOverview({ dispatched, reportStatus }) {
   const items = [
     { label: "Logged decisions", value: dispatched ? "4" : "3", detail: dispatched ? "+1 this session" : "Current history" },
@@ -748,42 +826,7 @@ export default function HomePage() {
                             <motion.div variants={fadeInUp}>
                 <GlobalNetworkOverview dispatched={isDispatched} />
               </motion.div>
-              <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                <div className="mb-5">
-                  <h2 className="text-lg font-bold text-slate-950">Live activity</h2>
-                  <p className="mt-1 text-sm text-slate-500">Recent workloads and routing outcomes</p>
-                </div>
-                <div className="mb-3 flex items-center justify-between">
-                  <span className="text-xs text-slate-500">{isDispatched ? "1 new dispatch this session" : "Recent system activity"}</span>
-                  <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">{liveStreamRows.length} records</span>
-                </div>
-                <div className="overflow-x-auto">
-                    <table className="w-full min-w-[760px] text-left text-sm">
-                      <thead>
-                        <tr className="border-b border-slate-100 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
-                          <th className="px-3 py-3">Dispatch</th>
-                          <th className="px-3 py-3">Workload</th>
-                          <th className="px-3 py-3">Destination</th>
-                          <th className="px-3 py-3">Carbon</th>
-                          <th className="px-3 py-3">Water</th>
-                          <th className="px-3 py-3">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {liveStreamRows.map((row) => (
-                          <tr key={row.id} className="hover:bg-slate-50">
-                            <td className="px-3 py-4 font-semibold text-slate-900">{row.id}</td>
-                            <td className="px-3 py-4"><div className="font-semibold text-slate-900">{row.name}</div><div className="mt-0.5 text-xs text-slate-500">{row.desc}</div></td>
-                            <td className="px-3 py-4"><DestBadge dest={row.dest} color={row.destColor} /></td>
-                            <td className="px-3 py-4 font-semibold text-emerald-600">{row.carbon}</td>
-                            <td className="px-3 py-4 font-semibold text-blue-600">{row.water}</td>
-                            <td className="px-3 py-4"><StatusBadge status={row.status} color={row.statusColor} /></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-              </motion.section>
+              <LiveActivityTimeline rows={liveStreamRows} />
             </motion.div>
           )}
           {activeTab === "router-studio" && (
