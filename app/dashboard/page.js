@@ -412,65 +412,92 @@ function RegionDetailCard({ region, selected, onSelect }) {
 }
 
 function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
+  const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
+
   return (
-    <section className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <div>
-          <div className="text-sm font-bold text-slate-950">Global routing map</div>
-          <div className="mt-1 text-xs text-slate-500">Candidate regions and live environmental inputs</div>
+          <div className="text-base font-bold text-slate-950">Global routing map</div>
+          <div className="mt-1 text-xs text-slate-500">Eligible compute regions, environmental conditions, and candidate routes.</div>
         </div>
-        <span className="text-xs font-semibold text-slate-400">{ROUTER_REGIONS.length} candidates evaluated</span>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />3 candidates
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Route selected
+          </span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.4fr)_minmax(300px,0.8fr)]">
-        <div className="relative min-h-[390px] border-b border-slate-100 bg-slate-50 xl:border-b-0 xl:border-r">
-          <div className="absolute left-4 top-4 z-10 rounded-md border border-slate-200 bg-white/90 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 shadow-sm">
-            Global compute network
-          </div>
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.6fr)_minmax(315px,0.75fr)]">
+        <div className="relative min-h-[370px] overflow-hidden bg-[#0b1420] xl:min-h-[400px]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_40%,rgba(16,185,129,0.08),transparent_34%),radial-gradient(circle_at_20%_65%,rgba(59,130,246,0.08),transparent_38%)]" />
 
           <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
             <defs>
-              <pattern id="map-grid-v2" width="50" height="50" patternUnits="userSpaceOnUse">
-                <path d="M50 0H0V50" fill="none" stroke="#dfe7ef" strokeWidth="1" />
+              <pattern id="network-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+                <path d="M48 0H0V48" fill="none" stroke="#1d3043" strokeWidth="1" />
               </pattern>
-              <linearGradient id="route-gradient-v2" x1="0" y1="0" x2="1" y2="0">
+              <linearGradient id="network-route" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0%" stopColor="#60a5fa" />
+                <stop offset="55%" stopColor="#34d399" />
                 <stop offset="100%" stopColor="#10b981" />
               </linearGradient>
-              <filter id="route-glow-v2" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="7" result="blur" />
+              <filter id="network-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="8" />
               </filter>
             </defs>
 
-            <rect width="1000" height="520" fill="url(#map-grid-v2)" opacity="0.5" />
+            <rect width="1000" height="520" fill="url(#network-grid)" />
 
-            <g fill="#d8e2ec" stroke="#c0cedc" strokeWidth="1.1">
-              <path d="M62 124 92 94 140 99 177 124 174 151 156 165 146 189 112 203 88 192 67 201 45 177 50 149Z" />
-              <path d="m174 202 31-17 45 4 31 20 20 30-17 18-12 31-27 13-18 43-27-4-12-31-28-25 8-34Z" />
-              <path d="m299 128 27-31 49-12 63 7 40 27 10 40-23 28-8 37-31 22-34-15-16-31-38-15-25-25Z" />
-              <path d="m405 198 29-15 43 8 30 23 4 31-21 23-34 12-35-11-23-22Z" />
-              <path d="m506 224 25-46 42-28 53-5 57 21 46 35 5 34-28 19-8 38-35 22-49-10-29-20-43-14Z" />
-              <path d="m541 299 24-13 32 8 21 26-10 27-28 19-30-9-18-26Z" />
-              <path d="m664 356 33-23 52 4 41 24 17 31-18 26-43 15-41-13-30-27Z" />
-              <path d="m837 215 24-19 38 3 31 20-3 21-31 21-35-6-19-21Z" />
-              <path d="m849 390 37-6 36 12 13 23-18 17-35-1-28-17Z" />
-              <path d="m753 429 17-8 21 5 12 15-8 10-23-2-18-9Z" />
+            <g fill="#1d3449" stroke="#35516a" strokeWidth="1.4" strokeLinejoin="round">
+              <path d="M74 120 111 87 161 93 196 118 190 147 165 164 151 187 115 203 91 194 65 204 44 181 52 148Z" />
+              <path d="M302 58 343 34 397 39 438 67 427 96 399 108 385 136 351 139 327 112 303 91Z" />
+              <path d="M284 224 320 207 351 219 372 249 361 281 345 307 335 349 315 381 296 372 286 335 270 309 278 275 264 247Z" />
+              <path d="M461 166 493 145 528 149 551 167 548 189 528 201 497 199 475 189Z" />
+              <path d="M475 213 508 203 546 214 575 242 570 274 548 304 539 340 510 362 484 346 478 315 461 286 466 252Z" />
+              <path d="M548 144 589 121 647 119 702 129 759 151 813 158 859 178 879 205 862 225 833 233 806 258 767 260 735 243 698 251 663 235 626 227 593 207 563 193Z" />
+              <path d="M762 300 803 286 837 294 855 315 846 336 818 346 786 341 766 325Z" />
+              <path d="M790 362 830 351 872 359 908 380 902 403 864 414 827 406 800 392Z" />
+              <path d="M926 235 950 221 972 228 981 247 972 266 948 270 929 259Z" />
             </g>
 
-            <g fill="none" stroke="#b8c6d5" strokeWidth="0.9" opacity="0.85">
-              <path d="M86 142 116 129 151 132 166 148" />
-              <path d="M101 178 139 162 171 168" />
-              <path d="M205 214 242 207 274 219" />
-              <path d="M321 119 352 147 390 145 418 159" />
-              <path d="M530 214 566 193 612 199 659 218 696 244" />
-              <path d="M677 368 717 359 754 370 783 387" />
+            <g fill="none" stroke="#47647b" strokeWidth="0.9" opacity="0.85">
+              <path d="M81 131 111 119 146 122 174 139" />
+              <path d="M91 175 122 158 156 165 178 179" />
+              <path d="M320 72 348 91 379 88 411 102" />
+              <path d="M487 167 516 180 540 174" />
+              <path d="M494 233 524 251 553 246 567 261" />
+              <path d="M584 160 625 145 664 155 703 170 744 181 778 206 817 207 846 219" />
+              <path d="M625 207 664 216 704 210 735 225" />
+              <path d="M784 304 811 313 839 309" />
+              <path d="M808 377 840 369 877 382" />
             </g>
 
-            <g fill="none" stroke="url(#route-gradient-v2)" strokeLinecap="round">
-              <path d="M235 205 C318 150 414 118 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow-v2)" />
-              <path d="M235 205 C318 150 414 118 528 159" strokeWidth="4.5" strokeDasharray="11 11" />
-              <path d="M702 307 C657 250 604 202 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow-v2)" />
-              <path d="M702 307 C657 250 604 202 528 159" strokeWidth="4.5" strokeDasharray="11 11" />
+            <g fill="#8aa1b5" opacity="0.75">
+              <circle cx="105" cy="228" r="1.5" /><circle cx="182" cy="254" r="1.5" />
+              <circle cx="421" cy="121" r="1.5" /><circle cx="438" cy="225" r="1.5" />
+              <circle cx="596" cy="101" r="1.5" /><circle cx="711" cy="284" r="1.5" />
+              <circle cx="897" cy="306" r="1.5" /><circle cx="912" cy="155" r="1.5" />
+            </g>
+
+            <g fill="none" stroke="url(#network-route)" strokeLinecap="round">
+              <path d="M235 221 C336 144 414 120 528 164" strokeWidth="10" opacity="0.14" filter="url(#network-glow)" />
+              <path d="M235 221 C336 144 414 120 528 164" strokeWidth="4.5" strokeDasharray="12 12" />
+              <path d="M700 306 C651 250 607 203 528 164" strokeWidth="10" opacity="0.14" filter="url(#network-glow)" />
+              <path d="M700 306 C651 250 607 203 528 164" strokeWidth="4.5" strokeDasharray="12 12" />
+            </g>
+
+            <circle cx="528" cy="164" r="30" fill="#10b981" opacity="0.1" />
+            <circle cx="528" cy="164" r="15" fill="#10b981" stroke="#d1fae5" strokeWidth="4" />
+            <circle cx="528" cy="164" r="5" fill="#ffffff" />
+
+            <g fontSize="10" fontFamily="inherit" fill="#7890a6" letterSpacing="1.2">
+              <text x="35" y="35">WEST</text>
+              <text x="472" y="35">EUROPE</text>
+              <text x="850" y="35">EAST</text>
             </g>
           </svg>
 
@@ -480,23 +507,66 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
             </div>
           ))}
 
-          <div className="absolute bottom-4 left-4 rounded-md border border-slate-200 bg-white/90 px-2.5 py-1.5 text-[10px] font-medium text-slate-500 shadow-sm">
-            Select a region to inspect its routing inputs.
+          <div className="absolute left-4 top-4 rounded-md border border-white/10 bg-slate-950/65 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-300 backdrop-blur">
+            Global compute network
+          </div>
+
+          <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-[10px] text-slate-300 backdrop-blur">
+              <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-blue-400" />Candidate route</span>
+              <span className="h-3 w-px bg-white/10" />
+              <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Selected route</span>
+            </div>
+            <div className="rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-[10px] font-medium text-slate-400 backdrop-blur">
+              Click a node to inspect
+            </div>
           </div>
         </div>
 
         <div className="bg-white p-4 sm:p-5">
-          <div className="mb-3 flex items-center justify-between">
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Region detail</div>
-              <div className="mt-1 text-xs text-slate-500">Each candidate is rendered from the same data model.</div>
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-600">Selected target</div>
+                <div className="mt-1 text-lg font-bold text-slate-950">{selected.name}</div>
+                <div className="mt-0.5 text-xs text-slate-500">{selected.code} · {selected.descriptor}</div>
+              </div>
+              <span className="rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] font-semibold text-emerald-700">Route target</span>
             </div>
-            <span className="text-xs font-semibold text-slate-400">{ROUTER_REGIONS.length} evaluated</span>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-emerald-100 pt-3">
+              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div><div className="mt-1 text-sm font-bold text-emerald-700">{selected.carbon} gCO2e/kWh</div></div>
+              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water stress</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.waterStress} · {selected.waterLabel}</div></div>
+              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat loop</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.heat}</div></div>
+              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Latency</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.latency} ms</div></div>
+            </div>
           </div>
-          <div className="space-y-3">
-            {ROUTER_REGIONS.map((region) => (
-              <RegionDetailCard key={region.id} region={region} selected={region.id === selectedRegionId} onSelect={onSelectRegion} />
-            ))}
+
+          <div className="mt-4">
+            <div className="mb-2 flex items-center justify-between">
+              <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Candidate regions</div>
+              <span className="text-[10px] font-semibold text-slate-400">Select to inspect</span>
+            </div>
+            <div className="space-y-2">
+              {ROUTER_REGIONS.map((region) => {
+                const active = region.id === selectedRegionId;
+                const tone = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
+                const dot = tone === "red" ? "bg-red-500" : tone === "amber" ? "bg-amber-500" : "bg-emerald-500";
+                const badge = tone === "red" ? "border-red-200 bg-red-50 text-red-700" : tone === "amber" ? "border-amber-200 bg-amber-50 text-amber-700" : "border-emerald-200 bg-emerald-50 text-emerald-700";
+                return (
+                  <button key={region.id} type="button" onClick={() => onSelectRegion(region.id)} className={active ? "flex w-full items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50/60 px-3 py-2.5 text-left" : "flex w-full items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-left transition hover:border-slate-300 hover:bg-slate-50"}>
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <span className={`h-2 w-2 shrink-0 rounded-full ${dot}`} />
+                      <div className="min-w-0">
+                        <div className="text-xs font-semibold text-slate-900">{region.name}</div>
+                        <div className="mt-0.5 text-[10px] text-slate-500">{region.carbon} gCO2e/kWh · {region.latency} ms</div>
+                      </div>
+                    </div>
+                    <span className={`shrink-0 rounded border px-2 py-1 text-[9px] font-semibold ${active ? "border-blue-200 bg-white text-blue-700" : badge}`}>{active ? "Inspecting" : region.badge}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
