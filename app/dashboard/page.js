@@ -433,16 +433,16 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
 
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.6fr)_minmax(315px,0.75fr)]">
         <div className="relative min-h-[370px] overflow-hidden bg-[#0b1420] xl:min-h-[400px]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_40%,rgba(16,185,129,0.08),transparent_34%),radial-gradient(circle_at_20%_65%,rgba(59,130,246,0.08),transparent_38%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_36%,rgba(16,185,129,0.10),transparent_34%),radial-gradient(circle_at_20%_68%,rgba(59,130,246,0.10),transparent_38%)]" />
 
           <div className="absolute inset-0 overflow-hidden bg-[#0b1420]">
             <img
               src="/world-map.svg"
               alt=""
-              className="absolute inset-0 h-full w-full object-cover opacity-95"
+              className="absolute inset-0 h-full w-full object-cover opacity-100"
               draggable="false"
             />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_38%,rgba(16,185,129,0.10),transparent_34%),linear-gradient(180deg,rgba(11,20,32,0.04),rgba(11,20,32,0.18))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(226,237,247,0.16))]" />
           </div>
 
           {ROUTER_REGIONS.map((region) => (
@@ -451,17 +451,17 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
             </div>
           ))}
 
-          <div className="absolute left-4 top-4 rounded-md border border-white/10 bg-slate-950/65 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-300 backdrop-blur">
+          <div className="absolute left-4 top-4 rounded-md border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur">
             Global compute network
           </div>
 
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-[10px] text-slate-300 backdrop-blur">
+            <div className="flex items-center gap-3 rounded-lg border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] text-slate-600 shadow-sm backdrop-blur">
               <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-blue-400" />Candidate route</span>
-              <span className="h-3 w-px bg-white/10" />
+              <span className="h-3 w-px bg-slate-200" />
               <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Selected route</span>
             </div>
-            <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-slate-950/70 px-3 py-2 text-[10px] font-medium text-slate-400 backdrop-blur">
+            <div className="flex items-center gap-3 rounded-lg border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] font-medium text-slate-500 shadow-sm backdrop-blur">
               <span>Click a node to inspect</span>
               <span className="hidden text-slate-600 sm:inline">Map: simple-world-map</span>
             </div>
