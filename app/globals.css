@@ -76,17 +76,13 @@ input[type="range"] {
 }
 
 .laptop-device {
-  transform: perspective(1500px) rotateX(2deg) rotateY(5deg) rotateZ(2deg) translateY(56px);
+  transform: perspective(1500px) rotateX(2deg) rotateY(5deg) rotateZ(2deg) translateY(82px);
   transform-origin: center bottom;
   filter: drop-shadow(0 30px 42px rgba(15,23,42,0.14));
 }
 
 .premium-screen {
   aspect-ratio: 16 / 10;
-}
-
-.premium-screen > div {
-  min-height: 100%;
 }
 
 
@@ -111,7 +107,7 @@ input[type="range"] {
   }
 
   .laptop-device {
-    transform: rotate(-2deg) translateY(32px);
+    transform: rotate(-2deg) translateY(42px);
   }
 
   .hero-auth-card {
