@@ -66,96 +66,137 @@ function FeatureIcon({ type }) {
 
 function DashboardPreview() {
   return (
-    <div className="laptop-stage relative mx-auto w-full max-w-[690px] rounded-[28px] p-5 sm:p-6 lg:-mr-4">
-      <div className="pointer-events-none absolute inset-0 rounded-[30px] bg-black/10" />
-      <div className="relative z-10 rotate-[1.2deg] px-1 pt-1">
-        <div className="laptop-screen overflow-hidden rounded-[18px] border-[9px] border-slate-900 bg-white shadow-2xl shadow-slate-900/30">
-        <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
-          <div className="flex items-center gap-2">
-            <GlobeMark size="sm" />
-            <span className="text-base font-bold tracking-tight text-slate-950">
-              Omni<span className="text-blue-600">Router</span>
+    <div className="laptop-device relative mx-auto w-full max-w-[820px]">
+      <div className="relative z-10 px-1 pt-1">
+        <div className="laptop-screen overflow-hidden rounded-[20px] border-[10px] border-slate-900 bg-white shadow-[0_35px_80px_rgba(15,23,42,0.28)]">
+          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
+            <div className="flex items-center gap-2">
+              <GlobeMark size="sm" />
+              <span className="text-base font-bold tracking-tight text-slate-950">
+                Omni<span className="text-blue-600">Router</span>
+              </span>
+            </div>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Telemetry active
             </span>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Telemetry active
-          </span>
-        </div>
 
-        <div className="grid grid-cols-[180px_1fr]">
-          <aside className="border-r border-slate-200 bg-slate-50/70 p-3">
-            <p className="mb-2 px-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">Navigation</p>
-            <div className="space-y-1">
-              <div className="rounded-lg bg-blue-50 px-3 py-2 text-[11px] font-semibold text-blue-600">Command Center</div>
-              <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-slate-500">Router Studio</div>
-              <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-slate-500">Audit Ledger</div>
-            </div>
-          </aside>
-
-          <div className="bg-white p-4">
-            <div className="flex items-end justify-between border-b border-slate-100 pb-3">
-              <div>
-                <h3 className="text-base font-bold text-slate-950">Executive Dashboard</h3>
-                <p className="mt-0.5 text-[10px] text-slate-500">Carbon, water, and thermal routing efficiency</p>
+          <div className="grid grid-cols-[178px_1fr]">
+            <aside className="border-r border-slate-200 bg-slate-50/70 p-3">
+              <p className="mb-2 px-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">Navigation</p>
+              <div className="space-y-1">
+                <div className="rounded-lg bg-blue-50 px-3 py-2 text-[11px] font-semibold text-blue-600">Command Center</div>
+                <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-slate-500">Router Studio</div>
+                <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-slate-500">Audit Ledger</div>
               </div>
-              <span className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-semibold text-slate-600">Standby</span>
-            </div>
+            </aside>
 
-            <div className="mt-4 grid grid-cols-4 gap-2.5">
-              {[
-                ["Water", "41,850 L", "18.4%"],
-                ["Emissions", "1,420.8 kg", "68.2%"],
-                ["Heat", "8.4 MWh", "Active"],
-                ["Compliance", "99.4%", "Verified"],
-              ].map((item) => (
-                <div key={item[0]} className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
-                  <div className="text-[8px] font-semibold uppercase tracking-[0.12em] text-slate-400">{item[0]}</div>
-                  <div className="mt-3 text-sm font-bold tracking-tight text-slate-950">{item[1]}</div>
-                  <div className="mt-1 text-[9px] font-semibold text-emerald-600">{item[2]}</div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-3 rounded-xl border border-slate-200 p-3">
-              <div className="flex items-center justify-between">
+            <div className="bg-white p-4">
+              <div className="flex items-end justify-between border-b border-slate-100 pb-3">
                 <div>
-                  <div className="text-[10px] font-bold text-slate-950">Global data center network</div>
-                  <div className="mt-0.5 text-[9px] text-slate-500">Current operating conditions</div>
+                  <h3 className="text-base font-bold text-slate-950">Executive Dashboard</h3>
+                  <p className="mt-0.5 text-[10px] text-slate-500">Carbon, water, and thermal routing efficiency</p>
                 </div>
-                <span className="text-[9px] font-medium text-slate-400">3 regions</span>
+                <span className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-semibold text-slate-600">Standby</span>
               </div>
 
-              <div className="mt-3 grid grid-cols-3 gap-2">
+              <div className="mt-4 grid grid-cols-4 gap-2.5">
                 {[
-                  { name: "Oregon", detail: "142 gCO2e/kWh", badge: "High water stress", dot: "bg-red-500", badgeCls: "border-red-200 bg-red-50 text-red-700" },
-                  { name: "Stockholm", detail: "14 gCO2e/kWh", badge: "Recommended target", dot: "bg-emerald-500", badgeCls: "border-emerald-200 bg-emerald-50 text-emerald-700" },
-                  { name: "Mumbai", detail: "380 gCO2e/kWh", badge: "Thermal constraint", dot: "bg-amber-500", badgeCls: "border-amber-200 bg-amber-50 text-amber-700" },
-                ].map((region) => (
-                  <div key={region.name} className="rounded-lg border border-slate-200 bg-slate-50/50 p-2.5">
-                    <div className="flex items-start justify-between gap-1.5">
+                  ["Water", "41,850 L", "18.4%"],
+                  ["Emissions", "1,420.8 kg", "68.2%"],
+                  ["Heat", "8.4 MWh", "Active"],
+                  ["Compliance", "99.4%", "Verified"],
+                ].map((item) => (
+                  <div key={item[0]} className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
+                    <div className="text-[8px] font-semibold uppercase tracking-[0.12em] text-slate-400">{item[0]}</div>
+                    <div className="mt-3 text-sm font-bold tracking-tight text-slate-950">{item[1]}</div>
+                    <div className="mt-1 text-[9px] font-semibold text-emerald-600">{item[2]}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-3 rounded-xl border border-slate-200 p-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-[10px] font-bold text-slate-950">Global data center network</div>
+                    <div className="mt-0.5 text-[9px] text-slate-500">Current operating conditions</div>
+                  </div>
+                  <span className="text-[9px] font-medium text-slate-400">3 regions</span>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {[
+                    { name: "Oregon", detail: "142 gCO2e/kWh", badge: "High water stress", dot: "bg-red-500", badgeCls: "border-red-200 bg-red-50 text-red-700" },
+                    { name: "Stockholm", detail: "14 gCO2e/kWh", badge: "Recommended target", dot: "bg-emerald-500", badgeCls: "border-emerald-200 bg-emerald-50 text-emerald-700" },
+                    { name: "Mumbai", detail: "380 gCO2e/kWh", badge: "Thermal constraint", dot: "bg-amber-500", badgeCls: "border-amber-200 bg-amber-50 text-amber-700" },
+                  ].map((region) => (
+                    <div key={region.name} className="rounded-lg border border-slate-200 bg-slate-50/50 p-2.5">
                       <div className="flex items-center gap-1.5">
                         <span className={cx("h-1.5 w-1.5 rounded-full", region.dot)} />
                         <span className="text-[10px] font-bold text-slate-900">{region.name}</span>
                       </div>
+                      <div className="mt-2 text-[8px] text-slate-500">{region.detail}</div>
+                      <div className={cx("mt-2 inline-flex rounded px-1.5 py-1 text-[7px] font-semibold", region.badgeCls)}>{region.badge}</div>
                     </div>
-                    <div className="mt-2 text-[8px] text-slate-500">{region.detail}</div>
-                    <div className={cx("mt-2 inline-flex rounded px-1.5 py-1 text-[7px] font-semibold", region.badgeCls)}>{region.badge}</div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50/60 p-3">
-              <div className="text-[10px] font-bold text-emerald-900">Current route · EU-North-1 (Stockholm)</div>
-              <div className="mt-1 text-[9px] text-emerald-700">74.1% lower carbon · 120 L/hr water savings · district heat available</div>
+              <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50/60 p-3">
+                <div className="text-[10px] font-bold text-emerald-900">Current route · EU-North-1 (Stockholm)</div>
+                <div className="mt-1 text-[9px] text-emerald-700">74.1% lower carbon · 120 L/hr water savings · district heat available</div>
+              </div>
             </div>
           </div>
         </div>
-        </div>
-        <div className="laptop-base mx-auto h-6 w-[90%] rounded-b-[14px] bg-slate-800 shadow-lg" />
-        <div className="laptop-hinge mx-auto h-1.5 w-[46%] rounded-b-md bg-slate-600/80" />
+        <div className="laptop-base mx-auto h-7 w-[91%] rounded-b-[15px] bg-slate-800 shadow-[0_16px_24px_rgba(15,23,42,0.25)]" />
+        <div className="laptop-hinge mx-auto h-1.5 w-[46%] rounded-b-md bg-slate-600/90" />
         <div className="mx-auto h-1.5 w-[34%] rounded-full bg-slate-700/90" />
       </div>
+    </div>
+  );
+}
+
+function HeroAuthCard({ onContinue }) {
+  return (
+    <div className="hero-auth-card absolute left-[18%] top-[38%] z-20 w-[310px] rounded-2xl border border-white/80 bg-white/95 p-5 shadow-[0_25px_55px_rgba(15,23,42,0.18)] backdrop-blur-md">
+      <div className="text-center">
+        <Logo size="sm" />
+        <h2 className="mt-3 text-lg font-bold tracking-tight text-slate-950">Welcome to OmniRouter</h2>
+        <p className="mt-1 text-xs text-slate-500">Continue to your workspace</p>
+      </div>
+
+      <div className="mt-5 space-y-2">
+        {[
+          { label: "Continue with Google", icon: "G" },
+          { label: "Continue with GitHub", icon: "GH" },
+          { label: "Continue with Microsoft", icon: "MS" },
+        ].map((item) => (
+          <button
+            key={item.label}
+            onClick={onContinue}
+            className="flex h-10 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+          >
+            <span className="w-5 text-center text-[11px] font-bold text-slate-700">{item.icon}</span>
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="my-4 flex items-center gap-3 text-[11px] text-slate-400">
+        <span className="h-px flex-1 bg-slate-200" />or<span className="h-px flex-1 bg-slate-200" />
+      </div>
+
+      <button
+        onClick={onContinue}
+        className="flex h-10 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+      >
+        <span className="text-sm">✉</span> Continue with Email
+      </button>
+
+      <p className="mt-4 text-center text-[10px] leading-4 text-slate-400">
+        By continuing, you agree to the Terms and Privacy Policy.
+      </p>
     </div>
   );
 }
@@ -239,7 +280,7 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-white text-slate-900">
-      <header className="relative z-40 border-b border-slate-200/70 bg-white/70 backdrop-blur">
+      <header className="absolute inset-x-0 top-0 z-40 border-b border-white/40 bg-white/35 backdrop-blur-sm">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
           <Logo />
 
@@ -257,16 +298,18 @@ export default function LandingPage() {
       </header>
 
       <main>
-        <section className="relative overflow-hidden bg-white">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(37,99,235,0.06),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(16,185,129,0.05),transparent_24%)]" />
-          <div className="relative z-10 mx-auto grid min-h-[610px] max-w-[1440px] items-center gap-8 px-6 pb-14 pt-12 lg:grid-cols-[0.86fr_1.14fr] lg:px-10 lg:pb-16 lg:pt-14">
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/90 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700 shadow-sm">
+        <section className="hero-landing relative min-h-[700px] overflow-hidden bg-white">
+          <div className="hero-scene pointer-events-none absolute inset-y-[-100px] right-0 z-0 w-[68%]" />
+          <div className="hero-scene-fade pointer-events-none absolute inset-y-0 left-[34%] right-0 z-[1]" />
+
+          <div className="relative z-10 mx-auto grid min-h-[700px] max-w-[1440px] items-center gap-5 px-6 pb-16 pt-24 lg:grid-cols-[0.82fr_1.18fr] lg:px-10 lg:pb-16 lg:pt-20">
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="relative z-20">
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700 shadow-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 Sustainable compute routing
               </div>
 
-              <h1 className="mt-6 max-w-[590px] text-[44px] font-bold leading-[1.04] tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[60px]">
+              <h1 className="mt-6 max-w-[570px] text-[44px] font-bold leading-[1.03] tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[62px]">
                 Route AI workloads for a cleaner <span className="text-blue-600">planet.</span>
               </h1>
 
@@ -283,28 +326,30 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              <div className="mt-8 grid max-w-[560px] grid-cols-3 gap-2 rounded-2xl border border-white/85 bg-white/88 p-2.5 shadow-md backdrop-blur-md">
-                <div className="flex min-w-0 items-center gap-2 rounded-xl px-2.5 py-1.5">
+              <div className="mt-8 grid max-w-[560px] grid-cols-3 gap-0 border-t border-slate-200/90 pt-5">
+                <div className="flex min-w-0 items-center gap-2.5 pr-4">
                   <FeatureIcon type="leaf" />
-                  <div><div className="text-xs font-bold text-slate-900">Lower emissions</div><div className="text-[11px] text-slate-600">Carbon-aware</div></div>
+                  <div><div className="text-xs font-bold text-slate-900">Lower emissions</div><div className="text-[11px] text-slate-500">Carbon-aware</div></div>
                 </div>
-                <div className="flex min-w-0 items-center gap-2 rounded-xl px-2.5 py-1.5">
+                <div className="flex min-w-0 items-center gap-2.5 border-l border-slate-200/80 px-4">
                   <FeatureIcon type="drop" />
-                  <div><div className="text-xs font-bold text-slate-900">Conserve water</div><div className="text-[11px] text-slate-600">Water-aware</div></div>
+                  <div><div className="text-xs font-bold text-slate-900">Conserve water</div><div className="text-[11px] text-slate-500">Water-aware</div></div>
                 </div>
-                <div className="flex items-center gap-2.5">
+                <div className="flex min-w-0 items-center gap-2.5 border-l border-slate-200/80 pl-4">
                   <FeatureIcon type="heat" />
-                  <div><div className="text-xs font-bold text-slate-900">Reuse heat</div><div className="text-[11px] text-slate-600">Thermal</div></div>
+                  <div><div className="text-xs font-bold text-slate-900">Reuse heat</div><div className="text-[11px] text-slate-500">Thermal</div></div>
                 </div>
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }}>
-              <DashboardPreview />
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }} className="relative z-10">
+              <div className="relative min-h-[590px]">
+                <DashboardPreview />
+                <HeroAuthCard onContinue={() => { window.location.href = "/dashboard"; }} />
+              </div>
             </motion.div>
           </div>
         </section>
-
         <section className="border-y border-slate-200 bg-slate-50/70">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 px-5 py-5 lg:px-8">
             <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">Built for modern compute operations</span>
