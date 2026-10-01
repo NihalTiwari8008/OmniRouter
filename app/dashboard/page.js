@@ -442,7 +442,7 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
               className="absolute inset-0 h-full w-full object-cover opacity-100"
               draggable="false"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(226,237,247,0.16))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(240,246,252,0.34))]" />
           </div>
 
           {ROUTER_REGIONS.map((region) => (
@@ -451,7 +451,7 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
             </div>
           ))}
 
-          <div className="absolute left-4 top-4 rounded-md border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur">
+          <div className="absolute left-4 top-4 rounded-md border border-slate-200/90 bg-white/95 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur">
             Global compute network
           </div>
 
