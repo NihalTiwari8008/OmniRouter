@@ -97,6 +97,130 @@ function MetricCard({ label, value, suffix, detail, icon, tone = "blue", childre
     </motion.div>
   );
 }
+function GlobalNetworkOverview({ dispatched }) {
+  const recommended = ROUTER_REGIONS.find((region) => region.id === ROUTE_DECISION.regionId) || ROUTER_REGIONS[1];
+
+  return (
+    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-slate-950">Global data center network</h2>
+          <p className="mt-1 text-sm text-slate-500">Regional conditions and current routing targets</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />{ROUTER_REGIONS.length} regions
+          </span>
+          <span className={dispatched ? "inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : "inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700"}>
+            <span className={dispatched ? "h-1.5 w-1.5 rounded-full bg-emerald-500" : "h-1.5 w-1.5 rounded-full bg-blue-500"} />
+            {dispatched ? "Routing active" : "Route ready"}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.55fr)_minmax(340px,0.85fr)]">
+        <div className="relative min-h-[370px] overflow-hidden border-b border-slate-100 bg-[#f4f8fc] xl:min-h-[410px] xl:border-b-0 xl:border-r">
+          <img src="/world-map.svg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-100" draggable="false" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_36%,rgba(16,185,129,0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.16),rgba(238,246,252,0.26))]" />
+
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <linearGradient id="overview-route" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#60a5fa" />
+                <stop offset="60%" stopColor="#34d399" />
+                <stop offset="100%" stopColor="#10b981" />
+              </linearGradient>
+              <filter id="overview-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="6" />
+              </filter>
+            </defs>
+
+            <path d="M235 203 C338 140 425 122 530 164" fill="none" stroke="#60a5fa" strokeWidth="9" opacity="0.1" filter="url(#overview-glow)" />
+            <path d="M235 203 C338 140 425 122 530 164" fill="none" stroke="url(#overview-route)" strokeWidth="3.5" strokeDasharray="10 10" strokeLinecap="round" />
+            <path d="M700 307 C650 250 604 204 530 164" fill="none" stroke="url(#overview-route)" strokeWidth="3.5" strokeDasharray="10 10" strokeLinecap="round" opacity="0.95" />
+          </svg>
+
+          {ROUTER_REGIONS.map((region) => {
+            const recommendedRegion = region.id === recommended.id;
+            return (
+              <div key={region.id} className="absolute" style={{ left: region.map.x, top: region.map.y }}>
+                <span className="flex flex-col items-center">
+                  <span className={recommendedRegion ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md ring-2 ring-white"}>
+                    {recommendedRegion && <span className="absolute inset-1 rounded-full bg-white/90" />}
+                    <span className={recommendedRegion ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
+                  </span>
+                  <span className="mt-1 rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-700 shadow-sm">
+                    {region.name}
+                  </span>
+                </span>
+              </div>
+            );
+          })}
+
+          <div className="absolute bottom-4 left-4 flex items-center gap-4 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-[10px] text-slate-600 shadow-sm">
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-blue-500" />Candidate route</span>
+            <span className="h-3 w-px bg-slate-200" />
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />{dispatched ? "Active route" : "Recommended route"}</span>
+          </div>
+        </div>
+
+        <div className="bg-white">
+          <div className="border-b border-slate-100 px-5 py-4">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Region comparison</div>
+            <div className="mt-1 text-xs text-slate-500">Carbon · water · latency</div>
+          </div>
+
+          <div className="divide-y divide-slate-100">
+            {ROUTER_REGIONS.map((region) => {
+              const route = region.id === recommended.id;
+              const tone = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
+              const dot = tone === "red" ? "bg-red-500" : tone === "amber" ? "bg-amber-500" : "bg-emerald-500";
+              return (
+                <div key={region.id} className={route ? "bg-emerald-50/45 px-5 py-4" : "px-5 py-4"}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex min-w-0 items-start gap-2.5">
+                      <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${dot}`} />
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-bold text-slate-900">{region.name}</span>
+                          {route && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">{dispatched ? "Active route" : "Recommended"}</span>}
+                        </div>
+                        <div className="mt-0.5 text-[10px] text-slate-500">{region.code}</div>
+                      </div>
+                    </div>
+                    <span className={route ? "shrink-0 text-xs font-bold text-emerald-700" : "shrink-0 text-xs font-bold text-slate-800"}>{region.latency} ms</span>
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-3 gap-3 border-t border-slate-100 pt-3">
+                    <div>
+                      <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
+                      <div className="mt-1 text-xs font-semibold text-slate-800">{region.carbon} gCO2e/kWh</div>
+                    </div>
+                    <div>
+                      <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Water</div>
+                      <div className="mt-1 text-xs font-semibold text-slate-800">{region.waterStress} · {region.waterLabel}</div>
+                    </div>
+                    <div>
+                      <div className="text-[9px] uppercase tracking-[0.08em] text-slate-400">Heat</div>
+                      <div className="mt-1 truncate text-xs font-semibold text-slate-800">{region.id === "stockholm" ? "District heat" : region.heat}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="border-t border-slate-200 bg-slate-50/70 px-5 py-4">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">Route target</div>
+            <div className="mt-1 text-sm font-bold text-slate-900">{recommended.name} · {recommended.code}</div>
+            <div className="mt-1 text-[10px] leading-4 text-slate-500">{ROUTE_DECISION.rationale}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function AnalysisTimeline({ stage, complete }) {
   return (
     <div className="mb-5 rounded-xl border border-slate-200 bg-white px-4 py-4">
