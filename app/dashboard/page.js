@@ -507,17 +507,31 @@ export default function HomePage() {
   );
 }
 
+function GlobeMark({ size = "md" }) {
+  const sizes = size === "sm" ? "h-7 w-7" : "h-9 w-9";
+  const icon = size === "sm" ? "h-5 w-5" : "h-5 w-5";
+
+  return (
+    <span className={`relative flex shrink-0 items-center justify-center ${sizes} text-blue-600`}>
+      <svg className={`${icon} overflow-visible`} viewBox="0 0 36 36" fill="none" stroke="currentColor" aria-hidden="true">
+        <circle cx="18" cy="18" r="15.2" strokeWidth="2" />
+        <path d="M2.8 18h30.4M18 2.8c4.4 4 6.8 9.1 6.8 15.2S22.4 29.2 18 33.2C13.6 29.2 11.2 24.1 11.2 18S13.6 6.8 18 2.8Z" strokeWidth="1.65" />
+        <path d="M5.5 10.5c3.8 2.2 8 3.3 12.5 3.3s8.7-1.1 12.5-3.3M5.5 25.5c3.8-2.2 8-3.3 12.5-3.3s8.7 1.1 12.5 3.3" strokeWidth="1.35" />
+      </svg>
+      <span className="absolute right-0.5 top-1 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+    </span>
+  );
+}
+
 function Brand({ compact = false }) {
   return (
     <div className={`flex items-center gap-2.5 ${compact ? "" : "border-b border-slate-100 px-6 py-4"}`}>
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm">
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" /></svg>
-      </div>
+      <GlobeMark />
       <div className="min-w-0">
-        <div className="flex items-center gap-2 text-lg font-bold tracking-tight text-slate-950">
-          OmniRouter <span className="h-2 w-2 rounded-full bg-emerald-500" />
+        <div className="text-lg font-bold tracking-tight text-slate-950">
+          Omni<span className="text-blue-600">Router</span>
         </div>
-        <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">Compute sustainability</div>
+        {!compact && <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">Compute sustainability</div>}
       </div>
     </div>
   );
