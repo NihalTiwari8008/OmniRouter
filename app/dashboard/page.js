@@ -142,33 +142,32 @@ function RegionNode({ name, subtitle, hasData, selected, populated }) {
 }
 function AnalysisTimeline({ stage, complete }) {
   return (
-    <div className="mb-5 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
+    <div className="mb-5 rounded-xl border border-slate-200 bg-white px-4 py-4">
       <div className="flex items-center justify-between gap-3">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Routing pipeline</div>
-          <div className="mt-1 text-sm font-semibold text-slate-700">
-            {complete ? "Decision ready for dispatch" : stage > 0 ? "Evaluating workload against current constraints" : "Ready to run"}
-          </div>
-        </div>
-        <span className={complete ? "rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : stage > 0 ? "rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700" : "rounded-full border border-slate-200 bg-white px-2.5 py-1 text-[10px] font-semibold text-slate-500"}>
-          {complete ? "Complete" : stage > 0 ? "In progress" : "Idle"}
+        <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Routing pipeline</div>
+        <span className={complete ? "text-[10px] font-semibold text-emerald-700" : stage > 0 ? "text-[10px] font-semibold text-blue-700" : "text-[10px] font-semibold text-slate-400"}>
+          {complete ? "Complete" : stage > 0 ? "In progress" : "Ready"}
         </span>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-4">
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-4">
         {ROUTING_STEPS.map((label, index) => {
           const stepNumber = index + 1;
           const done = complete || stage > stepNumber;
           const active = !complete && stage === stepNumber;
           return (
-            <div key={label} className={done ? "rounded-lg border border-emerald-200 bg-white p-3" : active ? "rounded-lg border border-blue-200 bg-white p-3 shadow-sm" : "rounded-lg border border-slate-200 bg-white p-3"}>
-              <div className="flex items-center gap-2">
-                <span className={done ? "flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700" : active ? "flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700" : "flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-400"}>
-                  {done ? "✓" : stepNumber}
-                </span>
-                <span className="text-[11px] font-semibold leading-4 text-slate-700">{label}</span>
-              </div>
-              <div className={done ? "mt-2 text-[10px] font-medium text-emerald-600" : active ? "mt-2 text-[10px] font-medium text-blue-600" : "mt-2 text-[10px] font-medium text-slate-400"}>
-                {done ? "Passed" : active ? "Evaluating…" : "Waiting"}
+            <div key={label} className="relative flex items-start gap-2.5 sm:block">
+              {index < ROUTING_STEPS.length - 1 && (
+                <span className={done ? "absolute left-[13px] top-6 hidden h-px w-[calc(100%+12px)] bg-emerald-200 sm:block" : "absolute left-[13px] top-6 hidden h-px w-[calc(100%+12px)] bg-slate-200 sm:block"} />
+              )}
+              <span className={done ? "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-700 ring-4 ring-white" : active ? "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[11px] font-bold text-blue-700 ring-4 ring-white" : "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-bold text-slate-400 ring-4 ring-white"}>
+                {done ? "✓" : stepNumber}
+              </span>
+              <div className="pt-0.5 sm:mt-2 sm:pt-0">
+                <div className="text-[11px] font-semibold leading-4 text-slate-700">{label}</div>
+                <div className={done ? "mt-1 text-[9px] font-medium text-emerald-600" : active ? "mt-1 text-[9px] font-medium text-blue-600" : "mt-1 text-[9px] font-medium text-slate-400"}>
+                  {done ? "Passed" : active ? "Evaluating" : "Waiting"}
+                </div>
               </div>
             </div>
           );
@@ -177,6 +176,7 @@ function AnalysisTimeline({ stage, complete }) {
     </div>
   );
 }
+
 function FeasibilityPanel({ complete = false, running = false }) {
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
@@ -487,26 +487,27 @@ function EnvironmentalMap({ selectedRegionId, onSelectRegion }) {
 }
 function AuditOverview({ dispatched, reportStatus }) {
   const items = [
-    { label: "Logged decisions", value: dispatched ? "4" : "3", detail: dispatched ? "+1 this session" : "Awaiting new dispatch", tone: dispatched ? "emerald" : "slate" },
-    { label: "Policy checks", value: dispatched ? "4 / 4" : "Ready", detail: "Residency · SLA · capacity", tone: "blue" },
-    { label: "Impact fields", value: "Carbon + water", detail: "Heat reuse tracked", tone: "amber" },
-    { label: "Report status", value: reportStatus === "ready" ? "PDF ready" : "Available", detail: "CSRD export workflow", tone: reportStatus === "ready" ? "emerald" : "slate" },
+    { label: "Logged decisions", value: dispatched ? "4" : "3", detail: dispatched ? "+1 this session" : "Current history" },
+    { label: "Policy checks", value: dispatched ? "4 / 4" : "Ready", detail: "Residency · SLA · capacity" },
+    { label: "Impact fields", value: "Carbon + water", detail: "Heat reuse tracked" },
+    { label: "Report", value: reportStatus === "ready" ? "PDF ready" : "Available", detail: "CSRD workflow" },
   ];
+
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {items.map((item) => {
-        const valueTone = item.tone === "emerald" ? "text-emerald-700" : item.tone === "blue" ? "text-blue-700" : item.tone === "amber" ? "text-amber-700" : "text-slate-800";
-        return (
-          <div key={item.label} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="grid sm:grid-cols-2 xl:grid-cols-4">
+        {items.map((item, index) => (
+          <div key={item.label} className={index > 0 ? "border-t border-slate-100 p-4 sm:border-l sm:border-t-0" : "p-4"}>
             <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">{item.label}</div>
-            <div className={`mt-2 text-sm font-bold ${valueTone}`}>{item.value}</div>
+            <div className="mt-1.5 text-sm font-bold text-slate-900">{item.value}</div>
             <div className="mt-1 text-[10px] leading-4 text-slate-500">{item.detail}</div>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }
+
 function EmptyState({ title, description, compact = false }) {
   return (
     <div className={`flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-slate-50/60 text-center ${compact ? "min-h-52 p-8" : "min-h-64 p-10"}`}>
@@ -778,9 +779,7 @@ export default function HomePage() {
                   <div className="flex flex-col gap-2 border-b border-slate-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                       <h2 className="text-lg font-bold text-slate-950">Environmental impact</h2>
-                      <p className="mt-1 text-sm text-slate-500">Feasibility, environmental trade-offs, and route selection</p>
                     </div>
-                    <span className={hasData ? "text-xs font-medium text-emerald-700" : isLoading ? "text-xs font-medium text-blue-600" : "text-xs font-medium text-slate-400"}>{hasData ? "Analysis complete" : isLoading ? "Analysis running…" : "Ready"}</span>
                   </div>
                   <div className="pt-5">
                     <AnalysisTimeline stage={analysisStage} complete={hasData} />
