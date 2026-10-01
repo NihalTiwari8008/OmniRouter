@@ -66,9 +66,10 @@ function FeatureIcon({ type }) {
 
 function DashboardPreview() {
   return (
-    <div className="relative mx-auto w-full max-w-[680px]">
-      <div className="absolute -inset-5 rounded-[34px] bg-blue-100/50 blur-3xl" />
-      <div className="relative rotate-[1.2deg] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-300/30">
+    <div className="laptop-stage relative mx-auto w-full max-w-[730px] rounded-[30px] p-5 sm:p-7">
+      <div className="pointer-events-none absolute inset-0 rounded-[30px] bg-black/10" />
+      <div className="relative z-10 rotate-[1deg] px-1 pt-1">
+        <div className="laptop-screen overflow-hidden rounded-[18px] border-[10px] border-slate-900 bg-white shadow-2xl shadow-slate-900/30">
         <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
           <div className="flex items-center gap-2">
             <GlobeMark size="sm" />
@@ -150,6 +151,9 @@ function DashboardPreview() {
             </div>
           </div>
         </div>
+        </div>
+        <div className="laptop-base mx-auto h-5 w-[88%] rounded-b-[12px] bg-slate-800 shadow-lg" />
+        <div className="mx-auto h-1.5 w-[34%] rounded-full bg-slate-700/90" />
       </div>
     </div>
   );
@@ -252,9 +256,8 @@ export default function LandingPage() {
       </header>
 
       <main>
-        <section className="hero-environment relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(90deg,rgba(248,250,252,0.78)_0%,rgba(248,250,252,0.56)_38%,rgba(248,250,252,0.16)_72%,rgba(248,250,252,0.06)_100%)]" />
-          <div className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.01))]" />
+        <section className="relative overflow-hidden bg-white">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(37,99,235,0.06),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(16,185,129,0.05),transparent_24%)]" />
           <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-5 pb-18 pt-14 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-24 lg:pt-20">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-700">
