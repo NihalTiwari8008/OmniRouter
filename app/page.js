@@ -12,15 +12,29 @@ const navItems = [
 
 const cx = (...classes) => classes.filter(Boolean).join(" ");
 
-function Logo({ dark = false }) {
+function GlobeMark({ size = "md", dark = false }) {
+  const sizes = size === "sm" ? "h-7 w-7" : size === "lg" ? "h-10 w-10" : "h-9 w-9";
+  const icon = size === "sm" ? "h-5 w-5" : size === "lg" ? "h-6 w-6" : "h-5 w-5";
+
+  return (
+    <span className={cx("relative flex shrink-0 items-center justify-center", sizes, dark ? "text-white" : "text-blue-600")}>
+      <svg className={cx(icon, "overflow-visible")} viewBox="0 0 36 36" fill="none" stroke="currentColor" aria-hidden="true">
+        <circle cx="18" cy="18" r="15.2" strokeWidth="2" />
+        <path d="M2.8 18h30.4M18 2.8c4.4 4 6.8 9.1 6.8 15.2S22.4 29.2 18 33.2C13.6 29.2 11.2 24.1 11.2 18S13.6 6.8 18 2.8Z" strokeWidth="1.65" />
+        <path d="M5.5 10.5c3.8 2.2 8 3.3 12.5 3.3s8.7-1.1 12.5-3.3M5.5 25.5c3.8-2.2 8-3.3 12.5-3.3s8.7 1.1 12.5 3.3" strokeWidth="1.35" />
+      </svg>
+      <span className="absolute right-0.5 top-1 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+    </span>
+  );
+}
+
+function Logo({ dark = false, size = "md" }) {
   return (
     <a href="/" className="flex items-center gap-2.5">
-      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm">
-        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" />
-        </svg>
+      <GlobeMark size={size} dark={dark} />
+      <span className={cx("text-lg font-bold tracking-tight", dark ? "text-white" : "text-slate-950")}>
+        Omni<span className="text-blue-600">Router</span>
       </span>
-      <span className={cx("text-lg font-bold tracking-tight", dark ? "text-white" : "text-slate-950")}>OmniRouter</span>
     </a>
   );
 }
@@ -57,10 +71,10 @@ function DashboardPreview() {
       <div className="relative rotate-[1.2deg] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-300/30">
         <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-white">
-              <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" /></svg>
+            <GlobeMark size="sm" />
+            <span className="text-sm font-bold tracking-tight text-slate-950">
+              Omni<span className="text-blue-600">Router</span>
             </span>
-            <span className="text-sm font-bold text-slate-950">OmniRouter</span>
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Telemetry active
@@ -165,11 +179,11 @@ function SignInModal({ open, onClose }) {
             onMouseDown={(event) => event.stopPropagation()}
           >
             <div className="text-center">
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white">
-                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.2" /></svg>
+              <div className="flex items-center justify-center">
+                <Logo size="sm" />
               </div>
-              <h2 className="mt-4 text-xl font-bold tracking-tight text-slate-950">Welcome to OmniRouter</h2>
-              <p className="mt-1 text-sm text-slate-500">Continue to the workspace</p>
+              <h2 className="mt-4 text-xl font-bold tracking-tight text-slate-950">Sign in</h2>
+              <p className="mt-1 text-sm text-slate-500">Continue to your workspace</p>
             </div>
 
             <div className="mt-6 space-y-2.5">
@@ -238,8 +252,9 @@ export default function LandingPage() {
       </header>
 
       <main>
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_18%,rgba(37,99,235,0.10),transparent_33%),radial-gradient(circle_at_82%_20%,rgba(16,185,129,0.10),transparent_28%)]" />
+        <section className="hero-environment relative overflow-hidden">
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.96)_0%,rgba(255,255,255,0.84)_38%,rgba(255,255,255,0.28)_72%,rgba(255,255,255,0.08)_100%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0.22))]" />
           <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 pb-18 pt-14 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-24 lg:pt-20">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}>
               <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-700">
