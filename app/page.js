@@ -76,9 +76,7 @@ function DashboardPreview() {
                 Omni<span className="text-blue-600">Router</span>
               </span>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Telemetry active
-            </span>
+            <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-600">Routing workspace</span>
           </div>
 
           <div className="grid grid-cols-[178px_1fr]">
@@ -150,50 +148,6 @@ function DashboardPreview() {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function HeroAuthCard({ onContinue }) {
-  return (
-    <div className="hero-auth-card absolute left-[18%] top-[38%] z-20 w-[310px] rounded-2xl border border-white/80 bg-white/95 p-5 shadow-[0_25px_55px_rgba(15,23,42,0.18)] backdrop-blur-md">
-      <div className="text-center">
-        <Logo size="sm" />
-        <h2 className="mt-3 text-lg font-bold tracking-tight text-slate-950">Welcome to OmniRouter</h2>
-        <p className="mt-1 text-xs text-slate-500">Continue to your workspace</p>
-      </div>
-
-      <div className="mt-5 space-y-2">
-        {[
-          { label: "Continue with Google", icon: "G" },
-          { label: "Continue with GitHub", icon: "GH" },
-          { label: "Continue with Microsoft", icon: "MS" },
-        ].map((item) => (
-          <button
-            key={item.label}
-            onClick={onContinue}
-            className="flex h-10 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
-          >
-            <span className="w-5 text-center text-[11px] font-bold text-slate-700">{item.icon}</span>
-            {item.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="my-4 flex items-center gap-3 text-[11px] text-slate-400">
-        <span className="h-px flex-1 bg-slate-200" />or<span className="h-px flex-1 bg-slate-200" />
-      </div>
-
-      <button
-        onClick={onContinue}
-        className="flex h-10 w-full items-center justify-center gap-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
-      >
-        <span className="text-sm">✉</span> Continue with Email
-      </button>
-
-      <p className="mt-4 text-center text-[10px] leading-4 text-slate-400">
-        By continuing, you agree to the Terms and Privacy Policy.
-      </p>
     </div>
   );
 }
@@ -348,56 +302,74 @@ export default function LandingPage() {
         </section>
         <section className="border-y border-slate-200 bg-slate-50/70">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 px-5 py-5 lg:px-8">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">Built for modern compute operations</span>
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-2 text-sm font-semibold text-slate-400">
-              <span>Cloud infrastructure</span>
-              <span>AI platforms</span>
-              <span>Enterprise IT</span>
-              <span>Data centers</span>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">One routing layer · four decision signals</span>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-2 text-sm font-semibold text-slate-500">
+              <span>Carbon</span>
+              <span>Water</span>
+              <span>Heat reuse</span>
+              <span>Operational constraints</span>
             </div>
           </div>
         </section>
 
-        <section id="product" className="scroll-mt-20">
+                <section id="product" className="scroll-mt-20 border-t border-slate-200">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-            <div className="max-w-2xl">
+            <div className="max-w-3xl">
               <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Product</div>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Routing decisions, from workload to audit trail.</h2>
-              <p className="mt-4 text-base leading-7 text-slate-600">A focused workflow for choosing a destination, explaining the decision, and keeping a record of the outcome.</p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">A climate-conscious control plane for compute.</h2>
+              <p className="mt-4 text-base leading-7 text-slate-600">OmniRouter sits between your workload pipeline and cloud infrastructure, turning workload requirements and environmental conditions into an auditable routing decision.</p>
             </div>
 
-            <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-12 grid gap-4 lg:grid-cols-4">
               {[
-                { icon: "leaf", title: "Placement engine", text: "Compare regions against workload, SLA, residency, carbon, and water constraints." },
-                { icon: "drop", title: "Environmental view", text: "See the carbon and water trade-offs behind each candidate region." },
-                { icon: "heat", title: "Thermal reuse", text: "Surface locations where compute heat can support district or industrial heat loops." },
-                { icon: "shield", title: "Audit ledger", text: "Keep routing decisions, deltas, timestamps, and rationale in one traceable record." },
+                { icon: "shield", step: "01", title: "Intercept", text: "Accept a workload through an SDK, API, or Kubernetes manifest with its scheduling and policy requirements." },
+                { icon: "shield", step: "02", title: "Filter", text: "Remove regions that violate hard constraints such as data residency, SLA, or capacity requirements." },
+                { icon: "leaf", step: "03", title: "Optimize", text: "Compare eligible regions across carbon intensity, water stress, heat reuse, and latency." },
+                { icon: "drop", step: "04", title: "Dispatch & audit", text: "Send a lightweight route command and preserve the decision, environmental delta, and rationale." },
               ].map((item) => (
-                <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-                  <FeatureIcon type={item.icon} />
+                <div key={item.step} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <div className="flex items-center justify-between">
+                    <FeatureIcon type={item.icon} />
+                    <span className="text-[11px] font-semibold tracking-[0.14em] text-slate-300">{item.step}</span>
+                  </div>
                   <h3 className="mt-5 text-base font-bold text-slate-950">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50/70 p-6 lg:p-7">
+              <div className="grid gap-5 md:grid-cols-3 md:items-center">
+                <div>
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Routing engine</div>
+                  <div className="mt-1 text-lg font-bold text-slate-950">Multi-variable decisions, not carbon alone.</div>
+                </div>
+                <div className="text-sm leading-6 text-slate-600">Carbon and water can move in opposite directions. OmniRouter keeps both in the decision and surfaces locations where compute heat can be reused.</div>
+                <div className="rounded-xl border border-emerald-200 bg-white p-4">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-600">Decision output</div>
+                  <div className="mt-1 text-sm font-bold text-slate-950">Eligible target + rationale + environmental delta</div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         <section id="use-cases" className="scroll-mt-20 border-y border-slate-200 bg-slate-50/70">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-            <div className="max-w-2xl">
+            <div className="max-w-3xl">
               <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Use cases</div>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Where OmniRouter fits.</h2>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Designed around flexible compute.</h2>
+              <p className="mt-4 text-base leading-7 text-slate-600">Workloads with some scheduling flexibility give the router room to respond to environmental and operational changes.</p>
             </div>
 
             <div className="mt-12 grid gap-5 lg:grid-cols-3">
               {[
-                { eyebrow: "Batch workloads", title: "Shift flexible compute to better operating windows.", text: "Use execution windows to move jobs toward regions with lower environmental impact without changing the workload." },
-                { eyebrow: "Inference & embeddings", title: "Route sustained AI traffic around local constraints.", text: "Balance environmental conditions with latency and data-residency requirements across regions." },
-                { eyebrow: "Enterprise operations", title: "Turn routing decisions into reportable records.", text: "Keep an accountable record of why workloads moved, what changed, and which constraints were applied." },
+                { eyebrow: "Training & fine-tuning", title: "Find a better place or a better start window.", text: "Shift long-running GPU workloads toward eligible regions with lower combined environmental burden while keeping runtime independent from scheduling flexibility." },
+                { eyebrow: "Inference & embeddings", title: "Balance sustained traffic with local constraints.", text: "Use carbon, water stress, latency, and residency together when selecting where recurring AI workloads should run." },
+                { eyebrow: "HPC & rendering", title: "Route non-urgent compute around heat and water pressure.", text: "Use environmental conditions and recovery opportunities to place batch rendering, simulations, and other delay-tolerant workloads." },
               ].map((item) => (
-                <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-blue-600">{item.eyebrow}</div>
+                <div key={item.eyebrow} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-blue-600">{item.eyebrow}</div>
                   <h3 className="mt-3 text-xl font-bold leading-snug text-slate-950">{item.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-slate-600">{item.text}</p>
                 </div>
@@ -408,23 +380,26 @@ export default function LandingPage() {
 
         <section id="impact" className="scroll-mt-20">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
-            <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+            <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Impact</div>
-                <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Measure what changes when compute moves.</h2>
-                <p className="mt-4 max-w-xl text-base leading-7 text-slate-600">OmniRouter keeps environmental signals alongside routing outcomes, so the operational effect of each decision is visible.</p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Measure the effect of every routing decision.</h2>
+                <p className="mt-4 max-w-xl text-base leading-7 text-slate-600">OmniRouter keeps the environmental delta alongside the route itself, making the operational outcome visible to engineering, sustainability, and compliance teams.</p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 {[
-                  { title: "Carbon", text: "Compare grid intensity and resulting emissions deltas between candidate regions." },
-                  { title: "Water", text: "Account for regional water stress when choosing where workloads should run." },
-                  { title: "Heat", text: "Identify compute locations with practical opportunities for heat recovery and reuse." },
-                  { title: "Compliance", text: "Preserve decision history and rationale for internal reporting and audits." },
+                  { title: "Carbon", metric: "Grid intensity", text: "Compare the emissions profile of eligible regions instead of routing on availability alone." },
+                  { title: "Water", metric: "Regional stress", text: "Account for water scarcity so a lower-carbon destination does not create a blind water trade-off." },
+                  { title: "Heat", metric: "Recovery potential", text: "Surface locations where data-center heat can connect to district or industrial heat demand." },
+                  { title: "Compliance", metric: "Decision history", text: "Preserve timestamps, constraints, deltas, and rationale for traceable sustainability reporting." },
                 ].map((item) => (
                   <div key={item.title} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <div className="text-lg font-bold text-slate-950">{item.title}</div>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-lg font-bold text-slate-950">{item.title}</div>
+                      <span className="rounded-md bg-slate-50 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.1em] text-slate-400">{item.metric}</span>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-slate-600">{item.text}</p>
                   </div>
                 ))}
               </div>
@@ -435,32 +410,32 @@ export default function LandingPage() {
         <section id="docs" className="scroll-mt-20 border-t border-slate-200 bg-slate-50/70">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-              <div className="max-w-2xl">
+              <div className="max-w-3xl">
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Docs</div>
-                <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Understand the routing layer.</h2>
-                <p className="mt-4 text-base leading-7 text-slate-600">A compact documentation path for teams integrating OmniRouter into compute operations.</p>
+                <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Connect OmniRouter to the workloads you already run.</h2>
+                <p className="mt-4 text-base leading-7 text-slate-600">The routing layer is designed to sit beside your existing ML and compute workflows rather than replace them.</p>
               </div>
               <a href="/dashboard" className="inline-flex items-center gap-2 self-start rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 md:self-auto">Open workspace <Arrow /></a>
             </div>
 
             <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                ["Getting started", "Connect a workload and run your first placement analysis."],
-                ["Routing inputs", "Workload type, SLA, residency, and environmental constraints."],
-                ["Metrics & methodology", "Understand carbon, water, thermal, and routing deltas."],
-                ["Audit & reporting", "Review routing history and export compliance records."],
+                ["SDK / API", "Submit workload requirements, scheduling flexibility, and policy constraints."],
+                ["Kubernetes", "Attach routing policy through a workload manifest before compute is dispatched."],
+                ["Routing inputs", "Workload class, SLA flexibility, residency, environmental signals, and latency."],
+                ["Audit output", "Store the route, environmental delta, timestamp, and decision rationale."],
               ].map(([title, text]) => (
                 <a key={title} href="/dashboard" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                   <div className="text-base font-bold text-slate-950">{title}</div>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
-                  <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-blue-600">Open <Arrow /></div>
+                  <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-blue-600">Explore <Arrow /></div>
                 </a>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-t border-slate-200 bg-slate-950">
+<section className="border-t border-slate-200 bg-slate-950">
           <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-14 lg:flex-row lg:items-end lg:justify-between lg:px-8">
             <div>
               <Logo dark />
