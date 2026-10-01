@@ -572,7 +572,7 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
     </section>
   );
 }
-function LiveActivityTimeline({ rows }) {
+function LiveActivityTimeline({ rows, isDispatched }) {
   return (
     <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex items-end justify-between gap-4">
@@ -799,7 +799,7 @@ export default function HomePage() {
                             <motion.div variants={fadeInUp}>
                 <GlobalNetworkOverview dispatched={isDispatched} />
               </motion.div>
-              <LiveActivityTimeline rows={liveStreamRows} />
+              <LiveActivityTimeline rows={liveStreamRows} isDispatched={isDispatched} />
             </motion.div>
           )}
           {activeTab === "router-studio" && (
