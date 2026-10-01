@@ -145,8 +145,3 @@ npm run build
 ## Map asset attribution
 
 The dashboard routing map uses the open-source `simple-world-map` SVG by Al MacDonald / Fritz Lekschas, distributed under CC BY-SA 3.0. The asset is stored locally at `public/world-map.svg` so the demo does not depend on a remote map request. The map is used as the geographic base layer while OmniRouter renders its workload nodes and route overlays separately.
-
-
-
-
-

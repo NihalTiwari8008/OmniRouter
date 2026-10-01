@@ -1023,7 +1023,3 @@ function UserFooter() {
     </div>
   );
 }
-
-
-
-
