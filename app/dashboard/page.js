@@ -10,6 +10,7 @@ import {
   STREAM_ROWS,
   LEDGER_ROWS,
   ROUTE_DECISION,
+  DEFAULT_WORKLOAD,
   createDispatchPayload,
 } from "@/lib/router/mockRouter";
 
@@ -192,7 +193,8 @@ function AnalysisTimeline({ stage, complete }) {
   );
 }
 
-function FeasibilityPanel() {
+function FeasibilityPanel({ complete = false, running = false }) {
+  const ready = complete || running;
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex items-start justify-between gap-4">
@@ -200,7 +202,7 @@ function FeasibilityPanel() {
           <h3 className="text-base font-bold text-slate-950">Feasibility filter</h3>
           <p className="mt-1 text-xs text-slate-500">Hard workload and policy checks run before environmental ranking.</p>
         </div>
-        <span className="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">4 / 4 passed</span>
+        <span className={complete ? "shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : running ? "shrink-0 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700" : "shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500"}>{complete ? "4 / 4 passed" : running ? "Checking…" : "Ready"}</span>
       </div>
 
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
@@ -211,7 +213,7 @@ function FeasibilityPanel() {
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700">✓</span>
                 <span className="text-xs font-semibold text-slate-700">{check.label}</span>
               </div>
-              <span className="text-[10px] font-semibold text-emerald-600">{check.status}</span>
+              <span className={complete ? "text-[10px] font-semibold text-emerald-600" : running ? "text-[10px] font-semibold text-blue-600" : "text-[10px] font-semibold text-slate-400"}>{complete ? check.status : running ? "Checking" : "Pending"}</span>
             </div>
             <div className="ml-7 mt-1 text-[10px] text-slate-500">{check.detail}</div>
           </div>
@@ -265,7 +267,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
             </g>
           ))}
 
-          <path d={`M ${x(14)} ${y(0.12)} L ${x(142)} ${y(4.2)} L ${x(380)} ${y(2.1)}`} fill="none" stroke="#10b981" strokeWidth="2" strokeDasharray="6 6" opacity="0.6" />
+          <line x1={x(0)} y1={y(0)} x2={x(34)} y2={y(0.16)} stroke="#10b981" strokeWidth="2" strokeDasharray="6 6" opacity="0.45" />
 
           {ROUTER_REGIONS.map((region) => {
             const cx = x(region.carbon);
@@ -285,16 +287,19 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
         </svg>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] text-slate-500">
-        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />Selected route</span>
-        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-red-500" />Water constraint</span>
-        <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" />Thermal constraint</span>
+      <div className="mt-3 flex flex-col gap-2 text-[10px] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />Selected route</span>
+          <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-red-500" />Water constraint</span>
+          <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-amber-500" />Thermal constraint</span>
+        </div>
+        <span className="font-semibold text-slate-400">Stockholm is non-dominated in this scenario</span>
       </div>
     </section>
   );
 }
 
-function DispatchPanel({ dispatched, isDispatching, onDispatch }) {
+function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, workloadCategory, deadlineHours, geoFence, selectedRegionId }) {
   return (
     <section className={dispatched ? "rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 sm:p-6" : "rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -334,10 +339,10 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch }) {
         <summary className="cursor-pointer list-none px-4 py-3 text-xs font-semibold text-slate-700">View dispatch payload</summary>
         <div className="border-t border-slate-100 bg-slate-950 p-4">
           <pre className="overflow-x-auto text-[10px] leading-5 text-slate-200">{JSON.stringify(createDispatchPayload({
-            workloadName: "Llama-3 Fine-Tuning (70B-Instruct)",
-            workloadCategory: "LLM Batch Inference",
-            deadlineHours: 12,
-            geoFence: true,
+            workloadName,
+            workloadCategory,
+            deadlineHours,
+            geoFence,
           }), null, 2)}</pre>
         </div>
       </details>
@@ -533,7 +538,9 @@ export default function HomePage() {
   const [isDispatching, setIsDispatching] = useState(false);
   const [selectedRegionId, setSelectedRegionId] = useState("stockholm");
   const [telemetryRefreshing, setTelemetryRefreshing] = useState(false);
-  const [deadlineVal, setDeadlineVal] = useState(12);
+  const [workloadName, setWorkloadName] = useState(DEFAULT_WORKLOAD.name);
+  const [workloadCategory, setWorkloadCategory] = useState(DEFAULT_WORKLOAD.category);
+  const [deadlineVal, setDeadlineVal] = useState(DEFAULT_WORKLOAD.deadlineHours);
   const [geoFence, setGeoFence] = useState(true);
   const [countKey, setCountKey] = useState(0);
 
@@ -548,6 +555,7 @@ export default function HomePage() {
   const runPlacementAnalysis = useCallback(() => {
     if (isLoading) return;
     setIsLoading(true);
+    setHasData(false);
     setIsDispatched(false);
     setAnalysisStage(1);
 
@@ -731,15 +739,15 @@ export default function HomePage() {
                   <div className="space-y-5 pt-5">
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-slate-700">Workload name / job identifier</span>
-                      <input defaultValue="Llama-3 Fine-Tuning (70B-Instruct)" className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+                      <input value={workloadName} onChange={(e) => setWorkloadName(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
                     </label>
 
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-slate-700">Workload category</span>
-                      <select defaultValue="llm" className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
-                        <option value="llm">LLM Batch Inference · High Throughput</option>
-                        <option value="embedding">Vector Embeddings</option>
-                        <option value="diffusion">Diffusion / Rendering</option>
+                      <select value={workloadCategory} onChange={(e) => setWorkloadCategory(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+                        <option value="LLM Batch Inference · High Throughput">LLM Batch Inference · High Throughput</option>
+                        <option value="Vector Embeddings">Vector Embeddings</option>
+                        <option value="Diffusion / Rendering">Diffusion / Rendering</option>
                       </select>
                     </label>
 
@@ -772,59 +780,76 @@ export default function HomePage() {
                 </motion.section>
 
                 <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 xl:col-span-7">
-                  {!hasData ? (
-                    <div className="flex h-full min-h-[430px] flex-col justify-center">
-                      <div className="mb-4 flex items-center justify-between">
-                        <div>
-                          <h2 className="text-lg font-bold text-slate-950">Environmental impact</h2>
-                          <p className="mt-1 text-sm text-slate-500">Compare carbon and water trade-offs across regions.</p>
-                        </div>
-                      </div>
-                      <EmptyState title="Analysis ready" description="Set the workload constraints and run the placement analysis." />
-                    </div>
-                  ) : (
+                  <div className="flex flex-col gap-2 border-b border-slate-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                      <div className="flex flex-col gap-2 border-b border-slate-100 pb-4 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                          <h2 className="text-lg font-bold text-slate-950">Environmental impact</h2>
-                          <p className="mt-1 text-sm text-slate-500">Feasibility, environmental trade-offs, and route selection</p>
-                        </div>
-                        <span className={hasData ? "text-xs font-medium text-emerald-700" : "text-xs font-medium text-slate-400"}>{hasData ? "Analysis complete" : isLoading ? "Analysis running…" : "Ready"}</span>
-                      </div>
-
-                      <AnalysisTimeline stage={analysisStage} complete={hasData} />
-
-                      {!hasData ? (
-                        <div className="grid gap-4 xl:grid-cols-2">
-                          <FeasibilityPanel />
-                          <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-                            <div className="flex items-start justify-between gap-4">
-                              <div>
-                                <h3 className="text-base font-bold text-slate-950">Optimization target</h3>
-                                <p className="mt-1 text-xs text-slate-500">Environmental ranking appears after the feasibility pass.</p>
-                              </div>
-                              <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">Waiting</span>
-                            </div>
-                            <div className="mt-7 rounded-lg border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center">
-                              <div className="text-sm font-semibold text-slate-700">Run analysis to rank candidates</div>
-                              <div className="mt-1 text-xs text-slate-500">The router will evaluate carbon, water, heat reuse, and latency together.</div>
-                            </div>
-                          </section>
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          <EnvironmentalMap selectedRegionId={selectedRegionId} onSelectRegion={setSelectedRegionId} />
-                          <div className="grid gap-4 xl:grid-cols-2">
-                            <ParetoChart selectedRegionId={selectedRegionId} />
-                            <FeasibilityPanel />
-                          </div>
-                          <DispatchPanel dispatched={isDispatched} isDispatching={isDispatching} onDispatch={dispatchWorkload} />
-                        </div>
-                      )}
-
+                      <h2 className="text-lg font-bold text-slate-950">Environmental impact</h2>
+                      <p className="mt-1 text-sm text-slate-500">Feasibility, environmental trade-offs, and route selection</p>
                     </div>
-                  )}
-                </motion.section>
+                    <span className={hasData ? "text-xs font-medium text-emerald-700" : isLoading ? "text-xs font-medium text-blue-600" : "text-xs font-medium text-slate-400"}>{hasData ? "Analysis complete" : isLoading ? "Analysis running…" : "Ready"}</span>
+                  </div>
+
+                  <div className="pt-5">
+                    <AnalysisTimeline stage={analysisStage} complete={hasData} />
+
+                    {isLoading ? (
+                      <div className="grid gap-4 xl:grid-cols-2">
+                        <FeasibilityPanel running />
+                        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                              <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-20" cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" />
+                                <path d="M21 12a9 9 0 00-9-9" stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" />
+                              </svg>
+                            </div>
+                            <div>
+                              <div className="text-sm font-bold text-slate-900">Building route decision</div>
+                              <div className="mt-1 text-xs text-slate-500">Combining carbon, water, heat reuse, and latency signals.</div>
+                            </div>
+                          </div>
+                          <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
+                            <div className="h-full w-2/3 animate-pulse rounded-full bg-blue-500" />
+                          </div>
+                        </section>
+                      </div>
+                    ) : !hasData ? (
+                      <div className="grid gap-4 xl:grid-cols-2">
+                        <FeasibilityPanel />
+                        <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <h3 className="text-base font-bold text-slate-950">Optimization target</h3>
+                              <p className="mt-1 text-xs text-slate-500">Run placement analysis to rank eligible candidates.</p>
+                            </div>
+                            <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500">Waiting</span>
+                          </div>
+                          <div className="mt-7 rounded-lg border border-dashed border-slate-200 bg-slate-50/60 p-8 text-center">
+                            <div className="text-sm font-semibold text-slate-700">Ready for analysis</div>
+                            <div className="mt-1 text-xs text-slate-500">The router will evaluate the current workload against environmental conditions and operational constraints.</div>
+                          </div>
+                        </section>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <EnvironmentalMap selectedRegionId={selectedRegionId} onSelectRegion={setSelectedRegionId} />
+                        <div className="grid gap-4 xl:grid-cols-2">
+                          <ParetoChart selectedRegionId={selectedRegionId} />
+                          <FeasibilityPanel complete />
+                        </div>
+                        <DispatchPanel
+                          dispatched={isDispatched}
+                          isDispatching={isDispatching}
+                          onDispatch={dispatchWorkload}
+                          workloadName={workloadName}
+                          workloadCategory={workloadCategory}
+                          deadlineHours={deadlineVal}
+                          geoFence={geoFence}
+                          selectedRegionId={selectedRegionId}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </motion.section>                </motion.section>
               </div>
             </motion.div>
           )}
