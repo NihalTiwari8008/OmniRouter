@@ -66,9 +66,9 @@ function FeatureIcon({ type }) {
 
 function DashboardPreview() {
   return (
-    <div className="laptop-device relative mx-auto w-full max-w-[820px]">
+    <div className="laptop-device relative mx-auto w-full max-w-[730px]">
       <div className="relative z-10 px-1 pt-1">
-        <div className="laptop-screen overflow-hidden rounded-[20px] border-[10px] border-slate-900 bg-white shadow-[0_35px_80px_rgba(15,23,42,0.28)]">
+        <div className="laptop-screen premium-screen overflow-hidden rounded-[18px] border border-white/90 bg-white/95 shadow-[0_28px_70px_rgba(15,23,42,0.22),0_0_0_1px_rgba(148,163,184,0.24)]">
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <div className="flex items-center gap-2">
               <GlobeMark size="sm" />
@@ -149,9 +149,8 @@ function DashboardPreview() {
             </div>
           </div>
         </div>
-        <div className="laptop-base mx-auto h-7 w-[91%] rounded-b-[15px] bg-slate-800 shadow-[0_16px_24px_rgba(15,23,42,0.25)]" />
-        <div className="laptop-hinge mx-auto h-1.5 w-[46%] rounded-b-md bg-slate-600/90" />
-        <div className="mx-auto h-1.5 w-[34%] rounded-full bg-slate-700/90" />
+        <div className="laptop-base mx-auto h-5 w-[88%] rounded-b-[14px] shadow-[0_14px_22px_rgba(15,23,42,0.18)]" />
+        <div className="laptop-hinge mx-auto h-1 w-[42%] rounded-b-md" />
       </div>
     </div>
   );
