@@ -156,131 +156,212 @@ function RegionNode({ name, subtitle, hasData, selected, populated }) {
   );
 }
 
+function MapMarker({ region }) {
+  return (
+    <div className="absolute z-20 -translate-x-1/2 -translate-y-1/2">
+      <div className="group flex flex-col items-center">
+        <div className={region.selected ? "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : "relative flex h-5 w-5 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md"}>
+          {region.selected && <span className="absolute inset-1 rounded-full bg-white/90" />}
+          <span className={region.selected ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
+        </div>
+        <div className="mt-1 whitespace-nowrap rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur">
+          {region.name}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RegionDetailCard({ region }) {
+  return (
+    <div className={region.selected ? "rounded-xl border border-emerald-300 bg-emerald-50/40 p-4 ring-1 ring-emerald-100" : "rounded-xl border border-slate-200 bg-white p-4"}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className={region.selected ? "h-2 w-2 rounded-full bg-emerald-500" : region.status === "risk" ? "h-2 w-2 rounded-full bg-red-500" : "h-2 w-2 rounded-full bg-amber-500"} />
+            <h3 className="text-sm font-bold text-slate-950">{region.name}</h3>
+          </div>
+          <p className="mt-1 text-xs text-slate-500">{region.code} · {region.window}</p>
+        </div>
+        <span className={region.selected ? "shrink-0 rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] font-semibold text-emerald-700" : region.status === "risk" ? "shrink-0 rounded-md border border-red-200 bg-red-50 px-2 py-1 text-[10px] font-semibold text-red-700" : "shrink-0 rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-[10px] font-semibold text-amber-700"}>{region.badge}</span>
+      </div>
+
+      <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-3 border-t border-slate-100 pt-3">
+        <div>
+          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
+          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.carbon}</div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water stress</div>
+          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.water}</div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat loop</div>
+          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.heat}</div>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Latency</div>
+          <div className="mt-0.5 text-sm font-semibold text-slate-900">{region.latency}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function EnvironmentalMap() {
   const regions = [
     {
       name: "Oregon",
       code: "US-West",
+      window: "Hydro basin",
       carbon: "142 gCO2e/kWh",
       water: "4.2 · Critical",
       heat: "N/A",
       latency: "24 ms",
-      pos: "left-[25%] top-[39%]",
-      card: "left-[8%] top-[48%]",
-      dot: "bg-red-500",
+      x: "23.5%",
+      y: "39%",
+      status: "risk",
       badge: "High water stress",
-      badgeClass: "border-red-200 bg-red-50 text-red-700",
     },
     {
       name: "Stockholm",
       code: "EU-North-1",
+      window: "District heat",
       carbon: "14 gCO2e/kWh",
       water: "0.12 · Ultra low",
       heat: "82°C active",
       latency: "38 ms",
-      pos: "left-[56%] top-[27%]",
-      card: "left-[59%] top-[9%]",
-      dot: "bg-emerald-500",
+      x: "52.8%",
+      y: "30.5%",
+      status: "selected",
       badge: "Recommended",
-      badgeClass: "border-emerald-200 bg-emerald-50 text-emerald-700",
       selected: true,
     },
     {
       name: "Mumbai",
       code: "AP-South",
+      window: "Solar sync",
       carbon: "380 gCO2e/kWh",
       water: "2.1 · Moderate",
       heat: "Solar sync",
       latency: "112 ms",
-      pos: "left-[75%] top-[63%]",
-      card: "left-[65%] top-[67%]",
-      dot: "bg-amber-500",
+      x: "70.2%",
+      y: "59%",
+      status: "constraint",
       badge: "Thermal constraint",
-      badgeClass: "border-amber-200 bg-amber-50 text-amber-700",
     },
   ];
 
   return (
-    <div className="relative mt-5 overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-      <div className="absolute left-4 top-3 z-10 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-        Global compute network
+    <div className="mt-5 overflow-hidden rounded-xl border border-slate-200 bg-white">
+      <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+        <div>
+          <div className="text-sm font-bold text-slate-950">Global routing map</div>
+          <div className="mt-1 text-xs text-slate-500">Environmental conditions across eligible compute regions</div>
+        </div>
+        <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-500">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />
+            Evaluated
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            Selected
+          </span>
+        </div>
       </div>
 
-      <div className="relative h-[360px] sm:h-[390px]">
-        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" aria-hidden="true">
-          <defs>
-            <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse">
-              <path d="M46 0H0V46" fill="none" stroke="#e2e8f0" strokeWidth="1" />
-            </pattern>
-            <linearGradient id="route" x1="0" x2="1">
-              <stop offset="0%" stopColor="#60a5fa" />
-              <stop offset="100%" stopColor="#10b981" />
-            </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="7" result="blur" />
-            </filter>
-          </defs>
-
-          <rect width="1000" height="520" fill="url(#grid)" opacity="0.58" />
-
-          <g fill="#dbe5ef" opacity="0.92">
-            <path d="M85 144l35-35 40 7 27 25-16 31-23 12-18 34-33 2-19-27z" />
-            <path d="M188 204l36-19 44 8 22 24-18 24-8 42-27 36-29-9-9-39-28-20z" />
-            <path d="M306 131l34-19 52 4 30 24-7 32-24 18-5 34-32 19-27-18-17-35-22-10z" />
-            <path d="M401 197l35-11 41 12 29 25-7 31-28 17-36-3-26-21z" />
-            <path d="M533 170l41-24 49 7 35 25-8 29-34 13-18 31-39-7-23-32z" />
-            <path d="M583 265l32-17 35 12 19 28-14 27-32 10-24-18z" />
-            <path d="M718 304l37-20 35 6 26 26-13 27-34 9-32-11z" />
-            <path d="M805 170l34-18 38 4 25 21-9 28-34 15-31-18z" />
-          </g>
-
-          <g stroke="url(#route)" strokeWidth="5" strokeDasharray="12 12" fill="none" strokeLinecap="round">
-            <path d="M254 206 C355 125 460 114 560 143" />
-            <path d="M754 335 C690 258 622 207 560 143" />
-          </g>
-
-          <circle cx="560" cy="143" r="20" fill="#10b981" opacity="0.16" filter="url(#glow)" />
-          <circle cx="560" cy="143" r="11" fill="#10b981" stroke="#fff" strokeWidth="4" />
-          <circle cx="254" cy="206" r="9" fill="#ef4444" stroke="#fff" strokeWidth="4" />
-          <circle cx="754" cy="335" r="9" fill="#f59e0b" stroke="#fff" strokeWidth="4" />
-
-          <text x="34" y="490" fill="#94a3b8" fontSize="13" fontFamily="inherit">West</text>
-          <text x="916" y="490" fill="#94a3b8" fontSize="13" fontFamily="inherit">East</text>
-        </svg>
-
-        {regions.map((region) => (
-          <div key={region.name}>
-            <span className={`absolute ${region.pos} z-10 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-sm ${region.dot}`} />
-            <div className={`absolute ${region.card} z-20 w-[205px] rounded-xl border bg-white p-3.5 shadow-lg ${region.selected ? "border-emerald-300 ring-4 ring-emerald-100/60" : "border-slate-200"}`}>
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className={`h-2 w-2 rounded-full ${region.dot}`} />
-                    <span className="text-sm font-bold text-slate-950">{region.name}</span>
-                  </div>
-                  <div className="mt-0.5 text-[10px] font-medium text-slate-400">{region.code}</div>
-                </div>
-                <span className={`shrink-0 rounded border px-1.5 py-1 text-[9px] font-semibold ${region.badgeClass}`}>{region.badge}</span>
-              </div>
-
-              <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 border-t border-slate-100 pt-3 text-[10px]">
-                <div><span className="block text-slate-400">Carbon</span><span className="font-semibold text-slate-800">{region.carbon}</span></div>
-                <div><span className="block text-slate-400">Water stress</span><span className="font-semibold text-slate-800">{region.water}</span></div>
-                <div><span className="block text-slate-400">Heat loop</span><span className="font-semibold text-slate-800">{region.heat}</span></div>
-                <div><span className="block text-slate-400">Latency</span><span className="font-semibold text-slate-800">{region.latency}</span></div>
-              </div>
-            </div>
+      <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.45fr)_minmax(300px,0.75fr)]">
+        <div className="relative min-h-[390px] border-b border-slate-100 bg-slate-50 xl:border-b-0 xl:border-r">
+          <div className="absolute left-4 top-4 z-10 rounded-md border border-slate-200 bg-white/90 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400 shadow-sm">
+            Global compute network
           </div>
-        ))}
+
+          <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <pattern id="map-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                <path d="M50 0H0V50" fill="none" stroke="#dfe7ef" strokeWidth="1" />
+              </pattern>
+              <linearGradient id="route-gradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#60a5fa" />
+                <stop offset="100%" stopColor="#10b981" />
+              </linearGradient>
+              <filter id="route-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="7" result="blur" />
+              </filter>
+            </defs>
+
+            <rect width="1000" height="520" fill="url(#map-grid)" opacity="0.54" />
+
+            <g fill="#d9e2ec" stroke="#c4d1de" strokeWidth="1.25">
+              <path d="M66 123 95 94 145 100 181 126 178 151 158 166 148 191 113 206 89 193 67 202 46 178 52 151Z" />
+              <path d="m178 201 28-17 42 4 34 19 21 29-17 18-11 28-27 14-17 42-26-3-12-31-28-26 9-34Z" />
+              <path d="m297 130 28-32 48-13 65 7 41 26 9 42-22 28-9 38-30 20-35-15-15-30-39-16-26-24Z" />
+              <path d="m402 198 30-15 42 8 29 23 4 31-20 23-34 12-34-11-24-22Z" />
+              <path d="m506 225 24-46 42-28 53-5 57 21 46 35 5 34-28 19-8 38-35 22-49-10-29-20-43-14Z" />
+              <path d="m541 299 24-13 32 8 21 26-10 27-28 19-30-9-18-26Z" />
+              <path d="m664 356 33-23 52 4 41 24 17 31-18 26-43 15-41-13-30-27Z" />
+              <path d="m837 215 24-19 38 3 31 20-3 21-31 21-35-6-19-21Z" />
+              <path d="m849 390 37-6 36 12 13 23-18 17-35-1-28-17Z" />
+              <path d="m753 429 17-8 21 5 12 15-8 10-23-2-18-9Z" />
+            </g>
+
+            <g fill="none" stroke="#c4d1de" strokeWidth="0.9" opacity="0.8">
+              <path d="M86 142 116 129 151 132 166 148" />
+              <path d="M101 178 139 162 171 168" />
+              <path d="M205 214 242 207 274 219" />
+              <path d="M321 119 352 147 390 145 418 159" />
+              <path d="M530 214 566 193 612 199 659 218 696 244" />
+              <path d="M677 368 717 359 754 370 783 387" />
+            </g>
+
+            <g fill="none" stroke="url(#route-gradient)" strokeLinecap="round">
+              <path d="M235 205 C318 150 414 118 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow)" />
+              <path d="M235 205 C318 150 414 118 528 159" strokeWidth="4.5" strokeDasharray="11 11" />
+              <path d="M702 307 C657 250 604 202 528 159" strokeWidth="7" opacity="0.12" filter="url(#route-glow)" />
+              <path d="M702 307 C657 250 604 202 528 159" strokeWidth="4.5" strokeDasharray="11 11" />
+            </g>
+
+            <circle cx="528" cy="159" r="28" fill="#10b981" opacity="0.10" />
+            <circle cx="528" cy="159" r="13" fill="#10b981" stroke="#ffffff" strokeWidth="4" />
+          </svg>
+
+          {regions.map((region) => (
+            <div key={region.name} className="absolute" style={{ left: region.x, top: region.y }}>
+              <MapMarker region={region} />
+            </div>
+          ))}
+
+          <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-md border border-slate-200 bg-white/90 px-2.5 py-1.5 text-[10px] font-medium text-slate-500 shadow-sm">
+            <span className="h-2 w-2 rounded-full bg-blue-400" />
+            Candidate route
+            <span className="mx-1 h-3 w-px bg-slate-200" />
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            Recommended
+          </div>
+        </div>
+
+        <div className="bg-white p-4 sm:p-5">
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Region detail</div>
+              <div className="mt-1 text-xs text-slate-500">Decision inputs used for routing</div>
+            </div>
+            <span className="text-xs font-semibold text-slate-400">3 evaluated</span>
+          </div>
+          <div className="space-y-3">
+            {regions.map((region) => <RegionDetailCard key={region.name} region={region} />)}
+          </div>
+        </div>
       </div>
 
-      <div className="border-t border-slate-200 bg-white p-4 sm:p-5">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="border-t border-slate-200 bg-white px-4 py-4 sm:px-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="text-sm font-bold text-emerald-900">Recommended target · EU-North-1 (Stockholm)</div>
-            <div className="mt-1 text-xs leading-5 text-emerald-700">74.1% lower carbon emissions · 120 L/hr water savings · district heat available</div>
+            <div className="mt-1 text-xs text-emerald-700">74.1% lower carbon emissions · 120 L/hr water savings · district heat available</div>
           </div>
-          <span className="inline-flex w-fit items-center rounded-md border border-emerald-300 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-800">Selected route</span>
+          <span className="inline-flex w-fit items-center rounded-md border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800">Selected route</span>
         </div>
       </div>
     </div>
