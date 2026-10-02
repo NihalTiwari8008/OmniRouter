@@ -17,13 +17,13 @@ function GlobeMark({ size = "md", dark = false }) {
   const icon = size === "sm" ? "h-6 w-6" : size === "lg" ? "h-7 w-7" : "h-6 w-6";
 
   return (
-    <span className={cx("relative flex shrink-0 items-center justify-center", sizes, dark ? "text-white" : "text-blue-600")}>
+    <span className={cx("relative flex shrink-0 items-center justify-center", sizes, "text-[#84dc23]")}>
       <svg className={cx(icon, "overflow-visible")} viewBox="0 0 36 36" fill="none" stroke="currentColor" aria-hidden="true">
         <circle cx="18" cy="18" r="15.2" strokeWidth="2" />
         <path d="M2.8 18h30.4M18 2.8c4.4 4 6.8 9.1 6.8 15.2S22.4 29.2 18 33.2C13.6 29.2 11.2 24.1 11.2 18S13.6 6.8 18 2.8Z" strokeWidth="1.65" />
         <path d="M5.5 10.5c3.8 2.2 8 3.3 12.5 3.3s8.7-1.1 12.5-3.3M5.5 25.5c3.8-2.2 8-3.3 12.5-3.3s8.7 1.1 12.5 3.3" strokeWidth="1.35" />
       </svg>
-      <span className="absolute right-0.5 top-1 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+      <span className="absolute right-0.5 top-1 h-2 w-2 rounded-full bg-[#84dc23] ring-2 ring-white" />
     </span>
   );
 }
@@ -33,7 +33,7 @@ function Logo({ dark = false, size = "md" }) {
     <a href="/" className="flex items-center gap-2.5">
       <GlobeMark size={size} dark={dark} />
       <span className={cx("text-[22px] font-bold tracking-tight", dark ? "text-white" : "text-slate-950")}>
-        Omni<span className="text-blue-600">Router</span>
+        OmniRouter
       </span>
     </a>
   );
@@ -55,8 +55,15 @@ function FeatureIcon({ type }) {
     shield: "M12 3l7 3v5c0 4.4-3 8.4-7 10-4-1.6-7-5.6-7-10V6l7-3zm-3.1 8.4 2 2 4.2-4.2",
   };
 
+  const colors = {
+    leaf: "bg-[#f0fdf4] text-[#65a30d] ring-[#d9f99d]",
+    drop: "bg-blue-50 text-blue-600 ring-blue-100",
+    heat: "bg-orange-50 text-orange-600 ring-orange-100",
+    shield: "bg-[#ecfccb] text-[#365314] ring-[#bef264]",
+  };
+
   return (
-    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-blue-600 ring-1 ring-slate-200">
+    <span className={cx("flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1", colors[type] || "bg-slate-50 text-slate-700 ring-slate-200")}>
       <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d={paths[type]} strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" />
       </svg>
@@ -73,19 +80,19 @@ function DashboardPreview() {
             <div className="flex items-center gap-2">
               <GlobeMark size="sm" />
               <span className="text-base font-bold tracking-tight text-slate-950">
-                Omni<span className="text-blue-600">Router</span>
+                OmniRouter
               </span>
             </div>
-            <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-600">Routing workspace</span>
+            <span className="inline-flex items-center rounded-full border border-[#bef264] bg-[#ecfccb] px-2.5 py-1 text-[10px] font-semibold text-[#365314]">Routing workspace</span>
           </div>
 
           <div className="grid grid-cols-[178px_1fr]">
-            <aside className="border-r border-slate-200 bg-slate-50/70 p-3">
-              <p className="mb-2 px-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">Navigation</p>
+            <aside className="border-r border-[#1e2025] bg-[#0e1013] p-3">
+              <p className="mb-2 px-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#71826b]">Navigation</p>
               <div className="space-y-1">
-                <div className="rounded-lg bg-blue-50 px-3 py-2 text-[11px] font-semibold text-blue-600">Command Center</div>
-                <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-slate-500">Router Studio</div>
-                <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-slate-500">Audit Ledger</div>
+                <div className="rounded-lg bg-[#84dc23] px-3 py-2 text-[11px] font-semibold text-black">Command Center</div>
+                <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-zinc-400">Router Studio</div>
+                <div className="rounded-lg px-3 py-2 text-[11px] font-medium text-zinc-400">Audit Ledger</div>
               </div>
             </aside>
 
@@ -95,7 +102,7 @@ function DashboardPreview() {
                   <h3 className="text-base font-bold text-slate-950">Executive Dashboard</h3>
                   <p className="mt-0.5 text-[10px] text-slate-500">Carbon, water, and thermal routing efficiency</p>
                 </div>
-                <span className="rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[9px] font-semibold text-slate-600">Standby</span>
+                <span className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[9px] font-semibold text-slate-600">Standby</span>
               </div>
 
               <div className="mt-4 grid grid-cols-4 gap-2.5">
@@ -104,11 +111,11 @@ function DashboardPreview() {
                   ["Emissions", "1,420.8 kg", "68.2%"],
                   ["Heat", "8.4 MWh", "Active"],
                   ["Compliance", "99.4%", "Verified"],
-                ].map((item) => (
+                ].map((item, idx) => (
                   <div key={item[0]} className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
                     <div className="text-[8px] font-semibold uppercase tracking-[0.12em] text-slate-400">{item[0]}</div>
                     <div className="mt-3 text-sm font-bold tracking-tight text-slate-950">{item[1]}</div>
-                    <div className="mt-1 text-[9px] font-semibold text-emerald-600">{item[2]}</div>
+                    <div className={cx("mt-1 text-[9px] font-semibold", idx === 0 ? "text-blue-600" : idx === 1 ? "text-[#16a34a]" : idx === 2 ? "text-[#ea580c]" : "text-[#15803d]")}>{item[2]}</div>
                   </div>
                 ))}
               </div>
@@ -124,8 +131,8 @@ function DashboardPreview() {
 
                 <div className="mt-3 grid grid-cols-3 gap-2">
                   {[
-                    { name: "Oregon", detail: "142 gCO2e/kWh", badge: "High water stress", dot: "bg-red-500", badgeCls: "border-red-200 bg-red-50 text-red-700" },
-                    { name: "Stockholm", detail: "14 gCO2e/kWh", badge: "Recommended target", dot: "bg-emerald-500", badgeCls: "border-emerald-200 bg-emerald-50 text-emerald-700" },
+                    { name: "Oregon", detail: "142 gCO2e/kWh", badge: "High water stress", dot: "bg-[#f97316]", badgeCls: "border-orange-200 bg-orange-50 text-orange-700" },
+                    { name: "Stockholm", detail: "14 gCO2e/kWh", badge: "Recommended target", dot: "bg-[#84dc23]", badgeCls: "border-[#bef264] bg-[#ecfccb] text-[#365314]" },
                     { name: "Mumbai", detail: "380 gCO2e/kWh", badge: "Thermal constraint", dot: "bg-amber-500", badgeCls: "border-amber-200 bg-amber-50 text-amber-700" },
                   ].map((region) => (
                     <div key={region.name} className="rounded-lg border border-slate-200 bg-slate-50/50 p-2.5">
@@ -140,9 +147,9 @@ function DashboardPreview() {
                 </div>
               </div>
 
-              <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50/60 p-3">
-                <div className="text-[10px] font-bold text-emerald-900">Current route · EU-North-1 (Stockholm)</div>
-                <div className="mt-1 text-[9px] text-emerald-700">74.1% lower carbon · 120 L/hr water savings · district heat available</div>
+              <div className="mt-3 rounded-xl border border-[#bef264] bg-[#f8fdf2] p-3">
+                <div className="text-[10px] font-bold text-[#365314]">Current route · EU-North-1 (Stockholm)</div>
+                <div className="mt-1 text-[9px] text-[#4d7c0f]">74.1% lower carbon · 120 L/hr water savings · district heat available</div>
               </div>
             </div>
           </div>
@@ -264,7 +271,7 @@ export default function LandingPage() {
 
           <div className="flex items-center gap-2">
             <button onClick={() => setSignInOpen(true)} className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">Sign in</button>
-            <button onClick={() => setSignInOpen(true)} className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">Get started</button>
+            <button onClick={() => setSignInOpen(true)} className="rounded-lg border border-zinc-800 bg-[#0e1013] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black">Get started</button>
           </div>
         </div>
       </header>
@@ -276,13 +283,13 @@ export default function LandingPage() {
 
           <div className="relative z-10 mx-auto grid min-h-[700px] max-w-[1440px] items-center gap-4 px-6 pb-14 pt-24 lg:grid-cols-[0.84fr_1.16fr] lg:px-10 lg:pb-14 lg:pt-20">
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }} className="relative z-20">
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700 shadow-sm">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#bef264] bg-[#ecfccb] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#365314] shadow-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#84dc23]" />
                 Sustainable compute routing
               </div>
 
               <h1 className="mt-6 max-w-[570px] text-[44px] font-bold leading-[1.03] tracking-[-0.04em] text-slate-950 sm:text-5xl lg:text-[62px]">
-                Route AI workloads for a cleaner <span className="text-blue-600">planet.</span>
+                Route AI workloads for a cleaner <span className="text-[#65a30d]">planet.</span>
               </h1>
 
               <p className="mt-5 max-w-[560px] text-[16px] leading-7 text-slate-600 sm:text-[18px]">
@@ -290,7 +297,7 @@ export default function LandingPage() {
               </p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+                <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-[#0e1013] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-black">
                   Get started <Arrow />
                 </button>
                 <button onClick={() => setSignInOpen(true)} className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
@@ -336,7 +343,7 @@ export default function LandingPage() {
                 <section id="product" className="scroll-mt-20 border-t border-slate-200">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Product</div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#65a30d]">Product</div>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">A climate-conscious control plane for compute.</h2>
               <p className="mt-4 text-base leading-7 text-slate-600">OmniRouter sits between your workload pipeline and cloud infrastructure, turning workload requirements and environmental conditions into an auditable routing decision.</p>
             </div>
@@ -366,8 +373,8 @@ export default function LandingPage() {
                   <div className="mt-1 text-lg font-bold text-slate-950">Multi-variable decisions, not carbon alone.</div>
                 </div>
                 <div className="text-sm leading-6 text-slate-600">Carbon and water can move in opposite directions. OmniRouter keeps both in the decision and surfaces locations where compute heat can be reused.</div>
-                <div className="rounded-xl border border-emerald-200 bg-white p-4">
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-600">Decision output</div>
+                <div className="rounded-xl border border-[#bef264] bg-[#f8fdf2] p-4">
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#3f6212]">Decision output</div>
                   <div className="mt-1 text-sm font-bold text-slate-950">Eligible target + rationale + environmental delta</div>
                 </div>
               </div>
@@ -378,7 +385,7 @@ export default function LandingPage() {
         <section id="use-cases" className="scroll-mt-20 border-y border-slate-200 bg-slate-50/70">
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
             <div className="max-w-3xl">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Use cases</div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#65a30d]">Use cases</div>
               <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Designed around flexible compute.</h2>
               <p className="mt-4 text-base leading-7 text-slate-600">Workloads with some scheduling flexibility give the router room to respond to environmental and operational changes.</p>
             </div>
@@ -390,7 +397,7 @@ export default function LandingPage() {
                 { eyebrow: "HPC & rendering", title: "Route non-urgent compute around heat and water pressure.", text: "Use environmental conditions and recovery opportunities to place batch rendering, simulations, and other delay-tolerant workloads." },
               ].map((item) => (
                 <div key={item.eyebrow} className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                  <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-blue-600">{item.eyebrow}</div>
+                  <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[#65a30d]">{item.eyebrow}</div>
                   <h3 className="mt-3 text-xl font-bold leading-snug text-slate-950">{item.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-slate-600">{item.text}</p>
                 </div>
@@ -403,7 +410,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
             <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
               <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Impact</div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#65a30d]">Impact</div>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Measure the effect of every routing decision.</h2>
                 <p className="mt-4 max-w-xl text-base leading-7 text-slate-600">OmniRouter keeps the environmental delta alongside the route itself, making the operational outcome visible to engineering, sustainability, and compliance teams.</p>
               </div>
@@ -432,7 +439,7 @@ export default function LandingPage() {
           <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-24">
             <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
               <div className="max-w-3xl">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-emerald-600">Docs</div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#65a30d]">Docs</div>
                 <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">Connect OmniRouter to the workloads you already run.</h2>
                 <p className="mt-4 text-base leading-7 text-slate-600">The routing layer is designed to sit beside your existing ML and compute workflows rather than replace them.</p>
               </div>
@@ -449,14 +456,14 @@ export default function LandingPage() {
                 <a key={title} href="/dashboard" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                   <div className="text-base font-bold text-slate-950">{title}</div>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
-                  <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-blue-600">Explore <Arrow /></div>
+                  <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-[#65a30d] hover:text-[#4d7c0f]">Explore <Arrow /></div>
                 </a>
               ))}
             </div>
           </div>
         </section>
 
-<section className="border-t border-slate-200 bg-slate-950">
+<section className="border-t border-[#1e2025] bg-[#0e1013]">
           <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-14 lg:flex-row lg:items-end lg:justify-between lg:px-8">
             <div>
               <Logo dark />

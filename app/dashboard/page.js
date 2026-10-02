@@ -60,8 +60,8 @@ const stagger = {
 function DestBadge({ dest, color }) {
   const styles = color === "blue"
     ? "bg-blue-50 text-blue-700 border-blue-200"
-    : "bg-emerald-50 text-emerald-700 border-emerald-200";
-  const dot = color === "blue" ? "bg-blue-500" : "bg-emerald-500";
+    : "bg-[#ecfccb] text-[#365314] border-[#bef264]";
+  const dot = color === "blue" ? "bg-blue-500" : "bg-[#84dc23]";
   return (
     <span className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-sm font-medium ${styles}`}>
       <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
@@ -71,27 +71,27 @@ function DestBadge({ dest, color }) {
 }
 function StatusBadge({ status, color }) {
   const styles = color === "emerald"
-    ? "bg-emerald-50 text-emerald-700"
-    : "bg-slate-100 text-slate-600";
-  return <span className={`inline-flex rounded px-2.5 py-1 text-xs font-semibold ${styles}`}>{status}</span>;
+    ? "bg-[#ecfccb] text-[#365314] border border-[#bef264]"
+    : "bg-slate-100 text-slate-600 border border-slate-200";
+  return <span className={`inline-flex items-center rounded px-2.5 py-1 text-xs font-semibold ${styles}`}>{status}</span>;
 }
 function MetricCard({ label, value, suffix, detail, icon, tone = "blue", children }) {
   const tones = {
-    blue: "bg-blue-50 text-blue-600",
-    green: "bg-emerald-50 text-emerald-600",
-    amber: "bg-amber-50 text-amber-600",
-    slate: "bg-slate-100 text-slate-600",
+    blue: "bg-blue-50 text-blue-600 border border-blue-100",
+    green: "bg-[#f0fdf4] text-[#65a30d] border border-[#d9f99d]",
+    amber: "bg-orange-50 text-orange-500 border border-orange-100",
+    slate: "bg-slate-100 text-slate-600 border border-slate-200",
   };
   return (
-    <motion.div variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <motion.div variants={fadeInUp} className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm hover:shadow transition">
       <div className="flex items-start justify-between gap-4">
         <span className="max-w-[170px] text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">{label}</span>
-        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${tones[tone]}`}>{icon}</div>
+        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${tones[tone]}`}>{icon}</div>
       </div>
       <div className="mt-5 text-[30px] font-bold tracking-tight text-slate-950">
         {children || <>{value}{suffix}</>}
       </div>
-      <div className={`mt-1.5 text-sm font-medium ${tone === "amber" ? "text-amber-600" : tone === "green" ? "text-emerald-600" : "text-slate-600"}`}>
+      <div className={`mt-1.5 text-sm font-medium ${tone === "amber" ? "text-[#ea580c]" : tone === "green" ? "text-[#3f6212]" : tone === "blue" ? "text-blue-600" : "text-slate-600"}`}>
         {detail}
       </div>
     </motion.div>
@@ -101,7 +101,7 @@ function GlobalNetworkOverview({ dispatched }) {
   const recommended = ROUTER_REGIONS.find((region) => region.id === ROUTE_DECISION.regionId) || ROUTER_REGIONS[1];
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <section className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
       <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-bold text-slate-950">Global data center network</h2>
@@ -111,31 +111,31 @@ function GlobalNetworkOverview({ dispatched }) {
           <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
             <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />{ROUTER_REGIONS.length} regions
           </span>
-          <span className={dispatched ? "inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : "inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-700"}>
-            <span className={dispatched ? "h-1.5 w-1.5 rounded-full bg-emerald-500" : "h-1.5 w-1.5 rounded-full bg-blue-500"} />
+          <span className={dispatched ? "inline-flex items-center gap-1.5 rounded-full border border-[#bef264] bg-[#ecfccb] px-2.5 py-1 text-[10px] font-semibold text-[#365314]" : "inline-flex items-center gap-1.5 rounded-full border border-[#bef264] bg-[#ecfccb] px-2.5 py-1 text-[10px] font-semibold text-[#365314]"}>
+            <span className="h-1.5 w-1.5 rounded-full bg-[#84dc23]" />
             {dispatched ? "Routing active" : "Route ready"}
           </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.55fr)_minmax(340px,0.85fr)]">
-        <div className="relative min-h-[370px] overflow-hidden border-b border-slate-100 bg-[#f4f8fc] xl:min-h-[410px] xl:border-b-0 xl:border-r">
+        <div className="relative min-h-[370px] overflow-hidden border-b border-slate-100 bg-[#edf0f5] xl:min-h-[410px] xl:border-b-0 xl:border-r">
           <img src="/world-map.svg" alt="" className="absolute inset-0 h-full w-full object-cover opacity-100" draggable="false" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_36%,rgba(16,185,129,0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.16),rgba(238,246,252,0.26))]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_55%_36%,rgba(132,220,35,0.14),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.35),rgba(235,240,246,0.55))]" />
 
           <svg className="absolute inset-0 h-full w-full" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
             <defs>
               <linearGradient id="overview-route" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#60a5fa" />
-                <stop offset="60%" stopColor="#34d399" />
-                <stop offset="100%" stopColor="#10b981" />
+                <stop offset="0%" stopColor="#38bdf8" />
+                <stop offset="60%" stopColor="#a3e635" />
+                <stop offset="100%" stopColor="#84dc23" />
               </linearGradient>
               <filter id="overview-glow" x="-30%" y="-30%" width="160%" height="160%">
                 <feGaussianBlur stdDeviation="6" />
               </filter>
             </defs>
 
-            <path d="M235 203 C338 140 425 122 530 164" fill="none" stroke="#60a5fa" strokeWidth="9" opacity="0.1" filter="url(#overview-glow)" />
+            <path d="M235 203 C338 140 425 122 530 164" fill="none" stroke="#84dc23" strokeWidth="9" opacity="0.15" filter="url(#overview-glow)" />
             <path d="M235 203 C338 140 425 122 530 164" fill="none" stroke="url(#overview-route)" strokeWidth="3.5" strokeDasharray="10 10" strokeLinecap="round" />
             <path d="M700 307 C650 250 604 204 530 164" fill="none" stroke="url(#overview-route)" strokeWidth="3.5" strokeDasharray="10 10" strokeLinecap="round" opacity="0.95" />
           </svg>
@@ -145,11 +145,11 @@ function GlobalNetworkOverview({ dispatched }) {
             return (
               <div key={region.id} className="absolute" style={{ left: region.map.x, top: region.map.y }}>
                 <span className="flex flex-col items-center">
-                  <span className={recommendedRegion ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md ring-2 ring-white"}>
+                  <span className={recommendedRegion ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#84dc23] shadow-lg ring-4 ring-[#84dc23]/35" : "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md ring-2 ring-white"}>
                     {recommendedRegion && <span className="absolute inset-1 rounded-full bg-white/90" />}
-                    <span className={recommendedRegion ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
+                    <span className={recommendedRegion ? "relative h-2.5 w-2.5 rounded-full bg-[#84dc23]" : "relative h-2 w-2 rounded-full bg-white"} />
                   </span>
-                  <span className="mt-1 rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-700 shadow-sm">
+                  <span className="mt-1 rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-800 shadow-sm">
                     {region.name}
                   </span>
                 </span>
@@ -157,10 +157,10 @@ function GlobalNetworkOverview({ dispatched }) {
             );
           })}
 
-          <div className="absolute bottom-4 left-4 flex items-center gap-4 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-[10px] text-slate-600 shadow-sm">
-            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-blue-500" />Candidate route</span>
+          <div className="absolute bottom-4 left-4 flex items-center gap-4 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 text-[10px] text-slate-600 shadow-sm backdrop-blur">
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#f97316]" />Candidate route</span>
             <span className="h-3 w-px bg-slate-200" />
-            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-emerald-500" />{dispatched ? "Active route" : "Recommended route"}</span>
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#84dc23]" />{dispatched ? "Active route" : "Recommended route"}</span>
           </div>
         </div>
 
@@ -173,36 +173,35 @@ function GlobalNetworkOverview({ dispatched }) {
           <div className="divide-y divide-slate-100">
             {ROUTER_REGIONS.map((region) => {
               const route = region.id === recommended.id;
-              const tone = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
-              const dot = tone === "red" ? "bg-red-500" : tone === "amber" ? "bg-amber-500" : "bg-emerald-500";
+              const dot = route ? "bg-[#84dc23]" : region.id === "oregon" ? "bg-[#f97316]" : "bg-[#ef4444]";
               return (
-                <div key={region.id} className={route ? "bg-emerald-50/45 px-5 py-4" : "px-5 py-4"}>
+                <div key={region.id} className={route ? "bg-[#f8fdf2]/80 border-l-4 border-l-[#84dc23] px-5 py-4" : "px-5 py-4"}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-start gap-2.5">
                       <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${dot}`} />
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-base font-bold text-slate-900">{region.name}</span>
-                          {route && <span className="rounded border border-emerald-200 bg-white px-1.5 py-0.5 text-[8px] font-semibold text-emerald-700">{dispatched ? "Active route" : "Recommended"}</span>}
+                          {route && <span className="rounded border border-[#bef264] bg-[#ecfccb] px-1.5 py-0.5 text-[8px] font-semibold text-[#365314]">{dispatched ? "Active route" : "Recommended"}</span>}
                         </div>
                         <div className="mt-1 text-xs text-slate-500">{region.code}</div>
                       </div>
                     </div>
-                    <span className={route ? "shrink-0 text-sm font-bold text-emerald-700" : "shrink-0 text-sm font-bold text-slate-800"}>{region.latency} ms</span>
+                    <span className={route ? "shrink-0 text-sm font-bold text-[#15803d]" : "shrink-0 text-sm font-bold text-slate-800"}>{region.latency} ms</span>
                   </div>
 
                   <div className="mt-3 grid grid-cols-3 gap-3 border-t border-slate-100 pt-3">
                     <div>
                       <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div>
-                      <div className="mt-1 text-sm font-semibold text-slate-800">{region.carbon} gCO2e/kWh</div>
+                      <div className={route ? "mt-1 text-sm font-semibold text-[#16a34a]" : "mt-1 text-sm font-semibold text-slate-800"}>{region.carbon} gCO2e/kWh</div>
                     </div>
                     <div>
                       <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water</div>
-                      <div className="mt-1 text-sm font-semibold text-slate-800">{region.waterStress} · {region.waterLabel}</div>
+                      <div className={region.id === "oregon" ? "mt-1 text-sm font-semibold text-rose-600" : "mt-1 text-sm font-semibold text-slate-800"}>{region.waterStress} · {region.waterLabel}</div>
                     </div>
                     <div>
                       <div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat</div>
-                      <div className="mt-1 truncate text-sm font-semibold text-slate-800">{region.id === "stockholm" ? "District heat" : region.heat}</div>
+                      <div className={region.id === "stockholm" || region.id === "mumbai" ? "mt-1 truncate text-sm font-semibold text-[#ea580c]" : "mt-1 truncate text-sm font-semibold text-slate-800"}>{region.id === "stockholm" ? "District heat" : region.heat}</div>
                     </div>
                   </div>
                 </div>
@@ -210,10 +209,13 @@ function GlobalNetworkOverview({ dispatched }) {
             })}
           </div>
 
-          <div className="border-t border-slate-200 bg-slate-50/70 px-5 py-4">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-400">Route target</div>
-            <div className="mt-1 text-base font-bold text-slate-900">{recommended.name} · {recommended.code}</div>
-            <div className="mt-1 text-xs leading-5 text-slate-500">{ROUTE_DECISION.rationale}</div>
+          <div className="border-t border-zinc-800 bg-[#0c0e12] px-5 py-4 text-white">
+            <div className="flex items-center justify-between">
+              <div className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#8fee00]">Route target · Target Consensus</div>
+              <span className="rounded bg-[#8fee00] px-2 py-0.5 text-[9px] font-bold text-black uppercase tracking-wide">Optimal SLA</span>
+            </div>
+            <div className="mt-1.5 text-base font-bold text-white">{recommended.name} · {recommended.code}</div>
+            <div className="mt-1 text-xs leading-5 text-zinc-300">{ROUTE_DECISION.rationale}</div>
           </div>
         </div>
       </div>
@@ -226,7 +228,7 @@ function AnalysisTimeline({ stage, complete }) {
     <div className="mb-5 rounded-xl border border-slate-200 bg-white px-4 py-4">
       <div className="flex items-center justify-between gap-3">
         <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Routing pipeline</div>
-        <span className={complete ? "text-[10px] font-semibold text-emerald-700" : stage > 0 ? "text-[10px] font-semibold text-blue-700" : "text-[10px] font-semibold text-slate-400"}>
+        <span className={complete ? "text-[10px] font-semibold text-[#15803d]" : stage > 0 ? "text-[10px] font-semibold text-blue-700" : "text-[10px] font-semibold text-slate-400"}>
           {complete ? "Complete" : stage > 0 ? "In progress" : "Ready"}
         </span>
       </div>
@@ -239,14 +241,14 @@ function AnalysisTimeline({ stage, complete }) {
           return (
             <div key={label} className="relative flex items-start gap-2.5 sm:block">
               {index < ROUTING_STEPS.length - 1 && (
-                <span className={done ? "absolute left-[13px] top-6 hidden h-px w-[calc(100%+12px)] bg-emerald-200 sm:block" : "absolute left-[13px] top-6 hidden h-px w-[calc(100%+12px)] bg-slate-200 sm:block"} />
+                <span className={done ? "absolute left-[13px] top-6 hidden h-px w-[calc(100%+12px)] bg-[#bef264] sm:block" : "absolute left-[13px] top-6 hidden h-px w-[calc(100%+12px)] bg-slate-200 sm:block"} />
               )}
-              <span className={done ? "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[11px] font-bold text-emerald-700 ring-4 ring-white" : active ? "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[11px] font-bold text-blue-700 ring-4 ring-white" : "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-bold text-slate-400 ring-4 ring-white"}>
+              <span className={done ? "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ecfccb] text-[11px] font-bold text-[#365314] ring-4 ring-[#f0fdf4]" : active ? "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-900 text-[11px] font-bold text-white ring-4 ring-slate-100" : "relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-bold text-slate-400 ring-4 ring-white"}>
                 {done ? "✓" : stepNumber}
               </span>
               <div className="pt-0.5 sm:mt-2 sm:pt-0">
                 <div className="text-[11px] font-semibold leading-4 text-slate-700">{label}</div>
-                <div className={done ? "mt-1 text-[9px] font-medium text-emerald-600" : active ? "mt-1 text-[9px] font-medium text-blue-600" : "mt-1 text-[9px] font-medium text-slate-400"}>
+                <div className={done ? "mt-1 text-[9px] font-medium text-[#16a34a]" : active ? "mt-1 text-[9px] font-medium text-blue-600" : "mt-1 text-[9px] font-medium text-slate-400"}>
                   {done ? "Passed" : active ? "Evaluating" : "Waiting"}
                 </div>
               </div>
@@ -266,17 +268,17 @@ function FeasibilityPanel({ complete = false, running = false }) {
           <h3 className="text-base font-bold text-slate-950">Feasibility filter</h3>
           <p className="mt-1 text-xs text-slate-500">Hard workload and policy checks run before environmental ranking.</p>
         </div>
-        <span className={complete ? "shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700" : running ? "shrink-0 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700" : "shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500"}>{complete ? "4 / 4 passed" : running ? "Checking…" : "Ready"}</span>
+        <span className={complete ? "shrink-0 rounded-full border border-[#bef264] bg-[#ecfccb] px-2.5 py-1 text-[10px] font-semibold text-[#365314]" : running ? "shrink-0 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700" : "shrink-0 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-500"}>{complete ? "4 / 4 passed" : running ? "Checking…" : "Ready"}</span>
       </div>
       <div className="mt-4 grid gap-2 sm:grid-cols-2">
         {FEASIBILITY_CHECKS.map((check) => (
           <div key={check.label} className="rounded-lg border border-slate-100 bg-slate-50/70 p-3">
             <div className="flex items-center justify-between gap-3">
               <div className="flex min-w-0 items-center gap-2">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700">✓</span>
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#ecfccb] text-[10px] font-bold text-[#365314]">✓</span>
                 <span className="text-xs font-semibold text-slate-700">{check.label}</span>
               </div>
-              <span className={complete ? "text-[10px] font-semibold text-emerald-600" : running ? "text-[10px] font-semibold text-blue-600" : "text-[10px] font-semibold text-slate-400"}>{complete ? check.status : running ? "Checking" : "Pending"}</span>
+              <span className={complete ? "text-[10px] font-semibold text-[#16a34a]" : running ? "text-[10px] font-semibold text-blue-600" : "text-[10px] font-semibold text-slate-400"}>{complete ? check.status : running ? "Checking" : "Pending"}</span>
             </div>
             <div className="ml-7 mt-1 text-[10px] text-slate-500">{check.detail}</div>
           </div>
@@ -327,7 +329,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
           <h3 className="text-base font-bold text-slate-950">Environmental trade-off matrix</h3>
           <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500">Candidate profiles normalized to the same four routing signals.</p>
         </div>
-        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">Route target highlighted</span>
+        <span className="rounded-full border border-[#bef264] bg-[#ecfccb] px-2.5 py-1 text-[10px] font-semibold text-[#365314]">Route target highlighted</span>
       </div>
 
       <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(320px,1fr)_280px] lg:items-center">
@@ -346,11 +348,11 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
               <polygon key={region.id} points={polygonPoints(region)} fill="none" stroke={region.id === "oregon" ? "#f43f5e" : "#f59e0b"} strokeWidth="1.4" strokeDasharray="5 6" opacity="0.38" strokeLinejoin="round" />
             ))}
 
-            <polygon points={polygonPoints(selected)} fill="#10b981" fillOpacity="0.12" stroke="#059669" strokeWidth="3" strokeLinejoin="round" />
+            <polygon points={polygonPoints(selected)} fill="#84dc23" fillOpacity="0.14" stroke="#84dc23" strokeWidth="2.5" strokeLinejoin="round" />
 
             {normalize(selected).map((value, index) => {
               const point = pointAt(index, Math.max(0, Math.min(1, value)));
-              return <circle key={index} cx={point.x} cy={point.y} r="5" fill="#059669" stroke="#ffffff" strokeWidth="2" />;
+              return <circle key={index} cx={point.x} cy={point.y} r="5" fill="#84dc23" stroke="#ffffff" strokeWidth="2" />;
             })}
 
             <circle cx={center} cy={center} r="30" fill="#ffffff" stroke="#d5e2ec" strokeWidth="1.2" />
@@ -365,7 +367,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
           </svg>
 
           <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pb-1 text-[10px]">
-            <span className="inline-flex items-center gap-1.5 font-medium text-emerald-700"><span className="h-2 w-2 rounded-full bg-emerald-500" />{selected.name}</span>
+            <span className="inline-flex items-center gap-1.5 font-medium text-[#365314]"><span className="h-2 w-2 rounded-full bg-[#84dc23]" />{selected.name}</span>
             {ROUTER_REGIONS.filter((region) => region.id !== selected.id).map((region) => (
               <span key={region.id} className="inline-flex items-center gap-1.5 text-slate-500">
                 <span className={`h-2 w-2 rounded-full ${region.id === "oregon" ? "bg-red-400" : "bg-amber-400"}`} />{region.name}
@@ -382,16 +384,16 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
                   <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">{metric.label}</div>
                   <div className="mt-1 text-xs font-bold text-slate-900">{metric.value}</div>
                 </div>
-                <div className="text-sm font-bold text-emerald-700">{metric.score}</div>
+                <div className="text-sm font-bold text-[#15803d]">{metric.score}</div>
               </div>
               <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-100">
-                <div className="h-full rounded-full bg-emerald-500" style={{ width: `${metric.score}%` }} />
+                <div className="h-full rounded-full bg-[#84dc23]" style={{ width: `${metric.score}%` }} />
               </div>
             </div>
           ))}
 
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Route target</div>
+          <div className="rounded-xl border border-[#bef264] bg-[#f8fdf2] p-3.5">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#365314]">Route target</div>
             <div className="mt-1 text-sm font-bold text-slate-900">{selected.name} · {selected.code}</div>
           </div>
         </div>
@@ -402,7 +404,7 @@ function ParetoChart({ selectedRegionId = "stockholm" }) {
 
 function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, workloadCategory, deadlineHours, geoFence }) {
   return (
-    <section className={dispatched ? "rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 sm:p-6" : "rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"}>
+    <section className={dispatched ? "rounded-xl border border-[#bef264] bg-[#f8fdf2] p-5 sm:p-6" : "rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6"}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
           <div className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">Dispatch control</div>
@@ -414,15 +416,15 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
           </p>
         </div>
         {dispatched ? (
-          <div className="shrink-0 rounded-lg border border-emerald-200 bg-white px-4 py-3">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-emerald-600">Dispatch status</div>
-            <div className="mt-1 text-sm font-bold text-emerald-900">Dispatched · {ROUTE_DECISION.targetCode}</div>
+          <div className="shrink-0 rounded-lg border border-[#bef264] bg-white px-4 py-3">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-[#365314]">Dispatch status</div>
+            <div className="mt-1 text-sm font-bold text-slate-900">Dispatched · {ROUTE_DECISION.targetCode}</div>
           </div>
         ) : (
           <button
             onClick={onDispatch}
             disabled={isDispatching}
-            className="inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-blue-600 px-5 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex h-10 shrink-0 items-center justify-center rounded-lg bg-[#0e1013] px-5 text-sm font-semibold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-70 shadow-sm"
           >
             {isDispatching ? "Dispatching…" : "Dispatch workload"}
           </button>
@@ -433,8 +435,8 @@ function DispatchPanel({ dispatched, isDispatching, onDispatch, workloadName, wo
           <svg className="h-3.5 w-3.5 text-slate-400 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.7" /></svg>
           View payload
         </summary>
-        <div className="mt-3 overflow-hidden rounded-lg border border-slate-200 bg-slate-950 p-4">
-          <pre className="overflow-x-auto text-[10px] leading-5 text-slate-200">{JSON.stringify(createDispatchPayload({
+        <div className="mt-3 overflow-hidden rounded-lg border border-zinc-800 bg-[#0c0e12] p-4">
+          <pre className="overflow-x-auto text-[10px] leading-5 text-zinc-200">{JSON.stringify(createDispatchPayload({
             workloadName,
             workloadCategory,
             deadlineHours,
@@ -455,11 +457,11 @@ function MapMarker({ region, selected, recommended, onSelect }) {
       aria-label={`Select ${region.name}`}
     >
       <span className="group flex flex-col items-center">
-        <span className={recommended ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-emerald-500 shadow-lg ring-4 ring-emerald-100" : selected ? "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-blue-500 shadow-md ring-4 ring-blue-100 transition group-hover:scale-105" : "relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md transition group-hover:scale-105"}>
+        <span className={recommended ? "relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#84dc23] shadow-lg ring-4 ring-[#84dc23]/35" : selected ? "relative flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-slate-900 shadow-md ring-4 ring-slate-200 transition group-hover:scale-105" : "relative flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-slate-700 shadow-md transition group-hover:scale-105"}>
           {recommended && <span className="absolute inset-1 rounded-full bg-white/90" />}
-          <span className={recommended ? "relative h-2.5 w-2.5 rounded-full bg-emerald-500" : "relative h-2 w-2 rounded-full bg-white"} />
+          <span className={recommended ? "relative h-2.5 w-2.5 rounded-full bg-slate-950" : selected ? "relative h-2.5 w-2.5 rounded-full bg-[#84dc23]" : "relative h-2 w-2 rounded-full bg-white"} />
         </span>
-        <span className="mt-1 whitespace-nowrap rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-700 shadow-sm backdrop-blur">{region.name}</span>
+        <span className="mt-1 whitespace-nowrap rounded-md border border-slate-200 bg-white/95 px-2 py-1 text-[10px] font-semibold text-slate-800 shadow-sm backdrop-blur">{region.name}</span>
       </span>
     </button>
   );
@@ -468,7 +470,7 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
   const selected = ROUTER_REGIONS.find((region) => region.id === selectedRegionId) || ROUTER_REGIONS[1];
   const recommended = ROUTER_REGIONS.find((region) => region.id === recommendedRegionId) || ROUTER_REGIONS[1];
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <section className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
       <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
         <div>
           <div className="text-base font-bold text-slate-950">Global routing map</div>
@@ -478,36 +480,36 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
           <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold text-slate-600">
             <span className="h-1.5 w-1.5 rounded-full bg-slate-500" />3 candidates
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Route selected
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#bef264] bg-[#ecfccb] px-2.5 py-1 text-[10px] font-semibold text-[#365314]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#84dc23]" />Route selected
           </span>
         </div>
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1.6fr)_minmax(315px,0.75fr)]">
-        <div className="relative min-h-[370px] overflow-hidden bg-[#0b1420] xl:min-h-[400px]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_36%,rgba(16,185,129,0.10),transparent_34%),radial-gradient(circle_at_20%_68%,rgba(59,130,246,0.10),transparent_38%)]" />
-          <div className="absolute inset-0 overflow-hidden bg-[#0b1420]">
+        <div className="relative min-h-[370px] overflow-hidden bg-[#edf0f5] xl:min-h-[400px]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_58%_36%,rgba(132,220,35,0.12),transparent_35%),radial-gradient(circle_at_20%_68%,rgba(59,130,246,0.08),transparent_38%)]" />
+          <div className="absolute inset-0 overflow-hidden bg-[#edf0f5]">
             <img
               src="/world-map.svg"
               alt=""
               className="absolute inset-0 h-full w-full object-cover opacity-100"
               draggable="false"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(240,246,252,0.34))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.35),rgba(235,240,246,0.55))]" />
           </div>
           {ROUTER_REGIONS.map((region) => (
             <div key={region.id} className="absolute" style={{ left: region.map.x, top: region.map.y }}>
               <MapMarker region={region} selected={region.id === selectedRegionId} recommended={region.id === recommendedRegionId} onSelect={onSelectRegion} />
             </div>
           ))}
-          <div className="absolute left-4 top-4 rounded-md border border-slate-200/90 bg-white/95 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500 shadow-sm backdrop-blur">
+          <div className="absolute left-4 top-4 rounded-md border border-slate-200 bg-white/95 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-600 shadow-sm backdrop-blur">
             Global compute network
           </div>
           <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3 rounded-lg border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] text-slate-600 shadow-sm backdrop-blur">
-              <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-blue-400" />Candidate route</span>
+              <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-amber-500" />Candidate route</span>
               <span className="h-3 w-px bg-slate-200" />
-              <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Selected route</span>
+              <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-[#84dc23]" />Selected route</span>
             </div>
             <div className="flex items-center gap-3 rounded-lg border border-slate-200/90 bg-white/92 px-3 py-2 text-[10px] font-medium text-slate-500 shadow-sm backdrop-blur">
               <span>Click a node to inspect</span>
@@ -515,21 +517,21 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
           </div>
         </div>
         <div className="bg-white p-4 sm:p-5">
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+          <div className="rounded-xl border border-[#bef264] bg-[#f8fdf2]/80 p-4">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">Inspected region</div>
                 <div className="mt-1 text-lg font-bold text-slate-950">{selected.name}</div>
                 <div className="mt-0.5 text-xs text-slate-500">{selected.code} · {selected.descriptor}</div>
               </div>
-              <span className={selected.id === recommendedRegionId ? "rounded-md border border-emerald-200 bg-white px-2 py-1 text-[10px] font-semibold text-emerald-700" : "rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-700"}>
+              <span className={selected.id === recommendedRegionId ? "rounded-md border border-[#bef264] bg-[#ecfccb] px-2 py-1 text-[10px] font-semibold text-[#365314]" : "rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] font-semibold text-slate-700"}>
                 {selected.id === recommendedRegionId ? "Recommended" : "Inspecting"}
               </span>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-emerald-100 pt-3">
-              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div><div className="mt-1 text-sm font-bold text-emerald-700">{selected.carbon} gCO2e/kWh</div></div>
+            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-3">
+              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon</div><div className="mt-1 text-sm font-bold text-[#16a34a]">{selected.carbon} gCO2e/kWh</div></div>
               <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water stress</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.waterStress} · {selected.waterLabel}</div></div>
-              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat loop</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.heat}</div></div>
+              <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat loop</div><div className="mt-1 text-sm font-bold text-[#ea580c]">{selected.heat}</div></div>
               <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Latency</div><div className="mt-1 text-sm font-bold text-slate-900">{selected.latency} ms</div></div>
             </div>
           </div>
@@ -542,10 +544,10 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
               {ROUTER_REGIONS.map((region) => {
                 const active = region.id === selectedRegionId;
                 const tone = region.tone === "risk" ? "red" : region.tone === "constraint" ? "amber" : "emerald";
-                const dot = tone === "red" ? "bg-red-500" : tone === "amber" ? "bg-amber-500" : "bg-emerald-500";
-                const badge = tone === "red" ? "border-red-200 bg-red-50 text-red-700" : tone === "amber" ? "border-amber-200 bg-amber-50 text-amber-700" : "border-emerald-200 bg-emerald-50 text-emerald-700";
+                const dot = tone === "red" ? "bg-red-500" : tone === "amber" ? "bg-amber-500" : "bg-[#84dc23]";
+                const badge = tone === "red" ? "border-red-200 bg-red-50 text-red-700" : tone === "amber" ? "border-amber-200 bg-amber-50 text-amber-700" : "border-[#bef264] bg-[#ecfccb] text-[#365314]";
                 return (
-                  <button key={region.id} type="button" onClick={() => onSelectRegion(region.id)} className={active ? "flex w-full items-center justify-between gap-3 rounded-lg border border-blue-200 bg-blue-50/60 px-3 py-2.5 text-left" : "flex w-full items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-left transition hover:border-slate-300 hover:bg-slate-50"}>
+                  <button key={region.id} type="button" onClick={() => onSelectRegion(region.id)} className={active ? "flex w-full items-center justify-between gap-3 rounded-lg border border-[#84dc23] bg-[#ecfccb]/30 px-3 py-2.5 text-left shadow-sm" : "flex w-full items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-left transition hover:border-slate-300 hover:bg-slate-50"}>
                     <div className="flex min-w-0 items-center gap-2.5">
                       <span className={`h-2 w-2 shrink-0 rounded-full ${dot}`} />
                       <div className="min-w-0">
@@ -553,7 +555,7 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
                         <div className="mt-0.5 text-[10px] text-slate-500">{region.carbon} gCO2e/kWh · {region.latency} ms</div>
                       </div>
                     </div>
-                    <span className={`shrink-0 rounded border px-2 py-1 text-[9px] font-semibold ${active ? "border-blue-200 bg-blue-50 text-blue-700" : badge}`}>{active ? "Inspecting" : region.badge}</span>
+                    <span className={`shrink-0 rounded border px-2 py-1 text-[9px] font-semibold ${active ? "border-[#bef264] bg-[#ecfccb] text-[#365314]" : badge}`}>{active ? "Inspecting" : region.badge}</span>
                   </button>
                 );
               })}
@@ -563,9 +565,9 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
       </div>
       <div className="border-t border-slate-200 bg-slate-50/70 px-4 py-4 sm:px-5">
         <div className="grid gap-3 sm:grid-cols-4">
-          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon delta</div><div className="mt-1 text-sm font-bold text-emerald-700">{ROUTE_DECISION.carbonDelta}</div></div>
+          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Carbon delta</div><div className="mt-1 text-sm font-bold text-[#16a34a]">{ROUTE_DECISION.carbonDelta}</div></div>
           <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Water impact</div><div className="mt-1 text-sm font-bold text-blue-700">{ROUTE_DECISION.waterDelta}</div></div>
-          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat reuse</div><div className="mt-1 text-sm font-bold text-amber-700">{ROUTE_DECISION.heatReuse}</div></div>
+          <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Heat reuse</div><div className="mt-1 text-sm font-bold text-[#ea580c]">{ROUTE_DECISION.heatReuse}</div></div>
           <div><div className="text-[10px] uppercase tracking-[0.08em] text-slate-400">Residency</div><div className="mt-1 text-sm font-bold text-slate-800">{ROUTE_DECISION.residency}</div></div>
         </div>
       </div>
@@ -574,31 +576,31 @@ function EnvironmentalMap({ selectedRegionId, recommendedRegionId, onSelectRegio
 }
 function LiveActivityTimeline({ rows, isDispatched }) {
   return (
-    <motion.section variants={fadeInUp} className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+    <motion.section variants={fadeInUp} className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
       <div className="flex items-end justify-between gap-4">
         <div>
           <h2 className="text-lg font-bold text-slate-950">Live activity</h2>
           <p className="mt-1 text-sm text-slate-500">Recent workloads and routing outcomes</p>
         </div>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">{rows.length} records</span>
+        <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">{rows.length} records</span>
       </div>
 
       <div className="mt-5">
         {rows.map((row, index) => {
           const isNew = isDispatched && row.id === "#R-9043";
-          const dot = row.destColor === "blue" ? "bg-blue-500" : "bg-emerald-500";
+          const dot = row.destColor === "blue" ? "bg-amber-500" : "bg-[#84dc23]";
           return (
             <div key={row.id} className="grid grid-cols-[68px_18px_minmax(0,1fr)] gap-3 sm:grid-cols-[86px_18px_minmax(0,1fr)] sm:gap-4">
-              <div className="pt-2 text-[10px] text-slate-400">{isNew ? "Just now" : row.time}</div>
+              <div className="pt-2 text-[10px] font-medium text-slate-400">{isNew ? "Just now" : row.time}</div>
               <div className="relative flex justify-center">
                 {index < rows.length - 1 && <span className="absolute top-4 bottom-0 w-px bg-slate-200" />}
-                <span className={`relative z-10 mt-2 h-2.5 w-2.5 rounded-full ${isNew ? "bg-emerald-500 ring-4 ring-emerald-50" : dot}`} />
+                <span className={`relative z-10 mt-2 h-2.5 w-2.5 rounded-full ${isNew ? "bg-[#84dc23] ring-4 ring-[#ecfccb]" : dot}`} />
               </div>
-              <div className={isNew ? "mb-3 rounded-xl border border-emerald-200 bg-emerald-50/45 p-4" : "mb-3 rounded-xl border border-slate-200 bg-white p-4"}>
+              <div className={isNew ? "mb-3 rounded-xl border border-[#bef264] bg-[#f8fdf2]/60 p-4 transition hover:bg-[#f8fdf2]" : "mb-3 rounded-xl border border-slate-200/90 bg-white p-4 transition hover:bg-slate-50/60"}>
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-semibold text-slate-400">{row.id}</span>
+                      <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-mono font-semibold text-slate-600">{row.id}</span>
                       <span className="text-sm font-bold text-slate-900">{row.name}</span>
                     </div>
                     <div className="mt-1 text-xs text-slate-500">{row.desc}</div>
@@ -606,8 +608,8 @@ function LiveActivityTimeline({ rows, isDispatched }) {
                   <StatusBadge status={row.status} color={row.statusColor} />
                 </div>
                 <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-slate-100 pt-3 text-[10px]">
-                  <span className="inline-flex items-center gap-1.5 text-slate-600"><span className={`h-1.5 w-1.5 rounded-full ${dot}`} />{row.dest}</span>
-                  <span className="font-semibold text-emerald-600">{row.carbon}</span>
+                  <span className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-2 py-0.5 text-slate-700 shadow-2xs"><span className={`h-1.5 w-1.5 rounded-full ${dot}`} />{row.dest}</span>
+                  <span className="font-semibold text-[#16a34a]">{row.carbon}</span>
                   <span className="font-semibold text-blue-600">{row.water}</span>
                 </div>
               </div>
@@ -743,9 +745,9 @@ export default function HomePage() {
     compliance: <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg>,
   };
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800 antialiased">
+    <div className="min-h-screen bg-[#f4f5f8] font-sans text-slate-800 antialiased">
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-slate-200 bg-white md:flex md:flex-col md:justify-between">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-[#1e2025] bg-[#0e1013] md:flex md:flex-col md:justify-between">
         <div>
           <Brand />
           <Navigation activeTab={activeTab} switchTab={switchTab} />
@@ -753,11 +755,11 @@ export default function HomePage() {
         <UserFooter />
       </aside>
       {/* Mobile header */}
-      <div className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-4 py-3 backdrop-blur md:hidden">
+      <div className="sticky top-0 z-30 border-b border-[#1e2025] bg-[#0e1013]/95 px-4 py-3 backdrop-blur md:hidden">
         <div className="flex items-center justify-between gap-3">
           <Brand compact />
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Connected
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-[#bef264]/30 bg-[#ecfccb]/15 px-2.5 py-1 text-xs font-semibold text-[#bef264]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#84dc23]" /> Connected
           </span>
         </div>
         <nav className="mt-3 flex gap-1 overflow-x-auto pb-0.5">
@@ -765,18 +767,18 @@ export default function HomePage() {
             <button
               key={tab.id}
               onClick={() => switchTab(tab.id)}
-              className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium ${activeTab === tab.id ? "bg-blue-50 text-blue-600" : "text-slate-600"}`}
+              className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium ${activeTab === tab.id ? "bg-[#84dc23] text-black font-semibold" : "text-zinc-400 hover:text-white"}`}
             >
               {NAV_ICONS[tab.id]}{tab.label}
             </button>
           ))}
         </nav>
       </div>
-      <main className="min-h-screen px-4 py-5 md:ml-64 md:px-8 md:py-7 lg:px-10">
+      <main className="min-h-screen bg-[#f4f5f8] px-4 py-5 md:ml-64 md:px-8 md:py-7 lg:px-10">
         <header className="flex flex-col gap-4 border-b border-slate-200/80 pb-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-slate-950">{currentTab.title}</h1>
-            <p className="mt-1 text-sm text-slate-600">{currentTab.subtitle}</p>
+            <p className="mt-1 text-sm text-slate-500">{currentTab.subtitle}</p>
           </div>
         </header>
         <AnimatePresence mode="wait">
@@ -813,11 +815,11 @@ export default function HomePage() {
                   <div className="space-y-5 pt-5">
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-slate-700">Workload name / job identifier</span>
-                      <input value={workloadName} onChange={(e) => setWorkloadName(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100" />
+                      <input value={workloadName} onChange={(e) => setWorkloadName(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none transition focus:border-[#84dc23] focus:ring-2 focus:ring-[#84dc23]/20" />
                     </label>
                     <label className="block">
                       <span className="mb-2 block text-sm font-semibold text-slate-700">Workload category</span>
-                      <select value={workloadCategory} onChange={(e) => setWorkloadCategory(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100">
+                      <select value={workloadCategory} onChange={(e) => setWorkloadCategory(e.target.value)} className="h-11 w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 text-sm text-slate-800 outline-none focus:border-[#84dc23] focus:ring-2 focus:ring-[#84dc23]/20">
                         <option value="LLM Batch Inference · High Throughput">LLM Batch Inference · High Throughput</option>
                         <option value="Vector Embeddings">Vector Embeddings</option>
                         <option value="Diffusion / Rendering">Diffusion / Rendering</option>
@@ -826,9 +828,9 @@ export default function HomePage() {
                     <div>
                       <div className="flex items-center justify-between gap-3">
                         <span className="text-sm font-semibold text-slate-700">Start-time flexibility</span>
-                        <span className="rounded-md bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">{deadlineVal}h delay</span>
+                        <span className="rounded-md border border-[#bef264] bg-[#ecfccb] px-2.5 py-1 text-xs font-semibold text-[#365314]">{deadlineVal}h delay</span>
                       </div>
-                      <input type="range" min="0" max="48" step="12" value={deadlineVal} onChange={(e) => setDeadlineVal(Number(e.target.value))} className="mt-4 w-full accent-blue-600" />
+                      <input type="range" min="0" max="48" step="12" value={deadlineVal} onChange={(e) => setDeadlineVal(Number(e.target.value))} className="mt-4 w-full accent-[#84dc23]" />
                       <div className="mt-1 flex justify-between text-xs text-slate-500">
                         <span>0h · Start now</span><span>24h · Flexible</span><span>48h · Max shift</span>
                       </div>
@@ -840,13 +842,13 @@ export default function HomePage() {
                       </div>
                       <label className="relative inline-flex shrink-0 cursor-pointer items-center">
                         <input type="checkbox" checked={geoFence} onChange={(e) => setGeoFence(e.target.checked)} className="peer sr-only" />
-                        <span className="h-6 w-11 rounded-full bg-slate-300 transition peer-checked:bg-blue-600 after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow-sm after:transition peer-checked:after:translate-x-5" />
+                        <span className="h-6 w-11 rounded-full bg-slate-300 transition peer-checked:bg-[#84dc23] after:absolute after:left-1 after:top-1 after:h-4 after:w-4 after:rounded-full after:bg-white after:shadow-sm after:transition peer-checked:after:translate-x-5" />
                       </label>
                     </div>
                     <button
                       onClick={runPlacementAnalysis}
                       disabled={isLoading}
-                      className="flex h-10 w-full items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 transition hover:border-blue-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-70"
+                      className="flex h-10 w-full items-center justify-center rounded-lg border border-zinc-800 bg-[#0e1013] px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {isLoading ? "Analyzing placement…" : "Analyze placement"}
                     </button>
@@ -865,7 +867,7 @@ export default function HomePage() {
                         <FeasibilityPanel running />
                         <section className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#ecfccb] text-[#365314]">
                               <svg className="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-20" cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" />
                                 <path d="M21 12a9 9 0 00-9-9" stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" />
@@ -877,7 +879,7 @@ export default function HomePage() {
                             </div>
                           </div>
                           <div className="mt-5 h-2 overflow-hidden rounded-full bg-slate-100">
-                            <div className="h-full w-2/3 animate-pulse rounded-full bg-blue-500" />
+                            <div className="h-full w-2/3 animate-pulse rounded-full bg-[#84dc23]" />
                           </div>
                         </section>
                       </div>
@@ -924,9 +926,9 @@ export default function HomePage() {
           {activeTab === "audit-ledger" && (
             <motion.div key="audit" className="space-y-5 pt-6" initial="initial" animate="animate" variants={stagger}>
               <motion.div variants={fadeInUp} className="flex flex-wrap items-center justify-end gap-3">
-                {reportStatus === "ready" && <span className="text-xs font-medium text-emerald-700">CSRD report generated · PDF ready</span>}
-                <button onClick={generateReport} disabled={!isDispatched || reportStatus === "generating"} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60">
-                  <svg className={`h-4 w-4 text-slate-500 ${reportStatus === "generating" ? "animate-spin" : ""}`} fill="none" viewBox="0 0 24 24">
+                {reportStatus === "ready" && <span className="text-xs font-medium text-[#15803d]">CSRD report generated · PDF ready</span>}
+                <button onClick={generateReport} disabled={!isDispatched || reportStatus === "generating"} className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-[#0e1013] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-60">
+                  <svg className={`h-4 w-4 text-slate-400 ${reportStatus === "generating" ? "animate-spin" : ""}`} fill="none" viewBox="0 0 24 24">
                     {reportStatus === "generating" ? <><circle className="opacity-25" cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2.5" /><path d="M21 12a9 9 0 00-9-9" stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" /></> : <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />}
                   </svg>
                   {reportStatus === "generating" ? "Generating report…" : reportStatus === "ready" ? "Regenerate CSRD report" : isDispatched ? "Generate CSRD report" : "Dispatch a workload first"}
@@ -947,11 +949,11 @@ export default function HomePage() {
                       </thead>
                       <tbody className="divide-y divide-slate-100">
                         {liveLedgerRows.map((row, index) => (
-                          <tr key={row.id} className={index === 0 && isDispatched ? "bg-emerald-50/35 transition hover:bg-emerald-50/60" : "transition hover:bg-slate-50"}>
+                          <tr key={row.id} className={index === 0 && isDispatched ? "bg-[#f8fdf2]/70 transition hover:bg-[#f8fdf2]" : "transition hover:bg-slate-50"}>
                             <td className="px-4 py-4 font-semibold text-slate-900">{row.id}</td>
                             <td className="whitespace-nowrap px-4 py-4 text-slate-600">{row.time}</td>
                             <td className="px-4 py-4"><DestBadge dest={row.dest} color={row.destColor} /></td>
-                            <td className="px-4 py-4 font-semibold text-emerald-600">{row.carbon}<span className="ml-1 text-xs font-normal text-slate-500">({row.carbonSaved})</span></td>
+                            <td className="px-4 py-4 font-semibold text-[#16a34a]">{row.carbon}<span className="ml-1 text-xs font-normal text-slate-500">({row.carbonSaved})</span></td>
                             <td className="px-4 py-4 font-semibold text-blue-600">{row.water}</td>
                             <td className="max-w-md px-4 py-4 leading-5 text-slate-600">{row.rationale}</td>
                           </tr>
@@ -971,25 +973,25 @@ function GlobeMark({ size = "md" }) {
   const sizes = size === "sm" ? "h-8 w-8" : "h-11 w-11";
   const icon = size === "sm" ? "h-6 w-6" : "h-6 w-6";
   return (
-    <span className={`relative flex shrink-0 items-center justify-center ${sizes} text-blue-600`}>
+    <span className={`relative flex shrink-0 items-center justify-center ${sizes} text-[#84dc23]`}>
       <svg className={`${icon} overflow-visible`} viewBox="0 0 36 36" fill="none" stroke="currentColor" aria-hidden="true">
         <circle cx="18" cy="18" r="15.2" strokeWidth="2" />
         <path d="M2.8 18h30.4M18 2.8c4.4 4 6.8 9.1 6.8 15.2S22.4 29.2 18 33.2C13.6 29.2 11.2 24.1 11.2 18S13.6 6.8 18 2.8Z" strokeWidth="1.65" />
         <path d="M5.5 10.5c3.8 2.2 8 3.3 12.5 3.3s8.7-1.1 12.5-3.3M5.5 25.5c3.8-2.2 8-3.3 12.5-3.3s8.7 1.1 12.5 3.3" strokeWidth="1.35" />
       </svg>
-      <span className="absolute right-0.5 top-1 h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white" />
+      <span className="absolute right-0.5 top-1 h-2 w-2 rounded-full bg-[#84dc23] ring-2 ring-[#0e1013]" />
     </span>
   );
 }
 function Brand({ compact = false }) {
   return (
-    <div className={`flex items-center gap-2.5 ${compact ? "" : "border-b border-slate-100 px-6 py-4"}`}>
+    <div className={`flex items-center gap-2.5 ${compact ? "" : "border-b border-[#1e2025] px-6 py-5"}`}>
       <GlobeMark />
       <div className="min-w-0">
-        <div className="text-[22px] font-bold tracking-tight text-slate-950">
-          Omni<span className="text-blue-600">Router</span>
+        <div className="text-[22px] font-bold tracking-tight text-white">
+          OmniRouter
         </div>
-        {!compact && <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-400">Compute sustainability</div>}
+        {!compact && <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#84cc16]">Compute sustainability</div>}
       </div>
     </div>
   );
@@ -997,26 +999,40 @@ function Brand({ compact = false }) {
 function Navigation({ activeTab, switchTab }) {
   return (
     <div className="p-3">
-      <div className="px-3 pb-2 pt-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">Navigation</div>
+      <div className="px-3 pb-2 pt-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#71826b]">Operations Core</div>
       <nav className="space-y-1">
-        {TABS.map((tab) => (
-          <button key={tab.id} onClick={() => switchTab(tab.id)} className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${activeTab === tab.id ? "bg-blue-50 font-semibold text-blue-600" : "font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900"}`}>
-            {NAV_ICONS[tab.id]}{tab.label}
-          </button>
-        ))}
+        {TABS.map((tab) => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => switchTab(tab.id)}
+              className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${
+                isActive
+                  ? "bg-[#84dc23] font-semibold text-black shadow-sm"
+                  : "font-medium text-zinc-400 hover:bg-white/5 hover:text-white"
+              }`}
+            >
+              <span className={isActive ? "text-black" : "text-zinc-400"}>
+                {NAV_ICONS[tab.id]}
+              </span>
+              {tab.label}
+            </button>
+          );
+        })}
       </nav>
     </div>
   );
 }
 function UserFooter() {
   return (
-    <div className="border-t border-slate-100 p-4">
-      <div className="rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-3">
+    <div className="border-t border-[#1e2025] p-4">
+      <div className="rounded-xl border border-[#23262c] bg-[#15171b] px-3 py-3">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-[10px] font-bold text-slate-600 ring-1 ring-slate-200">AC</div>
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-800 text-[10px] font-bold text-zinc-300 ring-1 ring-zinc-700/80">AC</div>
           <div className="min-w-0">
-            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-slate-400">Workspace</div>
-            <div className="mt-0.5 truncate text-xs font-semibold text-slate-800">ACME Cloud</div>
+            <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-zinc-500">Workspace</div>
+            <div className="mt-0.5 truncate text-xs font-semibold text-white">ACME Cloud</div>
           </div>
         </div>
       </div>

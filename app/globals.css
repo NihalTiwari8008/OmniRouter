@@ -6,12 +6,12 @@
 }
 
 html {
-  background: #f8fafc;
+  background: #f4f5f8;
 }
 
 body {
-  background: #f8fafc;
-  color: #1e293b;
+  background: #f4f5f8;
+  color: #0f172a;
   font-family: var(--font-sans), "Inter", system-ui, sans-serif;
 }
 
